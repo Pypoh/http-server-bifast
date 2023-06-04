@@ -1,0 +1,132 @@
+{
+  "BusMsg": {
+    "AppHdr": {
+      "Fr": {
+        "FIId": {
+          "FinInstnId": {
+            "Othr": {
+              "Id": "GNESIDJA"
+            }
+          }
+        }
+      },
+      "To": {
+        "FIId": {
+          "FinInstnId": {
+            "Othr": {
+              "Id": "FASTIDJA"
+            }
+          }
+        }
+      },
+      "BizMsgIdr": "20230321GNESIDJA853O0110000001",
+      "MsgDefIdr": "pain.013.001.08",
+      "BizSvc": "BI",
+      "CreDt": "2023-03-21T18:02:56Z",
+      "CpyDplct": "CODU",
+      "PssblDplct": 0
+    },
+    "Document": {
+      "CdtrPmtActvtnReq": {
+        "GrpHdr": {
+          "MsgId": "20230321GNESIDJA85310000001",
+          "CreDtTm": "2023-03-21T18:02:56.259",
+          "NbOfTxs": 1,
+          "InitgPty": {
+            "Nm": "Surya_Test",
+            "PstlAdr": {
+              "Ctry": "ID"
+            }
+          }
+        },
+        "PmtInf": [
+          {
+            "PmtMtd": "TRF",
+            "PmtTpInf": {
+              "CtgyPurp": {
+                "Prtry": 85301
+              }
+            },
+            "ReqdExctnDt": {
+              "Dt": "2023-03-21"
+            },
+            "XpryDt": {
+              "Dt": "2023-04-21"
+            },
+            "Dbtr": "",
+            "DbtrAcct": {
+              "Id": {
+                "Othr": {
+                  "Id": "9479638523"
+                }
+              }
+            },
+            "DbtrAgt": {
+              "FinInstnId": {
+                "Othr": {
+                  "Id": "HNBNIDJA"
+                }
+              }
+            },
+            "CdtTrfTx": [
+              {
+                "PmtId": {
+                  "EndToEndId": "20230321GNESIDJA853O0110000001"
+                },
+                "Amt": {
+                  "InstdAmt": {
+                    "value": "123.12",
+                    "Ccy": "IDR"
+                  }
+                },
+                "ChrgBr": "DEBT",
+                "CdtrAgt": {
+                  "FinInstnId": {
+                    "Othr": {
+                      "Id": "GNESIDJA"
+                    }
+                  }
+                },
+                "Cdtr": {
+                  "Id": {
+                    "OrgId": {
+                      "Othr": [
+                        {
+                          "Id": "GNESIDJA_MERCH_999"
+                        }
+                      ]
+                    }
+                  }
+                },
+                "CdtrAcct": {
+                  "Id": {
+                    "Othr": {
+                      "Id": "9479638523"
+                    }
+                  },
+                  "Tp": {
+                    "Prtry": "CACC"
+                  },
+                  "Nm": "Telkom Indonesia"
+                },
+                "SplmtryData": [
+                  {
+                    "Envlp": {
+                      "Dtl": {
+                        "Cdtr": {
+                          "Tp": "01",
+                          "RsdntSts": "01",
+                          "TwnNm": "0300"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

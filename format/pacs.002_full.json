@@ -1,0 +1,69 @@
+{
+	"BusMsg": {
+		"AppHdr": {
+			"Fr": {
+				"FIId": {
+					"FinInstnId": {
+						"Othr": {
+							"Id": "{{ FrBIC }}"
+						}
+					}
+				}
+			},
+			"To": {
+				"FIId": {
+					"FinInstnId": {
+						"Othr": {
+							"Id": "{{ ToBIC }}"
+						}
+					}
+				}
+			},
+			"BizMsgIdr": "{{ BizMsgIdr }}",
+			"MsgDefIdr": "pacs.002.001.10",
+			"BizSvc": "ISO",
+			"CreDt": "{{ CreDt }}",
+			"CpyDplct": "CODU",
+			"PssblDplct": 0
+		},
+		"Document": {
+			"FIToFIPmtStsRpt": {
+				"GrpHdr": {
+					"MsgId": "{{ MsgId }}",
+					"CreDtTm": "{{ CreDtTm }}"
+				},
+				"OrgnlGrpInfAndSts": [{
+					"OrgnlMsgId": "{{ OrgnlMsgId }}",
+					"OrgnlMsgNmId": "{{ OrgnlMsgNmId }}"
+				}],
+				"TxInfAndSts": [{
+					"OrgnlEndToEndId": "{{ OrgnlEndToEndId }}",
+					"OrgnlTxId": "{{ OrgnlTxId }}",
+					"TxSts": "{{ TxSts }}",
+					"StsRsnInf": [{
+						"Rsn": {
+							"Prtry": "{{ RsnPrtry }}"
+						}
+					}],
+					"OrgnlTxRef": {
+						"Cdtr": {
+							"Pty": {
+								"Nm": "{{ OrgnlCdtrNm }}"
+							}
+						},
+						"CdtrAcct": {
+							"Id": {
+								"Othr": {
+									"Id": "{{ CdtrAcctId }}"
+								}
+							},
+							"Tp": {
+								"Prtry": "{{ CdtrAcctTp }}"
+							}
+						}
+					}
+				}]
+			}
+		}
+	}
+}

@@ -1,0 +1,36 @@
+@keyframes typingAnimation {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.row {
+  display: flex;
+}
+
+.column {
+  display: flex;
+  flex: 50%;
+  justify-content: center;
+  padding: 24px;
+  height: 480px;
+  border: 1px solid #000;
+}
+
+.text {
+  font-family: "Courier New", Courier, monospace;
+  font-size: small;
+  flex-grow: 1;
+  animation: typingAnimation 3s steps(40) infinite;
+  padding: 12px;
+  border: 1px solid #000;
+  overflow: auto;
+}
+
+.textarea {
+  flex-grow: 1;
+  animation: typingAnimation 3s steps(40) infinite;
+}
