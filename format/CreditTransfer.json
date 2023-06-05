@@ -1,0 +1,94 @@
+{
+    "BusMsg": {
+        "AppHdr": {
+            "Fr": {
+                "FIId": {
+                    "FinInstnId": {
+                        "Othr": {
+                            "Id": "GNESIDJA"
+                        }
+                    }
+                }
+            },
+            "To": {
+                "FIId": {
+                    "FinInstnId": {
+                        "Othr": {
+                            "Id": "FASTIDJA"
+                        }
+                    }
+                }
+            },
+            "BizMsgIdr": "20230324GNESIDJA510O0131081005",
+            "MsgDefIdr": "pacs.008.001.08",
+            "CreDt": "2023-03-24T09:21:55Z"
+        },
+        "Document": {
+            "FIToFICstmrCdtTrf": {
+                "GrpHdr": {
+                    "MsgId": "20230324GNESIDJA51031081005",
+                    "CreDtTm": "2023-03-24T09:21:55",
+                    "NbOfTxs": "1",
+                    "SttlmInf": {
+                        "SttlmMtd": "CLRG"
+                    }
+                },
+                "CdtTrfTxInf": [
+                    {
+                        "PmtId": {
+                            "EndToEndId": "20230324GNESIDJA510O0131081005",
+                            "TxId": "20230324GNESIDJA51031081005"
+                        },
+                        "PmtTpInf": {
+                            "CtgyPurp": {
+                                "Prtry": "51001"
+                            }
+                        },
+                        "IntrBkSttlmAmt": {
+                            "value": "1234.56",
+                            "Ccy": "IDR"
+                        },
+                        "ChrgBr": "DEBT",
+                        "Dbtr": {
+                            "Nm": "-"
+                        },
+                        "DbtrAcct": {
+                            "Id": {
+                                "Othr": {
+                                    "Id": "123123"
+                                }
+                            },
+                            "Tp": {
+                                "Prtry": "51001"
+                            }
+                        },
+                        "DbtrAgt": {
+                            "FinInstnId": {
+                                "Othr": {
+                                    "Id": "GNESIDJA"
+                                }
+                            }
+                        },
+                        "CdtrAgt": {
+                            "FinInstnId": {
+                                "Othr": {
+                                    "Id": "ARTGIDJA"
+                                }
+                            }
+                        },
+                        "Cdtr": {
+                            "Nm": "AA"
+                        },
+                        "CdtrAcct": {
+                            "Id": {
+                                "Othr": {
+                                    "Id": "666111"
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}
