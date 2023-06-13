@@ -61,13 +61,13 @@ def getTransactionCode(bizMsgIdr):
     return transactionCode
 
 
-def generateBizMsgIdr(bizMsgIdr):
+def generateBizMsgIdr(bizMsgIdrOrTTC = None):
     formatted_string = "{dateTime}{bankCode}{ttc}{route}{code}{status}"
 
     result = formatted_string.format(
         dateTime=datetime.now().strftime('%Y%m%d'),
         bankCode=bankConfig.BANK_CODE_VALUE,
-        ttc=bizMsgIdr[16:19],
+        ttc=bizMsgIdrOrTTC[16:19] if len(bizMsgIdrOrTTC) > 3 else bizMsgIdrOrTTC,
         route="O",
         code="01",
         status=random.randint(000000000, 999999999)

@@ -2,27 +2,28 @@ from blueprints.RequestForPayment import requestForPaymentBlueprint
 from flask import Flask, request
 import handler.general as handler
 import handler.message.accountEnquiryHandler as accountEnquiryHandler
+import handler.message.requestForPaymentHandler as requestForPaymentHandler
 import os
+import config.serverConfig as serverConfig
 
 app = Flask(__name__)
 app.register_blueprint(requestForPaymentBlueprint)
 app.config['FORMAT_PATH'] = os.path.join(app.root_path, 'format')
 
+@app.route('/', methods=['POST'])
+def rfpHandlerRFI():
+    if request.method == 'POST':
+        return requestForPaymentHandler.generateResponse(request.json)
 
-# OFI Account Enquiry
-# RFI Account Enquiry
 @app.route('/AccountEnquiryOFI', methods=['POST'])
-def aeHandler():
+def aeHandlerOFI():
     if request.method == 'POST':
-        return accountEnquiryHandler.generateResponse(request.json)
+        return accountEnquiryHandler.requestMessage()
 
-# RFI Account Enquiry
 @app.route('/AccountEnquiryRFI', methods=['POST'])
-def aeHandler():
+def aeHandlerRFI():
     if request.method == 'POST':
         return accountEnquiryHandler.generateResponse(request.json)
-
 
 if __name__ == '__main__':
-    # app.run(host='10.199.13.67', port='18907')
-    app.run()
+    app.run(host=serverConfig.HOST_URL_VALUE, port=serverConfig.PORT_VALUE)

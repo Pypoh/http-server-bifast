@@ -1,0 +1,94 @@
+{
+    "BusMsg": {
+        "AppHdr": {
+            "Fr": {
+                "FIId": {
+                    "FinInstnId": {
+                        "Othr": {
+                            "Id": "{{ FR_BIC_VALUE }}"
+                        }
+                    }
+                }
+            },
+            "To": {
+                "FIId": {
+                    "FinInstnId": {
+                        "Othr": {
+                            "Id": "{{ TO_BIC_VALUE }}"
+                        }
+                    }
+                }
+            },
+            "BizMsgIdr": "{{ BIZ_MSG_IDR_VALUE }}",
+            "MsgDefIdr": "pacs.008.001.08",
+            "CreDt": "{{ CRE_DT_VALUE }}"
+        },
+        "Document": {
+            "FIToFICstmrCdtTrf": {
+                "GrpHdr": {
+                    "MsgId":  "{{ MSG_ID_VALUE }}",
+                    "CreDtTm": "{{ CRE_DT_TM_VALUE }}",
+                    "NbOfTxs": "1",
+                    "SttlmInf": {
+                        "SttlmMtd": "CLRG"
+                    }
+                },
+                "CdtTrfTxInf": [
+                    {
+                        "PmtId": {
+                            "EndToEndId": "{{ END_TO_END_ID_VALUE }}",
+                            "TxId": "{{ TX_ID_VALUE }}"
+                        },
+                        "PmtTpInf": {
+                            "CtgyPurp": {
+                                "Prtry": "51001"
+                            }
+                        },
+                        "IntrBkSttlmAmt": {
+                            "value": "{{ INTR_BK_STTLM_AMT_VALUE }}",
+                            "Ccy": "{{ INTR_BK_STTLM_CCY_VALUE }}"
+                        },
+                        "ChrgBr": "DEBT",
+                        "Dbtr": {
+                            "Nm": "{{ DBTR_NM_VALUE }}"
+                        },
+                        "DbtrAcct": {
+                            "Id": {
+                                "Othr": {
+                                    "Id": "{{ DBTR_ACCT_VALUE }}"
+                                }
+                            },
+                            "Tp": {
+                                "Prtry": "{{ DBTR_ACCT_TP_VALUE }}"
+                            }
+                        },
+                        "DbtrAgt": {
+                            "FinInstnId": {
+                                "Othr": {
+                                    "Id": "{{ DBTR_AGT_VALUE }}"
+                                }
+                            }
+                        },
+                        "CdtrAgt": {
+                            "FinInstnId": {
+                                "Othr": {
+                                    "Id": "{{ CDTR_AGT_VALUE }}"
+                                }
+                            }
+                        },
+                        "Cdtr": {
+                            "Nm": "{{ CDTR_NM_VALUE }}"
+                        },
+                        "CdtrAcct": {
+                            "Id": {
+                                "Othr": {
+                                    "Id": "{{ CDTR_ACCT_VALUE }}"
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}
