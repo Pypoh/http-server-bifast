@@ -70,19 +70,21 @@ def generateBizMsgIdr(bizMsgIdrOrTTC = None):
         ttc=bizMsgIdrOrTTC[16:19] if len(bizMsgIdrOrTTC) > 3 else bizMsgIdrOrTTC,
         route="O",
         code="01",
-        status=random.randint(000000000, 999999999)
+        status=random.randint(00000000, 99999999)
     )
 
-    return str(result)
+    
+
+    return result
 
 
-def generateMsgId(bizMsgIdr):
+def generateMsgId(bizMsgIdrOrTTC = None):
     formatted_string = "{dateTime}{bankCode}{ttc}{status}"
 
     result = formatted_string.format(
         dateTime=datetime.now().strftime('%Y%m%d'),
         bankCode=bankConfig.BANK_CODE_VALUE,
-        ttc=bizMsgIdr[16:19],
+        ttc=bizMsgIdrOrTTC[16:19] if len(bizMsgIdrOrTTC) > 3 else bizMsgIdrOrTTC,
         status=random.randint(000000000, 999999999)
     )
 

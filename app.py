@@ -26,4 +26,4 @@ def aeHandlerRFI():
         return accountEnquiryHandler.generateResponse(request.json)
 
 if __name__ == '__main__':
-    app.run(host=serverConfig.HOST_URL_VALUE, port=serverConfig.PORT_VALUE)
+    app.run(host=serverConfig.SERVER_URL_VALUE, port=serverConfig.SERVER_PORT_VALUE)

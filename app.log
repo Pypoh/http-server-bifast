@@ -1,0 +1,16 @@
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 10.170.136.163:18939
+DEBUG:urllib3.connectionpool:http://10.170.136.163:18939 "POST / HTTP/1.1" 200 2292
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 10.170.136.163:18939
+DEBUG:urllib3.connectionpool:http://10.170.136.163:18939 "POST / HTTP/1.1" 400 1643
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 10.170.136.163:18939
+DEBUG:urllib3.connectionpool:http://10.170.136.163:18939 "POST / HTTP/1.1" 400 1643
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 10.170.136.163:18939
+DEBUG:urllib3.connectionpool:http://10.170.136.163:18939 "POST / HTTP/1.1" 400 1643
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 10.170.136.163:18939
+DEBUG:urllib3.connectionpool:http://10.170.136.163:18939 "POST / HTTP/1.1" 400 1643
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 10.170.136.163:18939
+DEBUG:urllib3.connectionpool:http://10.170.136.163:18939 "POST / HTTP/1.1" 400 1643
+DEBUG:app:200
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 10.170.136.163:18939
+DEBUG:urllib3.connectionpool:http://10.170.136.163:18939 "POST / HTTP/1.1" 400 1643
+DEBUG:app:200
