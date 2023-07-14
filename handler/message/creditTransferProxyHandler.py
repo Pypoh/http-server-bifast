@@ -1,10 +1,10 @@
 from flask import Flask, Response, current_app, jsonify
-import requests
-import handler.general as handler
 from datetime import datetime
+import requests
 import json
 import os
 import sys
+import handler.general as handler
 
 from config.bankConfig import BANK_CODE_VALUE, HUB_CODE_VALUE, RFI_BANK_CODE_VALUE
 from config.serverConfig import SCHEME_VALUE, HOST_URL_VALUE, HOST_PORT_VALUE
@@ -12,10 +12,10 @@ from config.serverConfig import SCHEME_VALUE, HOST_URL_VALUE, HOST_PORT_VALUE
 
 def requestMessage():
     filePath = os.path.join(
-        current_app.config["FORMAT_PATH"], 'pacs.008.001.10_AccountEnquiry.json')
+        current_app.config["FORMAT_PATH"], 'pacs.008.001.10_CreditTransferProxy.json')
 
-    generatedBizMsgIdr = handler.generateBizMsgIdr("510")
-    generatedMsgId = handler.generateMsgId("510")
+    generatedBizMsgIdr = handler.generateBizMsgIdr("110")
+    generatedMsgId = handler.generateMsgId("110")
 
     with open(filePath, 'r') as file:
         template_data = json.load(file)
@@ -30,29 +30,39 @@ def requestMessage():
             "TX_ID_VALUE": generatedMsgId,
             "INTR_BK_STTLM_AMT_VALUE": 123.12,
             "INTR_BK_STTLM_CCY_VALUE": "IDR",
+            "INTR_BK_STTLM_DT_VALUE": handler.getDt(),
             "DBTR_NM_VALUE": "PTAP",
+            "DBTR_ORG_ID_VALUE": "PT. Abhimata Persada",
             "DBTR_ACCT_VALUE": "Naufal Afif",
             "DBTR_ACCT_TP_VALUE": "SVGS",
             "DBTR_AGT_VALUE": BANK_CODE_VALUE,
             "CDTR_AGT_VALUE": RFI_BANK_CODE_VALUE,
             "CDTR_NM_VALUE": "Afif Naufal",
-            "CDTR_ACCT_VALUE": "12341234",
+            "CDTR_ORG_ID_VALUE": "PT. Bunyamin",
+            "CDTR_ACCT_VALUE": "665544332211",
+            "CDTR_ACCT_TP_VALUE": "SVGS",
+            "CDTR_PRXY_TP_VALUE": "02",
+            "CDTR_PRXY_ID_VALUE": "ARTGIDJA.001@PTAP.COM",
+            "RMTINF_USTRD_VALUE": "Test_RMTINF_USTRD",
+            "SPLMNTR_INITACCTID_VALUE": "123498761234",
+            "SPLMNTR_DBTR_TP_VALUE": "01",
+            "SPLMNTR_DBTR_RSDNTSTS_VALUE": "01",
+            "SPLMNTR_DBTR_TWNNM_VALUE": "0300",
+            "SPLMNTR_CDTR_TP_VALUE": "01",
+            "SPLMNTR_CDTR_RSDNTSTS_VALUE": "01",
+            "SPLMNTR_CDTR_TWNNM_VALUE": "0300",
         }
-    # jsonResponse = Response(json_data, content_type='application/json')
 
     filled_data = handler.replace_placeholders(template_data, value_dict)
+    filled_data["BusMsg"]["Document"]["FIToFICstmrCdtTrf"]["CdtTrfTxInf"][0]["IntrBkSttlmAmt"]["value"] = 123.12
+    headers = {
+        "Content-Type": "application/json",
+        "Content-Length": str(filled_data),
+        "message": "/FIToFICustomerCreditTransferV08"
+    }
 
-    filled_data["BusMsg"]["Document"]["FIToFICstmrCdtTrf"]["CdtTrfTxInf"][0]["IntrBkSttlmAmt"]["Value"] = 123.12
-    # json_data = json.dumps(filled_data, indent=None)
-    
-    # print(filled_data, file=sys.stderr)
-
-    response = requests.post(f"{SCHEME_VALUE}{HOST_URL_VALUE}:{HOST_PORT_VALUE}", json=filled_data)
-
-    # if response.status_code == 200:
-    #     return 'POST request sent successfully!'
-    # else:
-    #     return 'Failed to send POST request.'
+    response = requests.post(
+        f"{SCHEME_VALUE}{HOST_URL_VALUE}:{HOST_PORT_VALUE}", json=filled_data, headers=headers)
 
     return response.text
 

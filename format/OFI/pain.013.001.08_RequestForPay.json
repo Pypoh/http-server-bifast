@@ -1,0 +1,124 @@
+{
+	"BusMsg": {
+		"AppHdr": {
+			"Fr": {
+				"FIId": {
+					"FinInstnId": {
+						"Othr": {
+							"Id": "{{ FR_BIC_VALUE }}"
+						}
+					}
+				}
+			},
+			"To": {
+				"FIId": {
+					"FinInstnId": {
+						"Othr": {
+							"Id": "{{ TO_BIC_VALUE }}"
+						}
+					}
+				}
+			},
+			"BizMsgIdr": "{{ BIZ_MSG_IDR_VALUE }}",
+			"MsgDefIdr": "pain.013.001.08",
+			"BizSvc": "BI",
+			"CreDt": "{{ CRE_DT_VALUE }}",
+			"CpyDplct": "CODU",
+			"PssblDplct": false
+		},
+		"Document": {
+			"CdtrPmtActvtnReq": {
+				"GrpHdr": {
+					"MsgId": "{{ MSG_ID_VALUE }}",
+					"CreDtTm": "{{ CRE_DT_TM_VALUE }}",
+					"NbOfTxs": 1,
+					"InitgPty": {
+						"Nm": "{{ INITG_PTY_NM_VALUE }}",
+						"PstlAdr": {
+							"Ctry": "{{ PSTLADR_CTRY_VALUE }}"
+						}
+					}
+				},
+				"PmtInf": [{
+					"PmtMtd": "TRF",
+					"PmtTpInf": {
+						"CtgyPurp": {
+							"Prtry": 85301
+						}
+					},
+					"ReqdExctnDt": {
+						"Dt": "{{ REQD_EXCTN_DT_VALUE }}"
+					},
+					"XpryDt": {
+						"Dt": "{{ XPRY_DT_VALUE }}"
+					},
+					"Dbtr": {},
+					"DbtrAcct": {
+						"Id": {
+							"Othr": {
+								"Id": "{{ DBTR_ACCT_VALUE }}"
+							}
+						}
+					},
+					"DbtrAgt": {
+						"FinInstnId": {
+							"Othr": {
+								"Id": "{{ DBTR_AGT_VALUE }}"
+							}
+						}
+					},
+					"CdtTrfTx": [{
+						"PmtId": {
+							"EndToEndId": "{{ END_TO_END_ID_VALUE }}"
+						},
+						"Amt": {
+							"InstdAmt": {
+								"value": "{{ INSTDAMT_VALUE }}",
+								"Ccy": "{{ INSTDAMT_CCY_VALUE }}"
+							}						
+						},
+						"ChrgBr": "DEBT",
+						"CdtrAgt": {
+							"FinInstnId": {
+								"Othr": {
+									"Id": "{{ CDTR_AGT_VALUE }}"
+								}
+							}
+						},
+						"Cdtr": {
+							"Id": {
+								"OrgId": {
+									"Othr": [{
+										"Id": "{{ CDTR_ORG_ID_VALUE }}"
+									}]
+								}
+							}
+						},
+						"CdtrAcct": {
+							"Id": {
+								"Othr": {
+									"Id": "{{ CDTR_ACCT_VALUE }}"
+								}
+							},
+							"Tp": {
+								"Prtry": "{{ CDTR_ACCT_TP_VALUE }}"
+							},
+							"Nm": "{{ CDTR_ACCT_NM_VALUE }}"
+						},
+						"SplmtryData": [{
+							"Envlp": {
+								"Dtl": {
+									"Cdtr": {
+										"Tp": "{{ SPLMNTR_CDTR_TP_VALUE }}",
+										"RsdntSts": "{{ SPLMNTR_CDTR_RSDNTSTS_VALUE }}",
+										"TwnNm": "{{ SPLMNTR_CDTR_TWNNM_VALUE }}"
+									}
+								}
+							}
+						}]
+					}]
+				}]
+			}
+		}
+	}
+}

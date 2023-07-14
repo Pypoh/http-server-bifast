@@ -110,3 +110,9 @@ def getCreDtTm():
     currentTime = datetime.now(wibTimeZone)
     creDtTmValue = currentTime.strftime('%Y-%m-%dT%H:%M:%S')
     return creDtTmValue
+
+def getDt():
+    wibTimeZone = pytz.timezone('Asia/Jakarta')
+    currentTime = datetime.now(wibTimeZone)
+    DtValue = currentTime.strftime('%Y-%m-%d')
+    return DtValue

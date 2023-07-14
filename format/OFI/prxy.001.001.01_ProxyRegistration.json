@@ -1,0 +1,101 @@
+{
+  "BusMsg": {
+    "AppHdr": {
+      "Fr": {
+        "FIId": {
+          "FinInstnId": {
+            "Othr": {
+              "Id": "{{ FR_BIC_VALUE }}"
+            }
+          }
+        }
+      },
+      "To": {
+        "FIId": {
+          "FinInstnId": {
+            "Othr": {
+              "Id": "{{ TO_BIC_VALUE }}"
+            }
+          }
+        }
+      },
+      "BizMsgIdr": "{{ BIZ_MSG_IDR_VALUE }}",
+      "MsgDefIdr": "prxy.001.001.01",
+      "CreDt": "2023-07-07T10:00:00Z",
+      "CpyDplct": "CODU",
+      "PssblDplct": false
+    },
+    "Document": {
+      "PrxyRegn": {
+        "GrpHdr": {
+          "MsgId": "{{ MSG_ID_VALUE }}",
+          "CreDtTm": "{{ CRE_DT_TM_VALUE }}",
+          "MsgSndr": {
+            "Agt": {
+              "FinInstnId": {
+                "Othr": {
+                  "Id": "{{ MSGSNDR_AGT_VALUE }}"
+                }
+              }
+            },
+            "Acct": {
+              "Id": {
+                "Othr": {
+                  "Id": "{{ MSGSNDR_ACCT_ID_VALUE }}"
+                }
+              }
+            }
+          }
+        },
+        "Regn": {
+          "RegnTp": "{{ REGN_TP_VALUE }}",
+          "Prxy": {
+            "Tp": "{{ REGN_PRXY_TP_VALUE }}",
+            "Val": "{{ REGN_PRXY_VAL_VALUE }}"
+          },
+          "PrxyRegn": {
+            "DsplNm": "{{ PRXYREGN_DSPLNM_VALUE }}",
+            "Agt": {
+              "FinInstnId": {
+                "Nm": "{{ PRXYREGN_AGT_NM_VALUE }}",
+                "Othr": {
+                  "Id": "{{ PRXYREGN_AGT_ID_VALUE }}"
+                }
+              }
+            },
+            "Acct": {
+              "Id": {
+                "Othr": {
+                  "Id": "{{ PRXYREGN_ACCT_ID_VALUE }}"
+                }
+              },
+              "Tp": {
+                "Prtry": "{{ PRXYREGN_ACCT_TP_VALUE }}"
+              },
+              "Nm": "{{ PRXYREGN_ACCT_NM_VALUE }}"
+            },
+            "ScndId": {
+              "Tp": "{{ PRXYREGN_SCNDID_TP_VALUE }}",
+              "Val": "{{ PRXYREGN_SCNDID_VAL_VALUE }}"
+            },
+            "RegnSts": "{{ PRXYREGN_STS_VALUE }}"
+          }
+        },
+        "SplmtryData": [
+          {
+            "Envlp": {
+              "Dtl": {
+                "Cstmr": {
+                  "Tp": "{{ SPLMNTR_CSTMR_TP_VALUE }}",
+                  "Id": "{{ SPLMNTR_CSTMR_ID_VALUE }}",
+                  "RsdntSts": "{{ SPLMNTR_CSTMR_RSNDT_VALUE }}",
+                  "TwnNm": "{{ SPLMNTR_CSTMR_TWNNM_VALUE }}"
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

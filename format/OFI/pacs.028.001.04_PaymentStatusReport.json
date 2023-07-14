@@ -1,0 +1,42 @@
+{
+  "BusMsg": {
+    "AppHdr": {
+      "Fr": {
+        "FIId": {
+          "FinInstnId": {
+            "Othr": {
+              "Id": "{{ FR_BIC_VALUE }}"
+            }
+          }
+        }
+      },
+      "To": {
+        "FIId": {
+          "FinInstnId": {
+            "Othr": {
+              "Id": "FASTIDJA"
+            }
+          }
+        }
+      },
+      "BizMsgIdr": "{{ BIZ_MSG_IDR_VALUE }}",
+      "MsgDefIdr": "pacs.028.001.04",
+      "CreDt": "{{ CRE_DT_VALUE }}",
+      "CpyDplct": "CODU",
+      "PssblDplct": false
+    },
+    "Document": {
+      "FIToFIPmtStsReq": {
+        "GrpHdr": {
+          "MsgId": "{{ MSG_ID_VALUE }}",
+          "CreDtTm": "{{ CRE_DT_TM_VALUE }}"
+        },
+        "TxInf": [
+          {
+            "OrgnlEndToEndId": "{{ ORGNL_END_TO_END_ID_VALUE }}"
+          }
+        ]
+      }
+    }
+  }
+}
