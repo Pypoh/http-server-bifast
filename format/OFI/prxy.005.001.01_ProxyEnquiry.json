@@ -1,0 +1,60 @@
+{
+	"BusMsg": {
+		"AppHdr": {
+			"Fr": {
+				"FIId": {
+					"FinInstnId": {
+						"Othr": {
+							"Id": "{{ FR_BIC_VALUE }}"
+						}
+					}
+				}
+			},
+			"To": {
+				"FIId": {
+					"FinInstnId": {
+						"Othr": {
+							"Id": "{{ TO_BIC_VALUE }}"
+						}
+					}
+				}
+			},
+			"BizMsgIdr": "{{ BIZ_MSG_IDR_VALUE }}",
+			"MsgDefIdr": "prxy.005.001.01",
+			"BizSvc": "BI",
+			"CreDt": "{{ CRE_DT_VALUE }}",
+			"CpyDplct": "CODU",
+			"PssblDplct": false
+		},
+		"Document": {
+			"PrxyNqryReq": {
+				"GrpHdr": {
+					"MsgId": "{{ MSG_ID_VALUE }}",
+					"CreDtTm": "{{ CRE_DT_TM_VALUE }}",
+					"MsgSndr": {
+						"Agt": {
+							"FinInstnId": {
+								"Othr": {
+									"Id": "{{ MSGSNDR_AGT_VALUE }}"
+								}
+							}
+						},
+						"Acct": {
+							"Id": {
+								"Othr": {
+									"Id": "{{ MSGSNDR_ACCT_ID_VALUE }}"
+								}
+							}
+						}
+					}
+				},
+				"Nqry": {
+					"ScndId": {
+						"Tp": "{{ NQRY_SCNDID_TP_VALUE }}",
+						"Val": "{{ NQRY_SCNDID_VAL_VALUE }}"
+					}
+				}
+			}
+		}
+	}
+}

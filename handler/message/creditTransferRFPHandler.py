@@ -10,12 +10,12 @@ from config.bankConfig import BANK_CODE_VALUE, HUB_CODE_VALUE, RFI_BANK_CODE_VAL
 from config.serverConfig import SCHEME_VALUE, HOST_URL_VALUE, HOST_PORT_VALUE
 
 
-def requestMessage(id = None):
+def requestMessage():
     filePath = os.path.join(
-        current_app.config["FORMAT_PATH"], 'pacs.028.001.04_PaymentStatusReport.json')
+        current_app.config["FORMAT_PATH"], 'pacs.008.001.10_CreditTransfer.json')
 
-    generatedBizMsgIdr = handler.generateBizMsgIdr("000")
-    generatedMsgId = handler.generateMsgId("000")
+    generatedBizMsgIdr = handler.generateBizMsgIdr("310")
+    generatedMsgId = handler.generateMsgId("310")
 
     with open(filePath, 'r') as file:
         template_data = json.load(file)
@@ -26,20 +26,40 @@ def requestMessage(id = None):
             "CRE_DT_VALUE": handler.getCreDt(),
             "MSG_ID_VALUE": generatedMsgId,
             "CRE_DT_TM_VALUE": handler.getCreDtTm(),
-            "ORGNL_END_TO_END_ID_VALUE": id,
+            "END_TO_END_ID_VALUE": generatedBizMsgIdr,
+            "TX_ID_VALUE": generatedMsgId,
+            "INTR_BK_STTLM_AMT_VALUE": 123.12,
+            "INTR_BK_STTLM_CCY_VALUE": "IDR",
+            "INTR_BK_STTLM_DT_VALUE": handler.getDt(),
+            "DBTR_NM_VALUE": "PTAP",
+            "DBTR_ORG_ID_VALUE": "PT. Abhimata Persada",
+            "DBTR_ACCT_VALUE": "Naufal Afif",
+            "DBTR_ACCT_TP_VALUE": "SVGS",
+            "DBTR_AGT_VALUE": BANK_CODE_VALUE,
+            "CDTR_AGT_VALUE": RFI_BANK_CODE_VALUE,
+            "CDTR_NM_VALUE": "Afif Naufal",
+            "CDTR_ORG_ID_VALUE": "PT. Bunyamin",
+            "CDTR_ACCT_VALUE": "12349876",
+            "CDTR_ACCT_TP_VALUE": "SVGS",
+            "RMTINF_USTRD_VALUE": "Test_RMTINF_USTRD",
+            "SPLMNTR_INITACCTID_VALUE": "123498761234",
+            "SPLMNTR_DBTR_TP_VALUE": "01",
+            "SPLMNTR_DBTR_RSDNTSTS_VALUE": "01",
+            "SPLMNTR_DBTR_TWNNM_VALUE": "0300",
+            "SPLMNTR_CDTR_TP_VALUE": "01",
+            "SPLMNTR_CDTR_RSDNTSTS_VALUE": "01",
+            "SPLMNTR_CDTR_TWNNM_VALUE": "0300",
         }
-
     filled_data = handler.replace_placeholders(template_data, value_dict)
-
+    filled_data["BusMsg"]["Document"]["FIToFICstmrCdtTrf"]["CdtTrfTxInf"][0]["IntrBkSttlmAmt"]["value"] = 123.12
+    filled_data["BusMsg"]["Document"]["FIToFICstmrCdtTrf"]["CdtTrfTxInf"][0]["SplmtryData"][0]["Envlp"]["Dtl"]["RltdEndToEndId"] = "12341234123412341234"
     headers = {
         "Content-Type": "application/json",
         "Content-Length": str(filled_data),
-        "message": "/FIToFIPaymentStatusRequestV04"
+        "message": "/FIToFICustomerCreditTransferV08"
     }
-
     response = requests.post(
         f"{SCHEME_VALUE}{HOST_URL_VALUE}:{HOST_PORT_VALUE}", json=filled_data, headers=headers)
-
     return response.text
 
 

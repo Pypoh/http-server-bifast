@@ -20,7 +20,7 @@
                 }
             },
             "BizMsgIdr": "{{ BIZ_MSG_IDR_VALUE }}",
-            "MsgDefIdr": "pacs.008.001.08",
+            "MsgDefIdr": "{{ MSG_DEF_IDR_VALUE }}",
             "CreDt": "{{ CRE_DT_VALUE }}"
         },
         "Document": {
@@ -28,9 +28,9 @@
                 "GrpHdr": {
                     "MsgId":  "{{ MSG_ID_VALUE }}",
                     "CreDtTm": "{{ CRE_DT_TM_VALUE }}",
-                    "NbOfTxs": "1",
+                    "NbOfTxs": "{{ NM_OF_TXS_VALUE }}",
                     "SttlmInf": {
-                        "SttlmMtd": "CLRG"
+                        "SttlmMtd": "{{ STTLMTD_VALUE }}"
                     }
                 },
                 "CdtTrfTxInf": [
@@ -41,14 +41,14 @@
                         },
                         "PmtTpInf": {
                             "CtgyPurp": {
-                                "Prtry": "51001"
+                                "Prtry": "{{ PMT_TP_INF_CTGYPURP_VALUE }}"
                             }
                         },
                         "IntrBkSttlmAmt": {
                             "value": "{{ INTR_BK_STTLM_AMT_VALUE }}",
                             "Ccy": "{{ INTR_BK_STTLM_CCY_VALUE }}"
                         },
-                        "ChrgBr": "DEBT",
+                        "ChrgBr": "{{ CHRGBR_VALUE }}",
                         "Dbtr": {
                             "Nm": "{{ DBTR_NM_VALUE }}"
                         },

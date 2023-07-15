@@ -1,0 +1,79 @@
+{
+	"BusMsg": {
+		"AppHdr": {
+			"Fr": {
+				"FIId": {
+					"FinInstnId": {
+						"Othr": {
+							"Id": "{{ FR_BIC_VALUE }}"
+						}
+					}
+				}
+			},
+			"To": {
+				"FIId": {
+					"FinInstnId": {
+						"Othr": {
+							"Id": "{{ TO_BIC_VALUE }}"
+						}
+					}
+				}
+			},
+			"BizMsgIdr": "{{ BIZ_MSG_IDR_VALUE }}",
+			"MsgDefIdr": "pain.014.001.08",
+			"BizSvc": "BI",
+			"CreDt": "{{ CRE_DT_VALUE }}",
+			"CpyDplct": "CODU",
+			"PssblDplct": false
+		},
+		"Document": {
+			"CdtrPmtActvtnReqStsRpt": {
+				"GrpHdr": {
+					"MsgId": "{{ MSG_ID_VALUE }}",
+					"CreDtTm": "{{ CRE_DT_TM_VALUE }}",
+					"InitgPty": {},
+					"CdtrAgt": {
+						"FinInstnId": {
+							"Othr": {
+								"Id": "{{ CDTR_AGT_VALUE }}"
+							}
+						}
+					}
+				},
+				"OrgnlGrpInfAndSts": {
+					"OrgnlMsgId": "{{ ORGNL_MSG_ID_VALUE }}",
+					"OrgnlMsgNmId": "{{ ORGNL_MSG_NM_VALUE }}"
+				},
+				"OrgnlPmtInfAndSts": [
+					{
+						"OrgnlPmtInfId": "{{ ORGNL_PMTINF_ID_VALUE }}",
+						"TxInfAndSts": [
+							{
+								"OrgnlEndToEndId": "{{ ORGNL_END_TO_END_ID_VALUE }}",
+								"TxSts": "{{ TXSTS_VALUE }}",
+								"StsRsnInf": [
+									{
+										"Rsn": {
+											"Prtry": "{{ STS_RSN_INF_VALUE }}"
+										}
+									}
+								]
+							}
+						]
+					}
+				],
+				"SplmtryData": [
+					{
+						"Envlp": {
+							"Dtl": {
+								"TxInfAndSts": {
+									"EndToEndId": "{{ END_TO_END_ID_VALUE }}"
+								}
+							}
+						}
+					}
+				]
+			}
+		}
+	}
+}

@@ -10,12 +10,12 @@ from config.bankConfig import BANK_CODE_VALUE, HUB_CODE_VALUE, RFI_BANK_CODE_VAL
 from config.serverConfig import SCHEME_VALUE, HOST_URL_VALUE, HOST_PORT_VALUE
 
 
-def requestMessage(id = None):
+def requestMessageByAccount():
     filePath = os.path.join(
-        current_app.config["FORMAT_PATH"], 'pacs.028.001.04_PaymentStatusReport.json')
+        current_app.config["FORMAT_PATH"], 'pain.014.001.08_RequestForPayReject.json')
 
-    generatedBizMsgIdr = handler.generateBizMsgIdr("000")
-    generatedMsgId = handler.generateMsgId("000")
+    generatedBizMsgIdr = handler.generateBizMsgIdr("854")
+    generatedMsgId = handler.generateMsgId("854")
 
     with open(filePath, 'r') as file:
         template_data = json.load(file)
@@ -26,15 +26,24 @@ def requestMessage(id = None):
             "CRE_DT_VALUE": handler.getCreDt(),
             "MSG_ID_VALUE": generatedMsgId,
             "CRE_DT_TM_VALUE": handler.getCreDtTm(),
-            "ORGNL_END_TO_END_ID_VALUE": id,
+            "CDTR_AGT_VALUE": RFI_BANK_CODE_VALUE,
+            "ORGNL_MSG_ID_VALUE": "20230710ARTGIDJA85301001824",
+            "ORGNL_MSG_NM_VALUE": "pain.013.001.08",
+            "ORGNL_PMTINF_ID_VALUE": "20230710ARTGIDJA85301001824",
+            "ORGNL_END_TO_END_ID_VALUE": "20230710ARTGIDJA853O0101001824",
+            "TXSTS_VALUE": "RJCT",
+            "STS_RSN_INF_VALUE": "U110",
+            "END_TO_END_ID_VALUE": generatedBizMsgIdr
         }
 
     filled_data = handler.replace_placeholders(template_data, value_dict)
 
+    filled_data["BusMsg"]["Document"]["CdtrPmtActvtnReq"]["PmtInf"][0]["CdtTrfTx"][0]["Amt"]["InstdAmt"]["value"] = 123.12
+
     headers = {
         "Content-Type": "application/json",
         "Content-Length": str(filled_data),
-        "message": "/FIToFIPaymentStatusRequestV04"
+        "message": "/CreditorPaymentActivationRequestStatusReportV08"
     }
 
     response = requests.post(
@@ -42,6 +51,46 @@ def requestMessage(id = None):
 
     return response.text
 
+def requestMessageByProxy():
+    filePath = os.path.join(
+        current_app.config["FORMAT_PATH"], 'pain.014.001.08_RequestForPayReject.json')
+
+    generatedBizMsgIdr = handler.generateBizMsgIdr("852")
+    generatedMsgId = handler.generateMsgId("852")
+
+    with open(filePath, 'r') as file:
+        template_data = json.load(file)
+        value_dict = {
+            "FR_BIC_VALUE": BANK_CODE_VALUE,
+            "TO_BIC_VALUE": HUB_CODE_VALUE,
+            "BIZ_MSG_IDR_VALUE": generatedBizMsgIdr,
+            "CRE_DT_VALUE": handler.getCreDt(),
+            "MSG_ID_VALUE": generatedMsgId,
+            "CRE_DT_TM_VALUE": handler.getCreDtTm(),
+            "CDTR_AGT_VALUE": RFI_BANK_CODE_VALUE,
+            "ORGNL_MSG_ID_VALUE": "20230710ARTGIDJA85301001824",
+            "ORGNL_MSG_NM_VALUE": "pain.013.001.08",
+            "ORGNL_PMTINF_ID_VALUE": "20230710ARTGIDJA85301001824",
+            "ORGNL_END_TO_END_ID_VALUE": "20230710ARTGIDJA853O0101001824",
+            "TXSTS_VALUE": "RJCT",
+            "STS_RSN_INF_VALUE": "U110",
+            "END_TO_END_ID_VALUE": generatedBizMsgIdr
+        }
+
+    filled_data = handler.replace_placeholders(template_data, value_dict)
+
+    filled_data["BusMsg"]["Document"]["CdtrPmtActvtnReq"]["PmtInf"][0]["CdtTrfTx"][0]["Amt"]["InstdAmt"]["value"] = 123.12
+
+    headers = {
+        "Content-Type": "application/json",
+        "Content-Length": str(filled_data),
+        "message": "/CreditorPaymentActivationRequestStatusReportV08"
+    }
+
+    response = requests.post(
+        f"{SCHEME_VALUE}{HOST_URL_VALUE}:{HOST_PORT_VALUE}", json=filled_data, headers=headers)
+
+    return response.text
 
 def generateResponse(message):
     filePath = os.path.join(

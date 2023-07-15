@@ -21,7 +21,7 @@
       },
       "BizMsgIdr": "{{ BIZ_MSG_IDR_VALUE }}",
       "MsgDefIdr": "prxy.001.001.01",
-      "CreDt": "2023-07-07T10:00:00Z",
+      "CreDt": "{{ CRE_DT_VALUE }}",
       "CpyDplct": "CODU",
       "PssblDplct": false
     },
