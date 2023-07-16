@@ -20,18 +20,18 @@
 				}
 			},
 			"BizMsgIdr": "{{ BIZ_MSG_IDR_VALUE }}",
-			"MsgDefIdr": "pain.013.001.08",
-			"BizSvc": "BI",
+			"MsgDefIdr": "{{ MSG_DEF_IDR_VALUE }}",
+			"BizSvc": "{{ BIZ_SVC_VALUE }}",
 			"CreDt": "{{ CRE_DT_VALUE }}",
-			"CpyDplct": "CODU",
-			"PssblDplct": false
+			"CpyDplct": "{{ CPYDPLCT_VALUE }}",
+			"PssblDplct": "{{ PSSBLDPLCT_VALUE }}"
 		},
 		"Document": {
 			"CdtrPmtActvtnReq": {
 				"GrpHdr": {
 					"MsgId": "{{ MSG_ID_VALUE }}",
 					"CreDtTm": "{{ CRE_DT_TM_VALUE }}",
-					"NbOfTxs": 1,
+					"NbOfTxs": "{{ NM_OF_TXS_VALUE }}",
 					"InitgPty": {
 						"Nm": "{{ INITG_PTY_NM_VALUE }}",
 						"PstlAdr": {
@@ -40,10 +40,10 @@
 					}
 				},
 				"PmtInf": [{
-					"PmtMtd": "TRF",
+					"PmtMtd": "{{ PMTINF_PMTMTD_VALUE }}",
 					"PmtTpInf": {
 						"CtgyPurp": {
-							"Prtry": 85301
+							"Prtry": "{{ PMTTPINF_CTGYPURP_VALUE }}"
 						}
 					},
 					"ReqdExctnDt": {
@@ -77,7 +77,7 @@
 								"Ccy": "{{ INSTDAMT_CCY_VALUE }}"
 							}						
 						},
-						"ChrgBr": "DEBT",
+						"ChrgBr": "{{ CHRGBR_VALUE }}",
 						"CdtrAgt": {
 							"FinInstnId": {
 								"Othr": {

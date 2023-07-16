@@ -20,11 +20,11 @@
 				}
 			},
 			"BizMsgIdr": "{{ BIZ_MSG_IDR_VALUE }}",
-			"MsgDefIdr": "pain.014.001.08",
-			"BizSvc": "BI",
+			"MsgDefIdr": "{{ MSG_DEF_IDR_VALUE }}",
+			"BizSvc": "{{ BIZ_SVC_VALUE }}",
 			"CreDt": "{{ CRE_DT_VALUE }}",
-			"CpyDplct": "CODU",
-			"PssblDplct": false
+			"CpyDplct": "{{ CPYDPLCT_VALUE }}",
+			"PssblDplct": "{{ PSSBLDPLCT_VALUE }}"
 		},
 		"Document": {
 			"CdtrPmtActvtnReqStsRpt": {

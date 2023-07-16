@@ -10,7 +10,7 @@ from config.bankConfig import BANK_CODE_VALUE, HUB_CODE_VALUE, RFI_BANK_CODE_VAL
 from config.serverConfig import SCHEME_VALUE, HOST_URL_VALUE, HOST_PORT_VALUE
 
 
-def requestMessageByAccount():
+def requestMessageByAccount(requestData):
     filePath = os.path.join(
         current_app.config["FORMAT_PATH"], 'pain.014.001.08_RequestForPayReject.json')
 
@@ -20,19 +20,23 @@ def requestMessageByAccount():
     with open(filePath, 'r') as file:
         template_data = json.load(file)
         value_dict = {
-            "FR_BIC_VALUE": BANK_CODE_VALUE,
-            "TO_BIC_VALUE": HUB_CODE_VALUE,
+            "FR_BIC_VALUE": requestData.get('Fr'),
+            "TO_BIC_VALUE": requestData.get('Fr'),
             "BIZ_MSG_IDR_VALUE": generatedBizMsgIdr,
+            "MSG_DEF_IDR_VALUE": requestData.get('Fr'),
+            "BIZ_SVC_VALUE": requestData.get('Fr'),
             "CRE_DT_VALUE": handler.getCreDt(),
+            "CPYDPLCT_VALUE": requestData.get('Fr'),
+            "PSSBLDPLCT_VALUE": requestData.get('Fr'),
             "MSG_ID_VALUE": generatedMsgId,
             "CRE_DT_TM_VALUE": handler.getCreDtTm(),
-            "CDTR_AGT_VALUE": RFI_BANK_CODE_VALUE,
-            "ORGNL_MSG_ID_VALUE": "20230710ARTGIDJA85301001824",
-            "ORGNL_MSG_NM_VALUE": "pain.013.001.08",
-            "ORGNL_PMTINF_ID_VALUE": "20230710ARTGIDJA85301001824",
-            "ORGNL_END_TO_END_ID_VALUE": "20230710ARTGIDJA853O0101001824",
-            "TXSTS_VALUE": "RJCT",
-            "STS_RSN_INF_VALUE": "U110",
+            "CDTR_AGT_VALUE": requestData.get('Fr'),
+            "ORGNL_MSG_ID_VALUE": requestData.get('Fr'),
+            "ORGNL_MSG_NM_VALUE": requestData.get('Fr'),
+            "ORGNL_PMTINF_ID_VALUE": requestData.get('Fr'),
+            "ORGNL_END_TO_END_ID_VALUE": requestData.get('Fr'),
+            "TXSTS_VALUE": requestData.get('Fr'),
+            "STS_RSN_INF_VALUE": requestData.get('Fr'),
             "END_TO_END_ID_VALUE": generatedBizMsgIdr
         }
 
@@ -47,9 +51,10 @@ def requestMessageByAccount():
     }
 
     response = requests.post(
-        f"{SCHEME_VALUE}{HOST_URL_VALUE}:{HOST_PORT_VALUE}", json=filled_data, headers=headers)
+        f"{SCHEME_VALUE}{requestData.get('Host_url')}:{requestData.get('Host_port')}", json=filled_data, headers=headers)
 
     return response.text
+
 
 def requestMessageByProxy():
     filePath = os.path.join(
@@ -91,6 +96,7 @@ def requestMessageByProxy():
         f"{SCHEME_VALUE}{HOST_URL_VALUE}:{HOST_PORT_VALUE}", json=filled_data, headers=headers)
 
     return response.text
+
 
 def generateResponse(message):
     filePath = os.path.join(
