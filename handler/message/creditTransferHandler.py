@@ -14,8 +14,8 @@ def requestMessage(requestData):
     filePath = os.path.join(
         current_app.config["FORMAT_PATH"], 'pacs.008.001.10_CreditTransfer.json')
 
-    generatedBizMsgIdr = handler.generateBizMsgIdr("010")
-    generatedMsgId = handler.generateMsgId("010")
+    generatedBizMsgIdr = handler.generateBizMsgIdr(requestData.get('Fr'), "010")
+    generatedMsgId = handler.generateMsgId(requestData.get('Fr'), "010")
 
     with open(filePath, 'r') as file:
         template_data = json.load(file)
@@ -26,7 +26,7 @@ def requestMessage(requestData):
             "MSG_DEF_IDR_VALUE": requestData.get('MsgDefIdr'),
             "BIZ_SVC_VALUE": requestData.get('BizSvc'),
             "CRE_DT_VALUE": handler.getCreDt(),
-            "CPYDPLCT_VALUE": requestData.get('Cpydplct'),
+            "CPYDPLCT_VALUE": requestData.get('CpyDplct'),
             "PSSBLDPLCT_VALUE": requestData.get('PssblDplct'),
             "MSG_ID_VALUE": generatedMsgId,
             "CRE_DT_TM_VALUE": handler.getCreDtTm(),
@@ -48,8 +48,8 @@ def requestMessage(requestData):
             "CDTR_AGT_VALUE": requestData.get('CdtrAgt'),
             "CDTR_NM_VALUE": requestData.get('Cdtr_nm'),
             "CDTR_ORG_ID_VALUE": requestData.get('Cdtr_orgid'),
-            "CDTR_ACCT_VALUE": requestData.get('Cpydplct'),
-            "CDTR_ACCT_TP_VALUE": requestData.get('CdtrAcct_value'),
+            "CDTR_ACCT_VALUE": requestData.get('CdtrAcct_value'),
+            "CDTR_ACCT_TP_VALUE": requestData.get('CdtrAcct_type'),
             "RMTINF_USTRD_VALUE": requestData.get('RmtInf'),
             "SPLMNTR_INITACCTID_VALUE": requestData.get('SplmtryData_InitgAcctId'),
             "SPLMNTR_DBTR_TP_VALUE": requestData.get('SplmtryData_Dbtr_tp'),
@@ -61,14 +61,8 @@ def requestMessage(requestData):
         }
 
     filled_data = handler.replace_placeholders(template_data, value_dict)
-
     filled_data["BusMsg"]["Document"]["FIToFICstmrCdtTrf"]["CdtTrfTxInf"][0]["IntrBkSttlmAmt"]["value"] = 123.12
-    # filled_data["BusMsg"]["Document"]["FIToFICstmrCdtTrf"]["CdtTrfTxInf"][0]["SplmtryData"][0]["Envlp"]["Dbtr"]["Tp"] = 1
-    # filled_data["BusMsg"]["Document"]["FIToFICstmrCdtTrf"]["CdtTrfTxInf"][0]["SplmtryData"][0]["Envlp"]["Dbtr"]["RsdntSts"] = 1
-    # filled_data["BusMsg"]["Document"]["FIToFICstmrCdtTrf"]["CdtTrfTxInf"][0]["SplmtryData"][0]["Envlp"]["Dbtr"]["TwnNm"] = 300
-    # filled_data["BusMsg"]["Document"]["FIToFICstmrCdtTrf"]["CdtTrfTxInf"][0]["SplmtryData"][0]["Envlp"]["Cdtr"]["Tp"] = 1
-    # filled_data["BusMsg"]["Document"]["FIToFICstmrCdtTrf"]["CdtTrfTxInf"][0]["SplmtryData"][0]["Envlp"]["Cdtr"]["RsdntSts"] = 1
-    # filled_data["BusMsg"]["Document"]["FIToFICstmrCdtTrf"]["CdtTrfTxInf"][0]["SplmtryData"][0]["Envlp"]["Cdtr"]["TwnNm"] = 300
+    filled_data["BusMsg"]["AppHdr"]["PssblDplct"] = False
 
     # print(filled_data, file=sys.stderr)
 

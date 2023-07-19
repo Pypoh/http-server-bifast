@@ -20,8 +20,11 @@
         }
       },
       "BizMsgIdr": "{{ BIZ_MSG_IDR_VALUE }}",
-      "MsgDefIdr": "prxy.003.001.01",
-      "CreDt": "{{ CRE_DT_VALUE }}"
+      "MsgDefIdr": "{{ MSG_DEF_IDR_VALUE }}",
+      "BizSvc": "{{ BIZ_SVC_VALUE }}",
+      "CreDt": "{{ CRE_DT_VALUE }}",
+      "CpyDplct": "{{ CPYDPLCT_VALUE }}",
+      "PssblDplct": "{{ PSSBLDPLCT_VALUE }}"
     },
     "Document": {
       "PrxyLookUp": {

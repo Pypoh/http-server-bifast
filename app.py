@@ -37,13 +37,13 @@ def aeHandlerOFI():
 @app.route('/CreditTransferOFI', methods=['POST'])
 def ctHandlerOFI():
     if request.method == 'POST':
-        return creditTransferHandler.requestMessage()
+        return creditTransferHandler.requestMessage(request.form)
 
 # Credit Transfer Reversal
 @app.route('/CreditTransferReversalOFI', methods=['POST'])
 def ctreverseHandlerOFI():
     if request.method == 'POST':
-        return creditTransferReversalHandler.requestMessage()
+        return creditTransferReversalHandler.requestMessage(request.form)
 
 # Credit Transfer
 @app.route('/CreditTransferProxyOFI', methods=['POST'])
@@ -52,82 +52,70 @@ def ctproxyHandlerOFI():
         return creditTransferProxyHandler.requestMessage()
 
 # PSR CT
-@app.route('/PaymentStatusOFI/<id>', methods=['POST'])
-def psrctHandlerOFI(id):
+@app.route('/PaymentStatusOFI', methods=['POST'])
+def psrctHandlerOFI():
     if request.method == 'POST':
-        return paymentStatusReportHandler.requestMessage(id)
+        return paymentStatusReportHandler.requestMessage(request.form)
 
 # Proxy Registration
 @app.route('/ProxyRegistrationOFI', methods=['POST'])
 def proxyregistHandlerOFI():
     if request.method == 'POST':
-        return proxyHandler.requestMessageRegistration()
+        return proxyHandler.requestMessageRegistration(request.form)
 
 # Proxy Porting
 @app.route('/ProxyPortingOFI', methods=['POST'])
 def proxyportingHandlerOFI():
     if request.method == 'POST':
-        return proxyHandler.requestMessagePorting()
+        return proxyHandler.requestMessagePorting(request.form)
 
 # Proxy Lookup
 @app.route('/ProxyLookupOFI', methods=['POST'])
 def proxylookupHandlerOFI():
     if request.method == 'POST':
-        return proxyHandler.requestMessageLookup()
+        return proxyHandler.requestMessageLookup(request.form)
 
 # Proxy Enquiry
 @app.route('/ProxyEnquiryOFI', methods=['POST'])
 def proxyenquiryHandlerOFI():
     if request.method == 'POST':
-        return proxyHandler.requestMessageEnquiry()
+        return proxyHandler.requestMessageEnquiry(request.form)
 
 # Proxy Deactivate
 @app.route('/ProxyDeactivateOFI', methods=['POST'])
 def prpxydeactivateHandlerOFI():
     if request.method == 'POST':
-        return proxyHandler.requestMessage()
+        return proxyHandler.requestMessage(request.form)
 
 # Request For Payment
 @app.route('/RequestForPayByAccountOFI', methods=['POST'])
 def rfpaccountHandlerOFI():
     if request.method == 'POST':
-        return requestForPaymentHandler.requestMessageByAccount()
+        return requestForPaymentHandler.requestMessageByAccount(request.form)
 
 # Request For Payment
 @app.route('/RequestForPayByProxyOFI', methods=['POST'])
 def rfpproxyHandlerOFI():
     if request.method == 'POST':
-        return requestForPaymentHandler.requestMessageByProxy()
+        return requestForPaymentHandler.requestMessageByProxy(request.form)
 
 # Request For Payment Rejection
 @app.route('/RequestForPayRejectByAccountOFI', methods=['POST'])
 def rfprejectaccountHandlerOFI():
     if request.method == 'POST':
-        return requestForPaymentRejectHandler.requestMessageByAccount()
+        return requestForPaymentRejectHandler.requestMessageByAccount(request.form)
 
 # Request For Payment Rejection
 @app.route('/RequestForPayRejectByProxyOFI', methods=['POST'])
-def rfpHandlerOFI():
+def rfprejectproxyHandlerOFI():
     if request.method == 'POST':
-        return requestForPaymentRejectHandler.requestMessageByProxy()
+        return requestForPaymentRejectHandler.requestMessageByProxy(request.form)
 
 # Credit Transfer RFP
 @app.route('/CreditTransferRFPOFI', methods=['POST'])
-def rfpHandlerOFI():
+def ctrfpHandlerOFI():
     if request.method == 'POST':
-        return creditTransferRFPHandler.requestMessage()
-
-# # Payment Status RFP
-# @app.route('/PaymentStatusRFPOFI', methods=['POST'])
-# def rfpHandlerOFI():
-#     if request.method == 'POST':
-#         return requestForPaymentHandler.requestMessage()
-
-# # Request For Payment
-# @app.route('/PaymentStatusCTRFPOFI', methods=['POST'])
-# def rfpHandlerOFI():
-#     if request.method == 'POST':
-#         return requestForPaymentHandler.requestMessage()
+        return creditTransferRFPHandler.requestMessage(request.form)
 
 # # E-Mandate Registration by Crediting
 # @app.route('/MandateRegistByCreditOFI', methods=['POST'])

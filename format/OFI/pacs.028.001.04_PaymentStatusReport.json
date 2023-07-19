@@ -14,16 +14,16 @@
         "FIId": {
           "FinInstnId": {
             "Othr": {
-              "Id": "FASTIDJA"
+              "Id": "{{ TO_BIC_VALUE }}"
             }
           }
         }
       },
       "BizMsgIdr": "{{ BIZ_MSG_IDR_VALUE }}",
-      "MsgDefIdr": "pacs.028.001.04",
+      "MsgDefIdr": "{{ MSG_DEF_IDR_VALUE }}",
       "CreDt": "{{ CRE_DT_VALUE }}",
-      "CpyDplct": "CODU",
-      "PssblDplct": false
+      "CpyDplct": "{{ CPYDPLCT_VALUE }}",
+      "PssblDplct": "{{ PSSBLDPLCT_VALUE }}"
     },
     "Document": {
       "FIToFIPmtStsReq": {

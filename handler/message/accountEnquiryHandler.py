@@ -14,8 +14,8 @@ def requestMessage(requestData):
     filePath = os.path.join(
         current_app.config["FORMAT_PATH"], 'pacs.008.001.10_AccountEnquiry.json')
 
-    generatedBizMsgIdr = handler.generateBizMsgIdr("510")
-    generatedMsgId = handler.generateMsgId("510")
+    generatedBizMsgIdr = handler.generateBizMsgIdr(requestData.get('Fr'), "510")
+    generatedMsgId = handler.generateMsgId(requestData.get('Fr'), "510")
 
     with open(filePath, 'r') as file:
         template_data = json.load(file)
@@ -47,7 +47,7 @@ def requestMessage(requestData):
 
     filled_data = handler.replace_placeholders(template_data, value_dict)
 
-    filled_data["BusMsg"]["Document"]["FIToFICstmrCdtTrf"]["CdtTrfTxInf"][0]["IntrBkSttlmAmt"]["Value"] = 123.12
+    filled_data["BusMsg"]["Document"]["FIToFICstmrCdtTrf"]["CdtTrfTxInf"][0]["IntrBkSttlmAmt"]["value"] = 123.12
     # json_data = json.dumps(filled_data, indent=None)
 
     # print(filled_data, file=sys.stderr)

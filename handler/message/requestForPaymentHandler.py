@@ -14,8 +14,8 @@ def requestMessageByAccount(requestData):
     filePath = os.path.join(
         current_app.config["FORMAT_PATH"], 'pain.013.001.08_RequestForPay.json')
 
-    generatedBizMsgIdr = handler.generateBizMsgIdr("853")
-    generatedMsgId = handler.generateMsgId("853")
+    generatedBizMsgIdr = handler.generateBizMsgIdr(requestData.get('Fr'), "853")
+    generatedMsgId = handler.generateMsgId(requestData.get('Fr'), "853")
 
     with open(filePath, 'r') as file:
         template_data = json.load(file)
@@ -55,8 +55,8 @@ def requestMessageByAccount(requestData):
 
     filled_data = handler.replace_placeholders(template_data, value_dict)
 
-    filled_data["BusMsg"]["Document"]["CdtrPmtActvtnReq"]["PmtInf"][0]["CdtTrfTx"][0]["Amt"]["InstdAmt"]["value"] = 123.12
-
+    filled_data["BusMsg"]["Document"]["CdtrPmtActvtnReq"]["PmtInf"][0]["CdtTrfTx"][0]["Amt"]["InstdAmt"]["value"] = 853.01
+    filled_data["BusMsg"]["AppHdr"]["PssblDplct"] = False
     headers = {
         "Content-Type": "application/json",
         "Content-Length": str(filled_data),

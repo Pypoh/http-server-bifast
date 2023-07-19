@@ -20,20 +20,20 @@
         }
       },
       "BizMsgIdr": "{{ BIZ_MSG_IDR_VALUE }}",
-      "MsgDefIdr": "pacs.008.001.08",
-      "BizSvc": "BI",
+      "MsgDefIdr": "{{ MSG_DEF_IDR_VALUE }}",
+      "BizSvc": "{{ BIZ_SVC_VALUE }}",
       "CreDt": "{{ CRE_DT_VALUE }}",
-      "CpyDplct": "CODU",
-      "PssblDplct": false
+      "CpyDplct": "{{ CPYDPLCT_VALUE }}",
+      "PssblDplct": "{{ PSSBLDPLCT_VALUE }}"
     },
     "Document": {
       "FIToFICstmrCdtTrf": {
         "GrpHdr": {
           "MsgId": "{{ MSG_ID_VALUE }}",
           "CreDtTm": "{{ CRE_DT_TM_VALUE }}",
-          "NbOfTxs": "1",
+          "NbOfTxs": "{{ NM_OF_TXS_VALUE }}",
           "SttlmInf": {
-            "SttlmMtd": "CLRG"
+            "SttlmMtd": "{{ STTLMTD_VALUE }}"
           }
         },
         "CdtTrfTxInf": [
@@ -44,10 +44,10 @@
             },
             "PmtTpInf": {
               "LclInstrm": {
-                "Prtry": "02"
+                "Prtry": "{{ PMT_TP_INF_LCLINSTRM_VALUE }}"
               },
               "CtgyPurp": {
-                "Prtry": "11001"
+                "Prtry": "{{ PMT_TP_INF_CTGYPURP_VALUE }}"
               }
             },
             "IntrBkSttlmAmt": {
@@ -55,7 +55,7 @@
               "Ccy": "{{ INTR_BK_STTLM_CCY_VALUE }}"
             },
             "IntrBkSttlmDt": "{{ INTR_BK_STTLM_DT_VALUE }}",
-            "ChrgBr": "DEBT",
+            "ChrgBr": "{{ CHRGBR_VALUE }}",
             "Dbtr": {
               "Nm": "{{ DBTR_NM_VALUE }}",
               "Id": {
