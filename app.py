@@ -10,6 +10,7 @@ import handler.message.proxyHandler as proxyHandler
 import handler.message.requestForPaymentHandler as requestForPaymentHandler
 import handler.message.requestForPaymentRejectHandler as requestForPaymentRejectHandler
 import handler.message.creditTransferRFPHandler as creditTransferRFPHandler
+import handler.message.mandateRegistHandler as mandateRegistHandler
 import os
 import config.serverConfig as serverConfig
 
@@ -117,11 +118,11 @@ def ctrfpHandlerOFI():
     if request.method == 'POST':
         return creditTransferRFPHandler.requestMessage(request.form)
 
-# # E-Mandate Registration by Crediting
-# @app.route('/MandateRegistByCreditOFI', methods=['POST'])
-# def rfpHandlerOFI():
-#     if request.method == 'POST':
-#         return requestForPaymentHandler.requestMessage()
+# E-Mandate Registration by Crediting
+@app.route('/MandateRegistByCreditOFI', methods=['POST'])
+def mandateRegistByCreditingHandlerOFI():
+    if request.method == 'POST':
+        return mandateRegistHandler.requestMessageByCreditor(request.form)
 
 # # E-Mandate Registration by Debiting
 # @app.route('/MandateRegistByDebitOFI', methods=['POST'])

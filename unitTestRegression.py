@@ -14,14 +14,10 @@ import requests
 
 
 class HTTPServerUnitTest(unittest.TestCase):
-    # @patch('requests.Session.post')
     def setUp(self):
         app.config['TESTING'] = True
-
         logging.basicConfig(level=logging.INFO)
-        # self.logger = app.logger
         self.client = app.test_client()
-
         self.logger = logging.getLogger("test_result")
         handler = logging.FileHandler('custom.log')
         formatter = logging.Formatter(
@@ -33,396 +29,425 @@ class HTTPServerUnitTest(unittest.TestCase):
         pass
 
     def test_regression(self):
-        CONFIG = {
-            'LOCAL_URL': 'http://127.0.0.1',
-            'HOST_URL': '10.170.137.115',
-            'HOST_PORT': '18947'
-        }
+        # Account Enquiry
+        # self.accountEnquiryTestHandler()
 
-        session = requests.Session()
-
-        # # Account Enquiry
-        # accountEnquiryRequestForm = {
-        #     'Host_url': '10.170.137.115',
-        #     'Host_port': '18947',
-        #     'Fr': 'BANKDMY7',
-        #     'To': 'FASTIDJA',
-        #     'MsgDefIdr': "pacs.008.001.08",
-        #     'NbOfTxs': "1",
-        #     'SttlmMtd': "CLRG",
-        #     'CtgyPurp': "51001",
-        #     'IntrBkSttlmAmt_value': 123.12,
-        #     'IntrBkSttlmAmt_ccy': "IDR",
-        #     'ChrgBr': "DEBT",
-        #     'Dbtr_nm': "Naufal Afif",
-        #     'DbtrAcct_value': '123456789',
-        #     'DbtrAcct_type': 'SVGS',
-        #     'DbtrAgt': 'BANKDMY7',
-        #     'CdtrAgt': 'BANKDMY8',
-        #     'Cdtr_nm': 'Bunyamin',
-        #     'CdtrAcct_value': '987654321'
-        # }
-        # accountEnquiryStartTime = time.time()
-        # accountEnquiryResponse = self.client.post(
-        #     '/AccountEnquiryOFI', data=accountEnquiryRequestForm)
-        # aeduration = "{:.2f}".format(time.time() - accountEnquiryStartTime)
-        # aeJsonResponse = json.loads(accountEnquiryResponse.data)
-        # aeEndToEndId = aeJsonResponse["BusMsg"]["Document"]["FIToFIPmtStsRpt"]["TxInfAndSts"][0]["OrgnlEndToEndId"]
-        # aeTxSts = aeJsonResponse["BusMsg"]["Document"]["FIToFIPmtStsRpt"]["TxInfAndSts"][0]["TxSts"]
-        # aeStsRsnInf = aeJsonResponse["BusMsg"]["Document"]["FIToFIPmtStsRpt"]["TxInfAndSts"][0]["StsRsnInf"][0]["Rsn"]["Prtry"]
-        # self.logger.info(datetime.now().strftime("%Y-%m-%d %H:%M:%S")+f" ({aeduration} seconds) {aeEndToEndId} {aeTxSts} {aeStsRsnInf}")
-
-        # # Credit Transfer
+        # # Credit Transfer (pause for 10 seconds)
         # time.sleep(10)
-        # creditTransferRequestForm = {
-        #     'Host_url': '10.170.137.115',
-        #     'Host_port': '18947',
-        #     'Fr': 'BANKDMY7',
-        #     'To': 'FASTIDJA',
-        #     'MsgDefIdr': "pacs.008.001.08",
-        #     "BizSvc": "BI",
-        #     "CpyDplct": "CODU",
-        #     "PssblDplct": False,
-        #     'NbOfTxs': "1",
-        #     'SttlmMtd': "CLRG",
-        #     'CtgyPurp': "01001",
-        #     'LclInstrm': "01",
-        #     'IntrBkSttlmAmt_value': 123.12,
-        #     'IntrBkSttlmAmt_ccy': "IDR",
-        #     'ChrgBr': "DEBT",
-        #     'Dbtr_nm': "Naufal Afif",
-        #     'Dbtr_orgid': "PT. Abhimata Persada",
-        #     'DbtrAcct_value': '123456789',
-        #     'DbtrAcct_type': 'SVGS',
-        #     'DbtrAgt': 'BANKDMY7',
-        #     'CdtrAgt': 'BANKDMY8',
-        #     'Cdtr_nm': 'Bunyamin',
-        #     'Cdtr_orgid': 'PT. Telkom Indonesia',
-        #     'CdtrAcct_value': '987654321',
-        #     'CdtrAcct_type': 'SVGS',
-        #     'RmtInf': "Testing purpose",
-        #     'SplmtryData_InitgAcctId': "123456789",
-        #     'SplmtryData_Dbtr_tp': '01',
-        #     'SplmtryData_Dbtr_rsdntsts': '01',
-        #     'SplmtryData_Dbtr_twnnm': '0300',
-        #     'SplmtryData_Cdtr_tp': '01',
-        #     'SplmtryData_Cdtr_rsdntsts': '01',
-        #     'SplmtryData_Cdtr_twnnm': '0300',
-        # }
-        # creditTransferStartTime = time.time()
-        # creditTransferResponse = self.client.post(
-        #     '/CreditTransferOFI', data=creditTransferRequestForm)
-        # ctduration = "{:.2f}".format(time.time() - creditTransferStartTime)
-        # ctJsonResponse = json.loads(creditTransferResponse.data)
-        # ctEndToEndId = ctJsonResponse["BusMsg"]["Document"]["FIToFIPmtStsRpt"]["TxInfAndSts"][0]["OrgnlEndToEndId"]
-        # ctTxSts = ctJsonResponse["BusMsg"]["Document"]["FIToFIPmtStsRpt"]["TxInfAndSts"][0]["TxSts"]
-        # ctStsRsnInf = ctJsonResponse["BusMsg"]["Document"]["FIToFIPmtStsRpt"]["TxInfAndSts"][0]["StsRsnInf"][0]["Rsn"]["Prtry"]
-        # self.logger.info(datetime.now().strftime("%Y-%m-%d %H:%M:%S")+f" ({ctduration} seconds) {ctEndToEndId} {ctTxSts} {ctStsRsnInf}")
+        # ct = self.creditTransferTestHandler()
 
-        # ctPSRRequestForm = {
-        #     'Host_url': '10.170.137.115',
-        #     'Host_port': '18947',
-        #     'Fr': 'BANKDMY7',
-        #     'To': 'FASTIDJA',
-        #     'MsgDefIdr': "pacs.028.001.04",
-        #     "CpyDplct": "CODU",
-        #     "PssblDplct": False,
-        #     "OrgnlEndToEndId": ctEndToEndId
-
-        # }
-        # if ctTxSts == "ACTC":
-        #     time.sleep(15)
-        #     ctPSRStartTime = time.time()
-        #     ctPSRResponse = self.client.post(f'/PaymentStatusOFI', data=ctPSRRequestForm)
-        #     ctPSRduration = "{:.2f}".format(time.time() - ctPSRStartTime)
-        #     ctJsonResponse = json.loads(ctPSRResponse.data)
-        #     ctPSREndToEndId = ctJsonResponse["BusMsg"]["Document"]["FIToFIPmtStsRpt"]["TxInfAndSts"][0]["OrgnlEndToEndId"]
-        #     ctPSRTxSts = ctJsonResponse["BusMsg"]["Document"]["FIToFIPmtStsRpt"]["TxInfAndSts"][0]["TxSts"]
-        #     ctPSRStsRsnInf = ctJsonResponse["BusMsg"]["Document"]["FIToFIPmtStsRpt"]["TxInfAndSts"][0]["StsRsnInf"][0]["Rsn"]["Prtry"]
-        #     self.logger.info(datetime.now().strftime("%Y-%m-%d %H:%M:%S")+f" ({ctPSRduration} seconds) {ctPSREndToEndId} {ctPSRTxSts} {ctPSRStsRsnInf}")
-
-        # # Credit Transfer Reversal
-        # time.sleep(10)
-        # creditTransferReversalRequestForm = {
-        #     'Host_url': '10.170.137.115',
-        #     'Host_port': '18948',
-        #     'Fr': 'BANKDMY8',
-        #     'To': 'FASTIDJA',
-        #     'MsgDefIdr': "pacs.008.001.08",
-        #     "BizSvc": "BI",
-        #     "CpyDplct": "CODU",
-        #     "PssblDplct": False,
-        #     'NbOfTxs': "1",
-        #     'SttlmMtd': "CLRG",
-        #     'CtgyPurp': "01101",
-        #     'LclInstrm': "01",
-        #     'IntrBkSttlmAmt_value': 123.12,
-        #     'IntrBkSttlmAmt_ccy': "IDR",
-        #     'ChrgBr': "DEBT",
-        #     'Cdtr_nm': "Naufal Afif",
-        #     'Cdtr_orgid': "PT. Abhimata Persada",
-        #     'CdtrAcct_value': '123456789',
-        #     'CdtrAcct_type': 'SVGS',
-        #     'DbtrAgt': 'BANKDMY8',
-        #     'CdtrAgt': 'BANKDMY7',
-        #     'Dbtr_nm': 'Bunyamin',
-        #     'Dbtr_orgid': 'PT. Telkom Indonesia',
-        #     'DbtrAcct_value': '987654321',
-        #     'DbtrAcct_type': 'SVGS',
-        #     'RmtInf': "Testing purpose",
-        #     'SplmtryData_InitgAcctId': "123456789",
-        #     'SplmtryData_Dbtr_tp': '01',
-        #     'SplmtryData_Dbtr_rsdntsts': '01',
-        #     'SplmtryData_Dbtr_twnnm': '0300',
-        #     'SplmtryData_Cdtr_tp': '01',
-        #     'SplmtryData_Cdtr_rsdntsts': '01',
-        #     'SplmtryData_Cdtr_twnnm': '0300',
-        #     'SplmtryData_rltdEndToEndId': "20230718BANKDMY7010O0189145385"
-        # }
-
-        # creditTransferReversalStartTime = time.time()
-        # creditTransferReversalResponse = self.client.post(
-        #     '/CreditTransferReversalOFI', data=creditTransferReversalRequestForm)
-        # ctReverseduration = "{:.2f}".format(
-        #     time.time() - creditTransferReversalStartTime)
-        # ctReverseJsonResponse = json.loads(creditTransferReversalResponse.data)
-        # ctReverseEndToEndId = ctReverseJsonResponse["BusMsg"]["Document"][
-        #     "FIToFIPmtStsRpt"]["TxInfAndSts"][0]["OrgnlEndToEndId"]
-        # ctReverseTxSts = ctReverseJsonResponse["BusMsg"]["Document"]["FIToFIPmtStsRpt"]["TxInfAndSts"][0]["TxSts"]
-        # ctReverseStsRsnInf = ctReverseJsonResponse["BusMsg"]["Document"][
-        #     "FIToFIPmtStsRpt"]["TxInfAndSts"][0]["StsRsnInf"][0]["Rsn"]["Prtry"]
-        # self.logger.info(datetime.now().strftime("%Y-%m-%d %H:%M:%S") +
-        #                  f" ({ctReverseduration} seconds) {ctReverseEndToEndId} {ctReverseTxSts} {ctReverseStsRsnInf}")
-
-        # ctReversePSRRequestForm = {
-        #     'Host_url': '10.170.137.115',
-        #     'Host_port': '18948',
-        #     'Fr': 'BANKDMY8',
-        #     'To': 'FASTIDJA',
-        #     'MsgDefIdr': "pacs.028.001.04",
-        #     "CpyDplct": "CODU",
-        #     "PssblDplct": False,
-        #     "OrgnlEndToEndId": ctReverseEndToEndId
-
-        # }
-        # if ctReverseTxSts == "ACTC":
-        #     time.sleep(15)
-        #     ctReversePSRStartTime = time.time()
-        #     ctReversePSRResponse = self.client.post(
-        #         f'/PaymentStatusOFI', data=ctReversePSRRequestForm)
-        #     ctReversePSRduration = "{:.2f}".format(
-        #         time.time() - ctReversePSRStartTime)
-        #     ctReverseJsonResponse = json.loads(ctReversePSRResponse.data)
-        #     ctReversePSREndToEndId = ctReverseJsonResponse["BusMsg"]["Document"][
-        #         "FIToFIPmtStsRpt"]["TxInfAndSts"][0]["OrgnlEndToEndId"]
-        #     ctReversePSRTxSts = ctReverseJsonResponse["BusMsg"][
-        #         "Document"]["FIToFIPmtStsRpt"]["TxInfAndSts"][0]["TxSts"]
-        #     ctReversePSRStsRsnInf = ctReverseJsonResponse["BusMsg"]["Document"][
-        #         "FIToFIPmtStsRpt"]["TxInfAndSts"][0]["StsRsnInf"][0]["Rsn"]["Prtry"]
-        #     self.logger.info(datetime.now().strftime(
-        #         "%Y-%m-%d %H:%M:%S")+f" ({ctReversePSREndToEndId} seconds) {ctReversePSRTxSts} {ctReversePSRStsRsnInf} {ctReversePSRStsRsnInf}")
+        # # Credit Transfer Reversal (pause for 40 seconds)
+        # time.sleep(40)
+        # if (ct.get('txSts') == "ACTC"):
+        #     self.creditTransferReversalTestHandler(ct.get('endToEndId'))
 
         # # Credit Transfer Proxy
         # time.sleep(10)
-        # creditTransferRequestForm = {
-        #     'Host_url': '10.170.137.115',
-        #     'Host_port': '18947',
-        #     'Fr': 'BANKDMY7',
-        #     'To': 'FASTIDJA',
-        #     'MsgDefIdr': "pacs.008.001.08",
-        #     "BizSvc": "BI",
-        #     "CpyDplct": "CODU",
-        #     "PssblDplct": False,
-        #     'NbOfTxs': "1",
-        #     'SttlmMtd': "CLRG",
-        #     'CtgyPurp': "01001",
-        #     'LclInstrm': "01",
-        #     'IntrBkSttlmAmt_value': 123.12,
-        #     'IntrBkSttlmAmt_ccy': "IDR",
-        #     'ChrgBr': "DEBT",
-        #     'Dbtr_nm': "Naufal Afif",
-        #     'Dbtr_orgid': "PT. Abhimata Persada",
-        #     'DbtrAcct_value': '123456789',
-        #     'DbtrAcct_type': 'SVGS',
-        #     'DbtrAgt': 'BANKDMY7',
-        #     'CdtrAgt': 'BANKDMY8',
-        #     'Cdtr_nm': 'Bunyamin',
-        #     'Cdtr_orgid': 'PT. Telkom Indonesia',
-        #     'CdtrAcct_value': '987654321',
-        #     'CdtrAcct_type': 'SVGS',
-        #     'CdtrAcct_Prxy_tp': '02',
-        #     'CdtrAcct_Prxy_id': '',
-        #     'RmtInf': "Testing purpose",
-        #     'SplmtryData_InitgAcctId': "123456789",
-        #     'SplmtryData_Dbtr_tp': '01',
-        #     'SplmtryData_Dbtr_rsdntsts': '01',
-        #     'SplmtryData_Dbtr_twnnm': '0300',
-        #     'SplmtryData_Cdtr_tp': '01',
-        #     'SplmtryData_Cdtr_rsdntsts': '01',
-        #     'SplmtryData_Cdtr_twnnm': '0300',
-        # }
-        # creditTransferStartTime = time.time()
-        # creditTransferResponse = self.client.post(
-        #     '/CreditTransferOFI', data=creditTransferRequestForm)
-        # ctduration = "{:.2f}".format(time.time() - creditTransferStartTime)
-        # ctJsonResponse = json.loads(creditTransferResponse.data)
-        # ctEndToEndId = ctJsonResponse["BusMsg"]["Document"]["FIToFIPmtStsRpt"]["TxInfAndSts"][0]["OrgnlEndToEndId"]
-        # ctTxSts = ctJsonResponse["BusMsg"]["Document"]["FIToFIPmtStsRpt"]["TxInfAndSts"][0]["TxSts"]
-        # ctStsRsnInf = ctJsonResponse["BusMsg"]["Document"]["FIToFIPmtStsRpt"]["TxInfAndSts"][0]["StsRsnInf"][0]["Rsn"]["Prtry"]
-        # self.logger.info(datetime.now().strftime("%Y-%m-%d %H:%M:%S")+f" ({ctduration} seconds) {ctEndToEndId} {ctTxSts} {ctStsRsnInf}")
+        # self.creditTransferProxyHandler()
 
-        # ctPSRRequestForm = {
-        #     'Host_url': '10.170.137.115',
-        #     'Host_port': '18947',
-        #     'Fr': 'BANKDMY7',
-        #     'To': 'FASTIDJA',
-        #     'MsgDefIdr': "pacs.028.001.04",
-        #     "CpyDplct": "CODU",
-        #     "PssblDplct": False,
-        #     "OrgnlEndToEndId": ctEndToEndId
-
-        # }
-        # if ctTxSts == "ACTC":
-        #     time.sleep(15)
-        #     ctPSRStartTime = time.time()
-        #     ctPSRResponse = self.client.post(f'/PaymentStatusOFI', data=ctPSRRequestForm)
-        #     ctPSRduration = "{:.2f}".format(time.time() - ctPSRStartTime)
-        #     ctJsonResponse = json.loads(ctPSRResponse.data)
-        #     ctPSREndToEndId = ctJsonResponse["BusMsg"]["Document"]["FIToFIPmtStsRpt"]["TxInfAndSts"][0]["OrgnlEndToEndId"]
-        #     ctPSRTxSts = ctJsonResponse["BusMsg"]["Document"]["FIToFIPmtStsRpt"]["TxInfAndSts"][0]["TxSts"]
-        #     ctPSRStsRsnInf = ctJsonResponse["BusMsg"]["Document"]["FIToFIPmtStsRpt"]["TxInfAndSts"][0]["StsRsnInf"][0]["Rsn"]["Prtry"]
-        #     self.logger.info(datetime.now().strftime("%Y-%m-%d %H:%M:%S")+f" ({ctPSRduration} seconds) {ctPSREndToEndId} {ctPSRTxSts} {ctPSRStsRsnInf}")
-
-        # # Proxy Register
+        # # Proxy Registration
         # time.sleep(10)
-        # uniqueId = random.randint(10000, 99999)
+        # proxy = self.proxyRegisterTestHandler()
 
-        # proxyRegisterRequestForm = {
-        #     'Host_url': '10.170.137.115',
-        #     'Host_port': '18948',
-        #     'Fr': 'BANKDMY8',
-        #     'To': 'FASTIDJA',
-        #     'MsgDefIdr': "prxy.001.001.01",
-        #     "BizSvc": "BI",
-        #     "CpyDplct": "CODU",
-        #     "PssblDplct": False,
-        #     'MsgSndr_agt': "BANKDMY8",
-        #     'MsgSndr_acct': f'312{uniqueId}',
-        #     'RegnTp': 'NEWR',
-        #     'Prxy_tp': '02',
-        #     'Prxy_val': f'Proxy Value {uniqueId}',
-        #     'DsplNm': f'Proxy Display Name {uniqueId}',
-        #     'PrxyRegn_Agt_nm': 'PT. Abhimata Persada',
-        #     'PrxyRegn_Agt_id': 'BANKDMY8',
-        #     'PrxyRegn_acct': f'312{uniqueId}',
-        #     'PrxyRegn_tp': 'CACC',
-        #     'PrxyRegn_nm': f'Proxy Name {uniqueId}',
-        #     'ScndId_tp': '01',
-        #     'ScndId_val': f'6812345{uniqueId}',
-        #     'RegnSts': 'ACTV',
-        #     'SplmtryData_Cstmr_tp': '01',
-        #     'SplmtryData_Cstmr_id': f'10203040{uniqueId}',
-        #     'SplmtryData_Cstmr_rsdntsts': '01',
-        #     'SplmtryData_Cstmr_twnnm': '0300',
-        # }
-        # proxyRegisterStartTime = time.time()
-        # proxyRegisterResponse = self.client.post(
-        #     '/ProxyRegistrationOFI', data=proxyRegisterRequestForm)
-        # proxyRegisterduration = "{:.2f}".format(
-        #     time.time() - proxyRegisterStartTime)
-        # proxyRegisterJsonResponse = json.loads(proxyRegisterResponse.data)
-        # proxyRegisterMsgId = proxyRegisterJsonResponse["BusMsg"][
-        #     "Document"]["PrxyRegnRspn"]["OrgnlGrpInf"]["OrgnlMsgId"]
-        # proxyRegisterTxSts = proxyRegisterJsonResponse["BusMsg"][
-        #     "Document"]["PrxyRegnRspn"]["RegnRspn"]["PrxRspnSts"]
-        # proxyRegisterStsRsnInf = proxyRegisterJsonResponse["BusMsg"][
-        #     "Document"]["PrxyRegnRspn"]["RegnRspn"]["StsRsnInf"]["Prtry"]
-        # self.logger.info(datetime.now().strftime("%Y-%m-%d %H:%M:%S") +
-        #                  f" ({proxyRegisterduration} seconds) {proxyRegisterMsgId} {proxyRegisterTxSts} {proxyRegisterStsRsnInf}")
-
-        # # Proxy Register Lookup
+        # # Proxy Resolution
         # time.sleep(10)
-        # proxyLookupRequestForm = {
-        #     'Host_url': '10.170.137.115',
-        #     'Host_port': '18948',
-        #     'Fr': 'BANKDMY8',
-        #     'To': 'FASTIDJA',
-        #     'MsgDefIdr': "prxy.003.001.01",
-        #     "BizSvc": "BI",
-        #     "CpyDplct": "CODU",
-        #     "PssblDplct": False,
-        #     'MsgSndr_agt': "BANKDMY8",
-        #     'MsgSndr_acct': proxyRegisterRequestForm.get('MsgSndr_acct'),
-        #     'PrxyOnly_LkUpTp': "PXRS",
-        #     'PrxyRtrvl_tp': proxyRegisterRequestForm.get('Prxy_tp'),
-        #     'PrxyRtrvl_value': proxyRegisterRequestForm.get('Prxy_val'),
-        # }
-        # proxyLookupStartTime = time.time()
-        # proxyLookupResponse = self.client.post(
-        #     '/ProxyLookupOFI', data=proxyLookupRequestForm)
-        # proxyLookupduration = "{:.2f}".format(
-        #     time.time() - proxyLookupStartTime)
-        # proxyLookupJsonResponse = json.loads(proxyLookupResponse.data)
-        # # self.logger.info(proxyLookupResponse.data)
-        # proxyLookupMsgId = proxyLookupJsonResponse["BusMsg"][
-        #     "Document"]["PrxyLookUpRspn"]["LkUpRspn"]["OrgnlId"]
-        # proxyLookupTxSts = proxyLookupJsonResponse["BusMsg"][
-        #     "Document"]["PrxyLookUpRspn"]["LkUpRspn"]["RegnRspn"]["PrxRspnSts"]
-        # proxyLookupStsRsnInf = proxyLookupJsonResponse["BusMsg"][
-        #     "Document"]["PrxyLookUpRspn"]["LkUpRspn"]["RegnRspn"]["StsRsnInf"]["Prtry"]
-        # self.logger.info(datetime.now().strftime("%Y-%m-%d %H:%M:%S") +
-        #                  f" ({proxyLookupduration} seconds) {proxyLookupMsgId} {proxyLookupTxSts} {proxyLookupStsRsnInf}")
+        # self.proxyLookupTestHandler(proxy)
 
-        # # Proxy Register Enquiry
+        # # Proxy Enquiry
         # time.sleep(10)
-        # proxyEnquiryRequestForm = {
-        #     'Host_url': '10.170.137.115',
-        #     'Host_port': '18948',
-        #     'Fr': 'BANKDMY8',
-        #     'To': 'FASTIDJA',
-        #     'MsgDefIdr': "prxy.005.001.01",
-        #     "BizSvc": "BI",
-        #     "CpyDplct": "CODU",
-        #     "PssblDplct": False,
-        #     'MsgSndr_agt': "BANKDMY8",
-        #     'MsgSndr_acct': proxyRegisterRequestForm.get('MsgSndr_acct'),
-        #     'ScndId_tp': proxyRegisterRequestForm.get('ScndId_tp'),
-        #     'ScndId_val': proxyRegisterRequestForm.get('ScndId_val')
-        # }
-        # proxyEnquiryStartTime = time.time()
-        # proxyEnquiryResponse = self.client.post(
-        #     '/ProxyEnquiryOFI', data=proxyEnquiryRequestForm)
-        # proxyEnquiryduration = "{:.2f}".format(
-        #     time.time() - proxyEnquiryStartTime)
-        # proxyEnquiryJsonResponse = json.loads(proxyEnquiryResponse.data)
-        # # self.logger.info(proxyEnquiryResponse.data)
-        # proxyEnquiryMsgId = proxyEnquiryJsonResponse["BusMsg"]["Document"]["PrxyNqryRspn"]["OrgnlGrpInf"]["OrgnlMsgId"]
-        # proxyEnquiryTxSts = proxyEnquiryJsonResponse["BusMsg"]["Document"]["PrxyNqryRspn"]["NqryRspn"]["PrxRspnSts"]
-        # proxyEnquiryStsRsnInf = proxyEnquiryJsonResponse["BusMsg"]["Document"]["PrxyNqryRspn"]["NqryRspn"]["StsRsnInf"]["Prtry"]
-        # self.logger.info(datetime.now().strftime("%Y-%m-%d %H:%M:%S") +
-        #                  f" ({proxyEnquiryduration} seconds) {proxyEnquiryMsgId} {proxyEnquiryTxSts} {proxyEnquiryStsRsnInf}")
+        # self.proxyEnquiryTestHandler(proxy)
 
-        # # Proxy Porting
-        # proxyPortingResponse = self.client.post(
-        #     '/ProxyPortingOFI', data=proxyData)
+        # Proxy Porting
 
-        # # Proxy Porting Lookup
-        # # Proxy Porting Enquiry
+        # Proxy Deactivate
 
-        # # Proxy Deactivate
+        # # Request for Payment by Account
+        # time.sleep(10)
+        # rfpAccountRequest, rfpAccountResult = self.requestForPaymentAccountTestHandler()
 
-        # # Proxy Deactivate Lookup
-        # # Proxy Deactivate Enquiry
+        # # Request for Payment Rejection by Account
+        # time.sleep(15)
+        # self.requestForPaymentAccountRejectTestHandler(rfpAccountResult)
 
-        # Request For Payment by Account
+        # # Request for Payment by Proxy
+        # time.sleep(10)
+        # proxy = self.proxyRegisterTestHandler()
+        # time.sleep(10)
+        # rfpProxyRequest, rfpProxyResult = self.requestForPaymentProxyTestHandler(proxy)
+
+        # # Request for Payment Rejection by Proxy
+        # time.sleep(10)
+        # self.requestForPaymentProxyRejectTestHandler(rfpProxyResult)
+
+        # # Credit Transfer RFP
+        # time.sleep(10)
+        # rfpAccountRequest, rfpAccountResult = self.requestForPaymentAccountTestHandler()
+        # time.sleep(10)
+        # self.creditTransferRFPTestHandler(rfpAccountRequest, rfpAccountResult)
+
+        # E-Mandate Registration by Crediting
+        # time.sleep(10)
+        emandateRegistrationCrediting = self.eMandateRegistrationByCreditingTest()
+
+
+        # E-Mandate Registration by Debiting
+         
+        # E-Mandate Approval by Crediting
+         
+        # E-Mandate Approval by Debiting
+         
+        # E-Mandate Amendment by Crediting
+         
+        # E-Mandate Amendment by Debiting
+         
+        # E-Mandate Amendment Approval by Crediting
+         
+        # E-Mandate Amendment Approval by Debiting
+         
+        # E-Mandate Termination by Crediting
+         
+        # E-Mandate Termintation by Debiting
+         
+        # E-Mandate Enquiry by EndToEndId
+         
+        # E-Mandate Enquiry by MandateID
+         
+        # Direct Debit
+         
+        # PSR Direct Debit
+
+
+        pass
+
+    def requestHandler(self, form):
+        startTime = time.time()
+        response = self.client.post(form.get('Payment_url'), data=form)
+        duration = "{:.2f}".format(time.time() - startTime)
+        # self.logger.info(response.data)
+        jsonResponse = json.loads(response.data)
+        try:
+            msgId = jsonResponse["BusMsg"]["Document"]["FIToFIPmtStsRpt"]["OrgnlGrpInfAndSts"][0]["OrgnlMsgId"]
+            endToEndId = jsonResponse["BusMsg"]["Document"]["FIToFIPmtStsRpt"]["TxInfAndSts"][0]["OrgnlEndToEndId"]
+            txSts = jsonResponse["BusMsg"]["Document"]["FIToFIPmtStsRpt"]["TxInfAndSts"][0]["TxSts"]
+            stsRsnInf = jsonResponse["BusMsg"]["Document"]["FIToFIPmtStsRpt"]["TxInfAndSts"][0]["StsRsnInf"][0]["Rsn"]["Prtry"]
+            self.logger.info(datetime.now().strftime("%Y-%m-%d %H:%M:%S") +
+                             f" ({duration} seconds) {form.get('Payment_url')} {endToEndId} {txSts} {stsRsnInf}")
+            resultForm = {
+                'msgId': msgId,
+                'endToEndId': endToEndId,
+                'txSts': txSts,
+                'stsRsnInf': stsRsnInf
+            }
+            return resultForm
+        except KeyError:
+            self.logger.info(response.data)
+
+        # return resultForm
+
+    def accountEnquiryTestHandler(self):
+        accountEnquiryRequestForm = {
+            'Payment_url': '/AccountEnquiryOFI',
+            'Host_url': '10.170.137.115',
+            'Host_port': '18947',
+            'Fr': 'BANKDMY7',
+            'To': 'FASTIDJA',
+            'MsgDefIdr': "pacs.008.001.08",
+            'NbOfTxs': "1",
+            'SttlmMtd': "CLRG",
+            'CtgyPurp': "51001",
+            'IntrBkSttlmAmt_value': 123.12,
+            'IntrBkSttlmAmt_ccy': "IDR",
+            'ChrgBr': "DEBT",
+            'Dbtr_nm': "Naufal Afif",
+            'DbtrAcct_value': '123456789',
+            'DbtrAcct_type': 'SVGS',
+            'DbtrAgt': 'BANKDMY7',
+            'CdtrAgt': 'BANKDMY8',
+            'Cdtr_nm': 'Bunyamin',
+            'CdtrAcct_value': '987654321'
+        }
+        return self.requestHandler(accountEnquiryRequestForm)
+
+    def creditTransferTestHandler(self):
+        creditTransferRequestForm = {
+            'Payment_url': '/CreditTransferOFI',
+            'Host_url': '10.170.137.115',
+            'Host_port': '18947',
+            'Fr': 'BANKDMY7',
+            'To': 'FASTIDJA',
+            'MsgDefIdr': "pacs.008.001.08",
+            "BizSvc": "BI",
+            "CpyDplct": "CODU",
+            "PssblDplct": False,
+            'NbOfTxs': "1",
+            'SttlmMtd': "CLRG",
+            'CtgyPurp': "01001",
+            'LclInstrm': "01",
+            'IntrBkSttlmAmt_value': 123.12,
+            'IntrBkSttlmAmt_ccy': "IDR",
+            'ChrgBr': "DEBT",
+            'Dbtr_nm': "Naufal Afif",
+            'Dbtr_orgid': "PT. Abhimata Persada",
+            'DbtrAcct_value': '123456789',
+            'DbtrAcct_type': 'SVGS',
+            'DbtrAgt': 'BANKDMY7',
+            'CdtrAgt': 'BANKDMY8',
+            'Cdtr_nm': 'Bunyamin',
+            'Cdtr_orgid': 'PT. Telkom Indonesia',
+            'CdtrAcct_value': '987654321',
+            'CdtrAcct_type': 'SVGS',
+            'RmtInf': "Testing purpose",
+            'SplmtryData_InitgAcctId': "123456789",
+            'SplmtryData_Dbtr_tp': '01',
+            'SplmtryData_Dbtr_rsdntsts': '01',
+            'SplmtryData_Dbtr_twnnm': '0300',
+            'SplmtryData_Cdtr_tp': '01',
+            'SplmtryData_Cdtr_rsdntsts': '01',
+            'SplmtryData_Cdtr_twnnm': '0300',
+        }
+        result = self.requestHandler(creditTransferRequestForm)
+
+        if result.get('txSts') == "ACTC":
+            time.sleep(15)
+            psrRequestForm = {
+                'Host_url': '10.170.137.115',
+                'Host_port': '18947',
+                'Fr': 'BANKDMY7',
+                'To': 'FASTIDJA',
+                'MsgDefIdr': "pacs.028.001.04",
+                "CpyDplct": "CODU",
+                "PssblDplct": False,
+                "OrgnlEndToEndId": result.get('endToEndId')
+            }
+            self.paymentStatusRequestTestHandler(psrRequestForm)
+            return result
+
+    def creditTransferReversalTestHandler(self, rltdEndToEndId=None):
+        creditTransferReversalRequestForm = {
+            'Payment_url': '/CreditTransferReversalOFI',
+            'Host_url': '10.170.137.115',
+            'Host_port': '18948',
+            'Fr': 'BANKDMY8',
+            'To': 'FASTIDJA',
+            'MsgDefIdr': "pacs.008.001.08",
+            "BizSvc": "BI",
+            "CpyDplct": "CODU",
+            "PssblDplct": False,
+            'NbOfTxs': "1",
+            'SttlmMtd': "CLRG",
+            'CtgyPurp': "01101",
+            'LclInstrm': "01",
+            'IntrBkSttlmAmt_value': 123.12,
+            'IntrBkSttlmAmt_ccy': "IDR",
+            'ChrgBr': "DEBT",
+            'Cdtr_nm': "Naufal Afif",
+            'Cdtr_orgid': "PT. Abhimata Persada",
+            'CdtrAcct_value': '123456789',
+            'CdtrAcct_type': 'SVGS',
+            'DbtrAgt': 'BANKDMY8',
+            'CdtrAgt': 'BANKDMY7',
+            'Dbtr_nm': 'Bunyamin',
+            'Dbtr_orgid': 'PT. Telkom Indonesia',
+            'DbtrAcct_value': '987654321',
+            'DbtrAcct_type': 'SVGS',
+            'RmtInf': "Testing purpose",
+            'SplmtryData_InitgAcctId': "123456789",
+            'SplmtryData_Dbtr_tp': '01',
+            'SplmtryData_Dbtr_rsdntsts': '01',
+            'SplmtryData_Dbtr_twnnm': '0300',
+            'SplmtryData_Cdtr_tp': '01',
+            'SplmtryData_Cdtr_rsdntsts': '01',
+            'SplmtryData_Cdtr_twnnm': '0300',
+            'SplmtryData_rltdEndToEndId': rltdEndToEndId
+        }
+        result = self.requestHandler(creditTransferReversalRequestForm)
+
+        if result.get('txSts') == "ACTC":
+            time.sleep(15)
+            psrRequestForm = {
+                'Host_url': '10.170.137.115',
+                'Host_port': '18948',
+                'Fr': 'BANKDMY8',
+                'To': 'FASTIDJA',
+                'MsgDefIdr': "pacs.028.001.04",
+                "CpyDplct": "CODU",
+                "PssblDplct": False,
+                "OrgnlEndToEndId": result.get('endToEndId')
+            }
+            self.paymentStatusRequestTestHandler(psrRequestForm)
+
+    def creditTransferProxyHandler(self):
+        creditTransferRequestForm = {
+            'Payment_url': '/CreditTransferOFI',
+            'Host_url': '10.170.137.115',
+            'Host_port': '18947',
+            'Fr': 'BANKDMY7',
+            'To': 'FASTIDJA',
+            'MsgDefIdr': "pacs.008.001.08",
+            "BizSvc": "BI",
+            "CpyDplct": "CODU",
+            "PssblDplct": False,
+            'NbOfTxs': "1",
+            'SttlmMtd': "CLRG",
+            'CtgyPurp': "01001",
+            'LclInstrm': "01",
+            'IntrBkSttlmAmt_value': 123.12,
+            'IntrBkSttlmAmt_ccy': "IDR",
+            'ChrgBr': "DEBT",
+            'Dbtr_nm': "Naufal Afif",
+            'Dbtr_orgid': "PT. Abhimata Persada",
+            'DbtrAcct_value': '123456789',
+            'DbtrAcct_type': 'SVGS',
+            'DbtrAgt': 'BANKDMY7',
+            'CdtrAgt': 'BANKDMY8',
+            'Cdtr_nm': 'Bunyamin',
+            'Cdtr_orgid': 'PT. Telkom Indonesia',
+            'CdtrAcct_value': '987654321',
+            'CdtrAcct_type': 'SVGS',
+            'CdtrAcct_Prxy_tp': '02',
+            'CdtrAcct_Prxy_id': '',
+            'RmtInf': "Testing purpose",
+            'SplmtryData_InitgAcctId': "123456789",
+            'SplmtryData_Dbtr_tp': '01',
+            'SplmtryData_Dbtr_rsdntsts': '01',
+            'SplmtryData_Dbtr_twnnm': '0300',
+            'SplmtryData_Cdtr_tp': '01',
+            'SplmtryData_Cdtr_rsdntsts': '01',
+            'SplmtryData_Cdtr_twnnm': '0300',
+        }
+        result = self.requestHandler(creditTransferRequestForm)
+
+        if result.get('txSts') == "ACTC":
+            time.sleep(15)
+            psrRequestForm = {
+                'Host_url': '10.170.137.115',
+                'Host_port': '18947',
+                'Fr': 'BANKDMY7',
+                'To': 'FASTIDJA',
+                'MsgDefIdr': "pacs.028.001.04",
+                "CpyDplct": "CODU",
+                "PssblDplct": False,
+                "OrgnlEndToEndId": result.get('endToEndId')
+            }
+            self.paymentStatusRequestTestHandler(psrRequestForm)
+
+    def proxyRegisterTestHandler(self):
+        uniqueId = random.randint(10000, 99999)
+        proxyRegisterRequestForm = {
+            'Host_url': '10.170.137.115',
+            'Host_port': '18948',
+            'Fr': 'BANKDMY8',
+            'To': 'FASTIDJA',
+            'MsgDefIdr': "prxy.001.001.01",
+            "BizSvc": "BI",
+            "CpyDplct": "CODU",
+            "PssblDplct": False,
+            'MsgSndr_agt': "BANKDMY8",
+            'MsgSndr_acct': f'312{uniqueId}',
+            'RegnTp': 'NEWR',
+            'Prxy_tp': '02',
+            'Prxy_val': f'Proxy Value {uniqueId}',
+            'DsplNm': f'Proxy Display Name {uniqueId}',
+            'PrxyRegn_Agt_nm': 'PT. Abhimata Persada',
+            'PrxyRegn_Agt_id': 'BANKDMY8',
+            'PrxyRegn_acct': f'312{uniqueId}',
+            'PrxyRegn_tp': 'CACC',
+            'PrxyRegn_nm': f'Proxy Name {uniqueId}',
+            'ScndId_tp': '01',
+            'ScndId_val': f'6812345{uniqueId}',
+            'RegnSts': 'ACTV',
+            'SplmtryData_Cstmr_tp': '01',
+            'SplmtryData_Cstmr_id': f'10203040{uniqueId}',
+            'SplmtryData_Cstmr_rsdntsts': '01',
+            'SplmtryData_Cstmr_twnnm': '0300',
+        }
+        startTime = time.time()
+        response = self.client.post(
+            '/ProxyRegistrationOFI', data=proxyRegisterRequestForm)
+        duration = "{:.2f}".format(time.time() - startTime)
+        jsonResponse = json.loads(response.data)
+        msgId = jsonResponse["BusMsg"]["Document"]["PrxyRegnRspn"]["OrgnlGrpInf"]["OrgnlMsgId"]
+        txSts = jsonResponse["BusMsg"]["Document"]["PrxyRegnRspn"]["RegnRspn"]["PrxRspnSts"]
+        stsRsnInf = jsonResponse["BusMsg"]["Document"]["PrxyRegnRspn"]["RegnRspn"]["StsRsnInf"]["Prtry"]
+        self.logger.info(datetime.now().strftime(
+            "%Y-%m-%d %H:%M:%S") + f" ({duration} seconds) {msgId} {txSts} {stsRsnInf}")
+        return proxyRegisterRequestForm
+
+    def proxyLookupTestHandler(self, form):
+        proxyLookupRequestForm = {
+            'Host_url': '10.170.137.115',
+            'Host_port': '18948',
+            'Fr': 'BANKDMY8',
+            'To': 'FASTIDJA',
+            'MsgDefIdr': "prxy.003.001.01",
+            "BizSvc": "BI",
+            "CpyDplct": "CODU",
+            "PssblDplct": False,
+            'MsgSndr_agt': "BANKDMY8",
+            'MsgSndr_acct': form.get('MsgSndr_acct'),
+            'PrxyOnly_LkUpTp': "PXRS",
+            'PrxyRtrvl_tp': form.get('Prxy_tp'),
+            'PrxyRtrvl_value': form.get('Prxy_val'),
+        }
+        startTime = time.time()
+        response = self.client.post(
+            '/OFI', data=proxyLookupRequestForm)
+        duration = "{:.2f}".format(time.time() - startTime)
+        jsonResponse = json.loads(response.data)
+        msgId = jsonResponse["BusMsg"]["Document"]["PrxyLookUpRspn"]["LkUpRspn"]["OrgnlId"]
+        txSts = jsonResponse["BusMsg"]["Document"]["PrxyLookUpRspn"]["LkUpRspn"]["RegnRspn"]["PrxRspnSts"]
+        stsRsnInf = jsonResponse["BusMsg"]["Document"]["PrxyLookUpRspn"]["LkUpRspn"]["RegnRspn"]["StsRsnInf"]["Prtry"]
+        self.logger.info(datetime.now().strftime(
+            "%Y-%m-%d %H:%M:%S") + f" ({duration} seconds) {msgId} {txSts} {stsRsnInf}")
+
+    def proxyEnquiryTestHandler(self, form):
+        time.sleep(10)
+        proxyEnquiryRequestForm = {
+            'Host_url': '10.170.137.115',
+            'Host_port': '18948',
+            'Fr': 'BANKDMY8',
+            'To': 'FASTIDJA',
+            'MsgDefIdr': "prxy.005.001.01",
+            "BizSvc": "BI",
+            "CpyDplct": "CODU",
+            "PssblDplct": False,
+            'MsgSndr_agt': "BANKDMY8",
+            'MsgSndr_acct': form.get('MsgSndr_acct'),
+            'ScndId_tp': form.get('ScndId_tp'),
+            'ScndId_val': form.get('ScndId_val')
+        }
+        startTime = time.time()
+        response = self.client.post(
+            '/ProxyEnquiryOFI', data=proxyEnquiryRequestForm)
+        duration = "{:.2f}".format(time.time() - startTime)
+        jsonResponse = json.loads(response.data)
+        msgId = jsonResponse["BusMsg"]["Document"]["PrxyNqryRspn"]["OrgnlGrpInf"]["OrgnlMsgId"]
+        txSts = jsonResponse["BusMsg"]["Document"]["PrxyNqryRspn"]["NqryRspn"]["PrxRspnSts"]
+        stsRsnInf = jsonResponse["BusMsg"]["Document"]["PrxyNqryRspn"]["NqryRspn"]["StsRsnInf"]["Prtry"]
+        self.logger.info(datetime.now().strftime(
+            "%Y-%m-%d %H:%M:%S") + f" ({duration} seconds) {msgId} {txSts} {stsRsnInf}")
+
+    def proxyPortingTestHandler(self):
+        # TODO: Not Developed Yet
+        pass
+
+    def proxyDeactivateTestHandler(self):
+        # TODO: Not Developed Yet
+        pass
+
+    def paymentStatusRequestTestHandler(self, paymentData):
+        paymentData['Payment_url'] = '/PaymentStatusOFI'
+        self.requestHandler(paymentData)
+
+    def requestForPaymentAccountTestHandler(self):
+        # TODO: Change the date with default value
         timestamp_now = datetime.now()
         timestamp_formatted = timestamp_now.strftime('%Y-%m-%d')
         timestamp_future = timestamp_now + timedelta(days=14)
-
         timestamp_future_formatted = timestamp_future.strftime('%Y-%m-%d')
-        delta_str = str(timedelta(days=14))
 
         rfpAccountRequestForm = {
+            'Payment_url': '/RequestForPayByAccountOFI',
             'Host_url': '10.170.137.115',
             'Host_port': '18947',
             'Fr': 'BANKDMY7',
@@ -452,115 +477,267 @@ class HTTPServerUnitTest(unittest.TestCase):
             'SplmtryData_Cdtr_rsdntsts': '01',
             'SplmtryData_Cdtr_twnnm': '0300',
         }
-        rfpAccountStartTime = time.time()
-        rfpAccountResponse = self.client.post(
-            '/RequestForPayByAccountOFI', data=rfpAccountRequestForm)
-        rfpAccountduration = "{:.2f}".format(
-            time.time() - rfpAccountStartTime)
-        rfpAccountJsonResponse = json.loads(rfpAccountResponse.data)
-        rfpAccountMsgId = rfpAccountJsonResponse["BusMsg"]["Document"][
-            "FIToFIPmtStsRpt"]["OrgnlGrpInfAndSts"][0]["OrgnlMsgId"]
-        rfpAccountEndToEndId = rfpAccountJsonResponse["BusMsg"]["Document"][
-            "FIToFIPmtStsRpt"]["TxInfAndSts"][0]["OrgnlEndToEndId"]
-        rfpAccountTxSts = rfpAccountJsonResponse["BusMsg"][
-            "Document"]["FIToFIPmtStsRpt"]["TxInfAndSts"][0]["TxSts"]
-        rfpAccountStsRsnInf = rfpAccountJsonResponse["BusMsg"]["Document"][
-            "FIToFIPmtStsRpt"]["TxInfAndSts"][0]["StsRsnInf"][0]["Rsn"]["Prtry"]
-        self.logger.info(datetime.now().strftime("%Y-%m-%d %H:%M:%S") +
-                         f" ({rfpAccountduration} seconds) {rfpAccountEndToEndId} {rfpAccountTxSts} {rfpAccountStsRsnInf}")
-        self.logger.info(rfpAccountResponse.data)
+        result = self.requestHandler(rfpAccountRequestForm)
 
-        # # Request For Payment Rejection by Account
-        # time.sleep(15)
-        # rfpAccountRejectRequestForm = {
-        #     'Host_url': '10.170.137.115',
-        #     'Host_port': '18948',
-        #     'Fr': 'BANKDMY8',
-        #     'To': 'FASTIDJA',
-        #     'MsgDefIdr': "pain.014.001.08",
-        #     "BizSvc": "BI",
-        #     "CpyDplct": "CODU",
-        #     "PssblDplct": False,
-        #     'CdtrAgt': "BANKDMY7",
-        #     "OrgnlMsgId": rfpAccountMsgId,
-        #     "OrgnlMsgNmId": "pain.013.001.08",
-        #     "OrgnlPmtInfId": rfpAccountMsgId,
-        #     "OrgnlEndToEndId": rfpAccountEndToEndId,
-        #     "TxSts": "RJCT",
-        #     "StsRsnInf": "U110",
-        # }
-        # rfpAccountRejectStartTime = time.time()
-        # rfpAccountRejectResponse = self.client.post(
-        #     '/RequestForPayRejectByAccountOFI', data=rfpAccountRejectRequestForm)
-        # rfpAccountRejectduration = "{:.2f}".format(
-        #     time.time() - rfpAccountRejectStartTime)
-        # rfpAccountRejectJsonResponse = json.loads(rfpAccountRejectResponse.data)
-        # rfpAccountRejectEndToEndId = rfpAccountRejectJsonResponse["BusMsg"]["Document"][
-        #     "FIToFIPmtStsRpt"]["TxInfAndSts"][0]["OrgnlEndToEndId"]
-        # rfpAccountRejectTxSts = rfpAccountRejectJsonResponse["BusMsg"][
-        #     "Document"]["FIToFIPmtStsRpt"]["TxInfAndSts"][0]["TxSts"]
-        # rfpAccountRejectStsRsnInf = rfpAccountRejectJsonResponse["BusMsg"]["Document"][
-        #     "FIToFIPmtStsRpt"]["TxInfAndSts"][0]["StsRsnInf"][0]["Rsn"]["Prtry"]
-        # self.logger.info(datetime.now().strftime("%Y-%m-%d %H:%M:%S") +
-        #                  f" ({rfpAccountRejectduration} seconds) {rfpAccountRejectEndToEndId} {rfpAccountRejectTxSts} {rfpAccountRejectStsRsnInf}")
-        # self.logger.info(rfpAccountRejectResponse.data)
+        if result.get('txSts') == "ACTC":
+            time.sleep(15)
+            psrRequestForm = {
+                'Host_url': '10.170.137.115',
+                'Host_port': '18947',
+                'Fr': 'BANKDMY7',
+                'To': 'FASTIDJA',
+                'MsgDefIdr': "pacs.028.001.04",
+                "CpyDplct": "CODU",
+                "PssblDplct": False,
+                "OrgnlEndToEndId": result.get('endToEndId')
+            }
+            self.paymentStatusRequestTestHandler(psrRequestForm)
+            return rfpAccountRequestForm, result
 
-        # # Request For Payment by Proxy
+    def requestForPaymentAccountRejectTestHandler(self, form):
+        rfpAccountRejectRequestForm = {
+            'Payment_url': '/RequestForPayRejectByAccountOFI',
+            'Host_url': '10.170.137.115',
+            'Host_port': '18948',
+            'Fr': 'BANKDMY8',
+            'To': 'FASTIDJA',
+            'MsgDefIdr': "pain.014.001.08",
+            "BizSvc": "BI",
+            "CpyDplct": "CODU",
+            "PssblDplct": False,
+            'CdtrAgt': "BANKDMY7",
+            "OrgnlMsgId": form.get('msgId'),
+            "OrgnlMsgNmId": "pain.013.001.08",
+            "OrgnlPmtInfId": form.get('msgId'),
+            "OrgnlEndToEndId": form.get('endToEndId'),
+            "TxSts": "RJCT",
+            "StsRsnInf": "U110",
+        }
+        result = self.requestHandler(rfpAccountRejectRequestForm)
 
-        # # Request For Payment Rejection by Proxy
+        if result.get('txSts') == "ACTC":
+            time.sleep(15)
+            psrRequestForm = {
+                'Host_url': '10.170.137.115',
+                'Host_port': '18948',
+                'Fr': 'BANKDMY8',
+                'To': 'FASTIDJA',
+                'MsgDefIdr': "pacs.028.001.04",
+                "CpyDplct": "CODU",
+                "PssblDplct": False,
+                "OrgnlEndToEndId": form.get('endToEndId')
+            }
+            self.paymentStatusRequestTestHandler(psrRequestForm)
+            return result
 
-        # # Credit Transfer RFP
-        # rfpForCTResponse = self.client.post(
-        #     '/RequestForPayByAccountOFI', data=requestForPaymentRequestForm)
-        # rfpAccountEndToEndId = rfpForCTResponse.json().get('OrgnlEndToEndId')
-        # rfpCTPSRResponse = self.client.post(f'/PaymentStatusOFI/{rfpAccountEndToEndId}')
-        # # TODO: Put RFP data in this variable to match original RFP for CT
-        # proxySecondaryType = ""
-        # proxySecondaryValue = ""
-        # proxyData = {
-        #     'proxyAccountNumber': proxyAccountNumber,
-        #     'proxyPrimaryType': proxyPrimaryType,
-        # }
-        # ctRFPRequestForm = {
-        #     'Host_url': '10.170.137.115',
-        #     'Host_port': '18907',
-        #     'Fr': 'ARTGIDJA',
-        #     'To': 'FASTIDJA',
-        #     'MsgDefIdr': "pacs.008.001.08",
-        #     "BizSvc": "BI",
-        #     "CpyDplct": "CODU",
-        #     "PssblDplct": "false",
-        #     'NbOfTxs': "1",
-        #     'SttlmMtd': "CLRG",
-        #     'CtgyPurp': "51001",
-        #     'LclInstrm': "01",
-        #     'IntrBkSttlmAmt_value': 123.12,
-        #     'IntrBkSttlmAmt_ccy': "IDR",
-        #     'ChrgBr': "DEBT",
-        #     'Dbtr_nm': "Naufal Afif",
-        #     'Dbtr_orgid': "PT. Abhimata Persada",
-        #     'DbtrAcct_value': '123456789',
-        #     'DbtrAcct_type': 'SVGS',
-        #     'DbtrAgt': 'ARTGIDJA',
-        #     'CdtrAgt': 'ATOSIDJ1',
-        #     'Cdtr_nm': 'Bunyamin',
-        #     'Cdtr_orgid': 'PT. Telkom Indonesia',
-        #     'CdtrAcct_value': '987654321',
-        #     'CdtrAcct_type': 'SVGS',
-        #     'RmtInf': "Testing purpose",
-        #     'SplmtryData_InitgAcctId': "123456789",
-        #     'SplmtryData_Dbtr_tp': '01',
-        #     'SplmtryData_Dbtr_rsdntsts': '01',
-        #     'SplmtryData_Dbtr_twnnm': '0300',
-        #     'SplmtryData_Cdtr_tp': '01',
-        #     'SplmtryData_Cdtr_rsdntsts': '01',
-        #     'SplmtryData_Cdtr_twnnm': '0300',
-        #     'SplmtryData_rltdEndToEndId': rfpAccountEndToEndId
-        # }
-        # ctRFPResponse = self.client.post(
-        #     '/CreditTransferRFPOFI', data=ctRFPRequestForm)
-        # ctRFPEndToEndId = ctRFPResponse.json().get('OrgnlEndToEndId')
-        # rfpCTPSRResponse = self.client.post(f'/PaymentStatusOFI/{ctRFPEndToEndId}')
+    def requestForPaymentProxyTestHandler(self, proxyForm):
+        timestamp_now = datetime.now()
+        timestamp_formatted = timestamp_now.strftime('%Y-%m-%d')
+        timestamp_future = timestamp_now + timedelta(days=14)
+        timestamp_future_formatted = timestamp_future.strftime('%Y-%m-%d')
+
+        rfpProxyRequestForm = {
+            'Payment_url': '/RequestForPayByProxyOFI',
+            'Host_url': '10.170.137.115',
+            'Host_port': '18947',
+            'Fr': 'BANKDMY7',
+            'To': 'FASTIDJA',
+            'MsgDefIdr': "pain.013.001.08",
+            "BizSvc": "BI",
+            "CpyDplct": "CODU",
+            "PssblDplct": False,
+            'NbOfTxs': "1",
+            'InitgPty_nm': "Naufal Afif",
+            'InitgPty_pstladr': 'ID',
+            'PmtMtd': "TRF",
+            'CtgyPurp': '85101',
+            'ReqdExctnDt': timestamp_formatted,
+            'XpryDt': timestamp_future_formatted,
+            'DbtrAcct_value': proxyForm.get('MsgSndr_acct'),
+            'DbtrAcct_Prxy_tp': proxyForm.get('Prxy_tp'),
+            'DbtrAcct_Prxy_id': proxyForm.get('Prxy_val'),
+            'DbtrAgt': 'BANKDMY8',
+            'InstdAmt_value': 851.01,
+            'InstdAmt_ccy': "IDR",
+            'ChrgBr': "DEBT",
+            'CdtrAgt': 'BANKDMY7',
+            'Cdtr_orgid': 'PT. Telkom Indonesia',
+            'CdtrAcct_value': '987654321',
+            'CdtrAcct_type': 'SVGS',
+            'CdtrAcct_nm': 'Raline',
+            'SplmtryData_Cdtr_tp': '01',
+            'SplmtryData_Cdtr_rsdntsts': '01',
+            'SplmtryData_Cdtr_twnnm': '0300',
+        }
+        result = self.requestHandler(rfpProxyRequestForm)
+
+        if result.get('txSts') == "ACTC":
+            time.sleep(15)
+            psrRequestForm = {
+                'Host_url': '10.170.137.115',
+                'Host_port': '18947',
+                'Fr': 'BANKDMY7',
+                'To': 'FASTIDJA',
+                'MsgDefIdr': "pacs.028.001.04",
+                "CpyDplct": "CODU",
+                "PssblDplct": False,
+                "OrgnlEndToEndId": result.get('endToEndId')
+            }
+            self.paymentStatusRequestTestHandler(psrRequestForm)
+            return rfpProxyRequestForm, result
+
+    def requestForPaymentProxyRejectTestHandler(self, form):
+        rfpProxyRejectRequestForm = {
+            'Payment_url': '/RequestForPayRejectByProxyOFI',
+            'Host_url': '10.170.137.115',
+            'Host_port': '18948',
+            'Fr': 'BANKDMY8',
+            'To': 'FASTIDJA',
+            'MsgDefIdr': "pain.014.001.08",
+            "BizSvc": "BI",
+            "CpyDplct": "CODU",
+            "PssblDplct": False,
+            'CdtrAgt': "BANKDMY7",
+            "OrgnlMsgId": form.get('msgId'),
+            "OrgnlMsgNmId": "pain.013.001.08",
+            "OrgnlPmtInfId": form.get('msgId'),
+            "OrgnlEndToEndId": form.get('endToEndId'),
+            "TxSts": "RJCT",
+            "StsRsnInf": "U110",
+        }
+        result = self.requestHandler(rfpProxyRejectRequestForm)
+
+        if result.get('txSts') == "ACTC":
+            time.sleep(15)
+            psrRequestForm = {
+                'Host_url': '10.170.137.115',
+                'Host_port': '18948',
+                'Fr': 'BANKDMY8',
+                'To': 'FASTIDJA',
+                'MsgDefIdr': "pacs.028.001.04",
+                "CpyDplct": "CODU",
+                "PssblDplct": False,
+                "OrgnlEndToEndId": form.get('endToEndId')
+            }
+            self.paymentStatusRequestTestHandler(psrRequestForm)
+            return result
+
+    def creditTransferRFPTestHandler(self, rfpForm, rfpResult):
+        ctRFPRequestForm = {
+            'Payment_url': '/CreditTransferRFPOFI',
+            'Host_url': '10.170.137.115',
+            'Host_port': '18948',
+            'Fr': 'BANKDMY8',
+            'To': 'FASTIDJA',
+            'MsgDefIdr': "pacs.008.001.08",
+            "BizSvc": "BI",
+            "CpyDplct": "CODU",
+            "PssblDplct": "false",
+            'NbOfTxs': "1",
+            'SttlmMtd': "CLRG",
+            'CtgyPurp': "31001",
+            'LclInstrm': "01",
+            'IntrBkSttlmAmt_value': rfpForm.get('InstdAmt_value'),
+            'IntrBkSttlmAmt_ccy': "IDR",
+            'ChrgBr': "DEBT",
+            'Dbtr_nm': rfpForm.get('InitgPty_nm'),
+            'Dbtr_orgid': "PT. Abhimata Persada",
+            'DbtrAcct_value': rfpForm.get('DbtrAcct_value'),
+            'DbtrAcct_type': rfpForm.get('DbtrAcct_type'),
+            'DbtrAgt': rfpForm.get('DbtrAgt'),
+            'CdtrAgt': rfpForm.get('CdtrAgt'),
+            'Cdtr_nm': rfpForm.get('InitgPty_nm'),
+            'Cdtr_orgid': 'PT. Bank Dummy 7',
+            'CdtrAcct_value': rfpForm.get('CdtrAcct_value'),
+            'CdtrAcct_type': rfpForm.get('CdtrAcct_type'),
+            'RmtInf': "Testing purpose",
+            'SplmtryData_InitgAcctId': rfpForm.get('DbtrAcct_value'),
+            'SplmtryData_Dbtr_tp': '01',
+            'SplmtryData_Dbtr_rsdntsts': '01',
+            'SplmtryData_Dbtr_twnnm': '0300',
+            'SplmtryData_Cdtr_tp': rfpForm.get('SplmtryData_Cdtr_tp'),
+            'SplmtryData_Cdtr_rsdntsts': rfpForm.get('SplmtryData_Cdtr_rsdntsts'),
+            'SplmtryData_Cdtr_twnnm': rfpForm.get('SplmtryData_Cdtr_twnnm'),
+            'SplmtryData_rltdEndToEndId': rfpResult.get('endToEndId')
+        }
+        result = self.requestHandler(ctRFPRequestForm)
+
+        if result.get('txSts') == "ACTC":
+            time.sleep(15)
+            psrRequestForm = {
+                'Host_url': '10.170.137.115',
+                'Host_port': '18948',
+                'Fr': 'BANKDMY8',
+                'To': 'FASTIDJA',
+                'MsgDefIdr': "pacs.028.001.04",
+                "CpyDplct": "CODU",
+                "PssblDplct": False,
+                "OrgnlEndToEndId": result.get('endToEndId')
+            }
+            self.paymentStatusRequestTestHandler(psrRequestForm)
+
+    def eMandateEnquiryByMandateID(self):
+        pass
+
+    def eMandateRegistrationByCreditingTest(self):
+        mandateRegistRequestForm = {
+            'Payment_url': '/MandateRegistByCreditOFI',
+            'Host_url': '10.170.137.115',
+            'Host_port': '18947',
+            'Fr': 'BANKDMY7',
+            'To': 'FASTIDJA',
+            'MsgDefIdr': "pacs.008.001.08",
+            "BizSvc": "BI",
+            "CpyDplct": "CODU",
+            "PssblDplct": "false",
+            'CtgyPurp': "01",
+            'LclInstrm': "FixedAmt",
+            'SeqTp' : "RCUR",
+            'Frqcy_tp': "MNTH",
+            'Frqcy_cntPerPrd': "12",
+            'FrDt': "", # Fill if need a custom date
+            'ToDt': "", # Fill if need a custom date
+            'FrstColltnDt': "", # Fill if need a custom date
+            'FnlColltnDt': "", # Fill if need a custom date
+            'TrckgInd': True,
+            'FrstColltnAmt_ccy': "IDR",
+            'FrstColltnAmt_value': "13001.01",
+            'ColltnAmt_ccy': "IDR",
+            'ColltnAmt_value': "13001.01",
+            'MaxAmt_ccy': "IDR",
+            'MaxAmt_value': "13001.01",
+            'Rsn':  "Credit Pay Insurance",
+            'Cdtr_nm': "PT. Bank Dummy 7",
+            'Cdtr_orgid': "BANKDMY7_MERCH_100",
+            'CdtrAcct_id': "12345677789",
+            'CdtrAcct_tp': "CACC",
+            'CdtrAcct_nm': "Dummy Account 7",
+            'CdtrAgt': "BANKDMY7",
+            'Dbtr_nm': "PT. Pypoh",
+            'Dbtr_prvtid': "3171234567890",
+            'DbtrAcct_id': "12347856999",
+            'DbtrAcct_tp': "SVGS",
+            'DbtrAcct_nm': "Naufal Afif",
+            'DbtrAgt': "BANKDMY8",
+            'CdtrRef': "BANKDMY7_MERCH_100"
+
+        }
+        result = self.requestHandler(mandateRegistRequestForm)
+
+        # if result.get('txSts') == "ACTC":
+        #     time.sleep(15)
+        #     mandateEnquiryRequestForm = {
+        #         'Host_url': '10.170.137.115',
+        #         'Host_port': '18948',
+        #         'Fr': 'BANKDMY8',
+        #         'To': 'FASTIDJA',
+        #         'MsgDefIdr': "pacs.028.001.04",
+        #         "CpyDplct": "CODU",
+        #         "PssblDplct": False,
+        #         "OrgnlEndToEndId": result.get('endToEndId')
+        #     }
+        #     self.paymentStatusRequestTestHandler(psrRequestForm)
+
 
 
 if __name__ == '__main__':
