@@ -107,6 +107,7 @@ def requestMessageByProxy(requestData):
             "CDTR_ACCT_VALUE": requestData.get('CdtrAcct_value'),
             "CDTR_ACCT_TP_VALUE": requestData.get('CdtrAcct_type'),
             "CDTR_ACCT_NM_VALUE": requestData.get('CdtrAcct_nm'),
+            "RMTINF_USTRD_VALUE": requestData.get('Ustrd'),
             "SPLMNTR_CDTR_TP_VALUE": requestData.get('SplmtryData_Cdtr_tp'),
             "SPLMNTR_CDTR_RSDNTSTS_VALUE": requestData.get('SplmtryData_Cdtr_rsdntsts'),
             "SPLMNTR_CDTR_TWNNM_VALUE": requestData.get('SplmtryData_Cdtr_twnnm'),

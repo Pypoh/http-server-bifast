@@ -1,0 +1,105 @@
+{
+  "BusMsg": {
+    "AppHdr": {
+      "Fr": {
+        "FIId": {
+          "FinInstnId": {
+            "Othr": {
+              "Id": "{{ FR_BIC_VALUE }}"
+            }
+          }
+        }
+      },
+      "To": {
+        "FIId": {
+          "FinInstnId": {
+            "Othr": {
+              "Id": "{{ TO_BIC_VALUE }}"
+            }
+          }
+        }
+      },
+      "BizMsgIdr": "{{ BIZ_MSG_IDR_VALUE }}",
+      "MsgDefIdr": "{{ MSG_DEF_IDR_VALUE }}",
+      "BizSvc": "{{ BIZ_SVC_VALUE }}",
+      "CreDt": "{{ CRE_DT_VALUE }}",
+      "CpyDplct": "{{ CPYDPLCT_VALUE }}",
+      "PssblDplct": "{{ PSSBLDPLCT_VALUE }}"
+    },
+    "Document": {
+      "MndtAccptncRpt": {
+        "GrpHdr": {
+            "MsgId": "{{ MSG_ID_VALUE }}",
+            "CreDtTm": "{{ CRE_DT_TM_VALUE }}"
+        },
+        "UndrlygAccptncDtls": [
+          {
+            "OrgnlMsgInf": {
+              "MsgId": "{{ ORGNL_MSG_ID_VALUE }}",  
+              "MsgNmId": "{{ ORGNL_MSG_NM_VALUE }}"
+            },
+            "AccptncRslt": {
+              "Accptd": "{{ ACCPTNCRSLT_VALUE }}"
+            },
+            "OrgnlMndt": {
+              "OrgnlMndt": {
+                "MndtId": "{{ ORGNL_MNDT_ID_VALUE }}",
+                "MndtReqId": "{{ ORGNL_MNDT_REQ_ID_VALUE }}",
+                "Ocrncs": {
+                  "SeqTp": "{{ ORGNL_SEQTP_VALUE }}",
+                  "Drtn": {
+                    "FrDt": "{{ ORGNL_FR_DT_VALUE }}",
+                    "ToDt": "{{ ORGNL_TO_DT_VALUE }}"
+                  },
+                  "FrstColltnDt": "{{ ORGNL_FRST_COLLTN_DT_VALUE }}",
+                  "FnlColltnDt": "{{ ORGNL_FNL_COLLTN_DT_VALUE }}"
+                },
+                "TrckgInd": "{{ TRCKGIND_VALUE }}",
+                "Cdtr": {
+                  "Nm": "{{ CDTR_NM_VALUE }}",
+                  "Id": {
+                    "OrgId": {
+                      "Othr": [
+                        {
+                          "Id": "{{ CDTR_ORG_ID_VALUE }}"
+                        }
+                      ]
+                    }
+                  }
+                },
+                "CdtrAgt": {
+                  "FinInstnId": {
+                    "Othr": {
+                      "Id": "{{ CDTR_AGT_VALUE }}"
+                    }
+                  }
+                },
+                "Dbtr": {
+                  "Nm": "{{ DBTR_NM_VALUE }}"
+                },
+                "DbtrAgt": {
+                  "FinInstnId": {
+                    "Othr": {
+                      "Id": "{{ DBTR_AGT_VALUE }}"
+                    }
+                  }
+                }
+              }
+            },
+            "SplmtryData": [
+              {
+                "Envlp": {
+                  "Dtl": {
+                    "OrgnlMndt": {
+                      "Sts": "{{ ORGNL_MNDT_STS_VALUE }}"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

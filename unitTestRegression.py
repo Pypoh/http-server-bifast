@@ -10,6 +10,7 @@ import time
 import json
 import unittest
 import requests
+import handler.general as generalHandler
 # from unittest.mock import patch, Mock
 
 
@@ -79,7 +80,7 @@ class HTTPServerUnitTest(unittest.TestCase):
         # time.sleep(10)
         # self.requestForPaymentProxyRejectTestHandler(rfpProxyResult)
 
-        # # Credit Transfer RFP
+        # Credit Transfer RFP
         # time.sleep(10)
         # rfpAccountRequest, rfpAccountResult = self.requestForPaymentAccountTestHandler()
         # time.sleep(10)
@@ -87,35 +88,34 @@ class HTTPServerUnitTest(unittest.TestCase):
 
         # E-Mandate Registration by Crediting
         # time.sleep(10)
-        emandateRegistrationCrediting = self.eMandateRegistrationByCreditingTest()
-
+        # emandateRegistrationCrediting = self.eMandateRegistrationByCreditingTest()
 
         # E-Mandate Registration by Debiting
-         
-        # E-Mandate Approval by Crediting
-         
-        # E-Mandate Approval by Debiting
-         
-        # E-Mandate Amendment by Crediting
-         
-        # E-Mandate Amendment by Debiting
-         
-        # E-Mandate Amendment Approval by Crediting
-         
-        # E-Mandate Amendment Approval by Debiting
-         
-        # E-Mandate Termination by Crediting
-         
-        # E-Mandate Termintation by Debiting
-         
-        # E-Mandate Enquiry by EndToEndId
-         
-        # E-Mandate Enquiry by MandateID
-         
-        # Direct Debit
-         
-        # PSR Direct Debit
 
+        # E-Mandate Approval by Crediting
+        # time.sleep(10)
+
+        # E-Mandate Approval by Debiting
+
+        # E-Mandate Amendment by Crediting
+
+        # E-Mandate Amendment by Debiting
+
+        # E-Mandate Amendment Approval by Crediting
+
+        # E-Mandate Amendment Approval by Debiting
+
+        # E-Mandate Termination by Crediting
+
+        # E-Mandate Termintation by Debiting
+
+        # E-Mandate Enquiry by EndToEndId
+
+        # E-Mandate Enquiry by MandateID
+
+        # Direct Debit
+
+        # PSR Direct Debit
 
         pass
 
@@ -123,22 +123,38 @@ class HTTPServerUnitTest(unittest.TestCase):
         startTime = time.time()
         response = self.client.post(form.get('Payment_url'), data=form)
         duration = "{:.2f}".format(time.time() - startTime)
-        # self.logger.info(response.data)
+        self.logger.info(response.data)
         jsonResponse = json.loads(response.data)
         try:
-            msgId = jsonResponse["BusMsg"]["Document"]["FIToFIPmtStsRpt"]["OrgnlGrpInfAndSts"][0]["OrgnlMsgId"]
-            endToEndId = jsonResponse["BusMsg"]["Document"]["FIToFIPmtStsRpt"]["TxInfAndSts"][0]["OrgnlEndToEndId"]
-            txSts = jsonResponse["BusMsg"]["Document"]["FIToFIPmtStsRpt"]["TxInfAndSts"][0]["TxSts"]
-            stsRsnInf = jsonResponse["BusMsg"]["Document"]["FIToFIPmtStsRpt"]["TxInfAndSts"][0]["StsRsnInf"][0]["Rsn"]["Prtry"]
+            msgNmId = jsonResponse["BusMsg"]["AppHdr"]["MsgDefIdr"]
+            if msgNmId == "pacs.028.001.04":
+                msgId = jsonResponse["BusMsg"]["Document"]["FIToFIPmtStsRpt"]["OrgnlGrpInfAndSts"][0]["OrgnlMsgId"]
+                endToEndId = jsonResponse["BusMsg"]["Document"]["FIToFIPmtStsRpt"]["TxInfAndSts"][0]["OrgnlEndToEndId"]
+                txSts = jsonResponse["BusMsg"]["Document"]["FIToFIPmtStsRpt"]["TxInfAndSts"][0]["TxSts"]
+                stsRsnInf = jsonResponse["BusMsg"]["Document"]["FIToFIPmtStsRpt"]["TxInfAndSts"][0]["StsRsnInf"][0]["Rsn"]["Prtry"]
+                resultForm = {
+                    'msgId': msgId,
+                    'endToEndId': endToEndId,
+                    'txSts': txSts,
+                    'stsRsnInf': stsRsnInf,
+                }
+                return resultForm
+            else:
+                msgId = jsonResponse["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"]["OrgnlMsgInf"]["MsgId"]
+                mndtId = jsonResponse.get("BusMsg", {}).get("Document", {}).get("FIToFIPmtStsRpt", {}).get(
+                    "TxInfAndSts", [])[0].get("OrgnlTxRef", {}).get("MndtRltdInf", {}).get("MndtId")
+                # seqTp =
+                # frDt =
+                # toDt =
+                # frstColltnDt =
+                # fnlColltnDt =
+                # cdtrNm =
+                # cdtrOrgId =
+                # dbtrNm =
+                return resultForm
+
             self.logger.info(datetime.now().strftime("%Y-%m-%d %H:%M:%S") +
                              f" ({duration} seconds) {form.get('Payment_url')} {endToEndId} {txSts} {stsRsnInf}")
-            resultForm = {
-                'msgId': msgId,
-                'endToEndId': endToEndId,
-                'txSts': txSts,
-                'stsRsnInf': stsRsnInf
-            }
-            return resultForm
         except KeyError:
             self.logger.info(response.data)
 
@@ -213,10 +229,6 @@ class HTTPServerUnitTest(unittest.TestCase):
                 'Host_url': '10.170.137.115',
                 'Host_port': '18947',
                 'Fr': 'BANKDMY7',
-                'To': 'FASTIDJA',
-                'MsgDefIdr': "pacs.028.001.04",
-                "CpyDplct": "CODU",
-                "PssblDplct": False,
                 "OrgnlEndToEndId": result.get('endToEndId')
             }
             self.paymentStatusRequestTestHandler(psrRequestForm)
@@ -268,10 +280,6 @@ class HTTPServerUnitTest(unittest.TestCase):
                 'Host_url': '10.170.137.115',
                 'Host_port': '18948',
                 'Fr': 'BANKDMY8',
-                'To': 'FASTIDJA',
-                'MsgDefIdr': "pacs.028.001.04",
-                "CpyDplct": "CODU",
-                "PssblDplct": False,
                 "OrgnlEndToEndId": result.get('endToEndId')
             }
             self.paymentStatusRequestTestHandler(psrRequestForm)
@@ -323,10 +331,6 @@ class HTTPServerUnitTest(unittest.TestCase):
                 'Host_url': '10.170.137.115',
                 'Host_port': '18947',
                 'Fr': 'BANKDMY7',
-                'To': 'FASTIDJA',
-                'MsgDefIdr': "pacs.028.001.04",
-                "CpyDplct": "CODU",
-                "PssblDplct": False,
                 "OrgnlEndToEndId": result.get('endToEndId')
             }
             self.paymentStatusRequestTestHandler(psrRequestForm)
@@ -437,6 +441,10 @@ class HTTPServerUnitTest(unittest.TestCase):
 
     def paymentStatusRequestTestHandler(self, paymentData):
         paymentData['Payment_url'] = '/PaymentStatusOFI'
+        paymentData['To'] = 'FASTIDJA'
+        paymentData['MsgDefIdr'] = 'pacs.028.001.04'
+        paymentData['CpyDplct'] = 'CODU'
+        paymentData['PssblDplct'] = False
         self.requestHandler(paymentData)
 
     def requestForPaymentAccountTestHandler(self):
@@ -473,6 +481,7 @@ class HTTPServerUnitTest(unittest.TestCase):
             'CdtrAcct_value': '987654321',
             'CdtrAcct_type': 'SVGS',
             'CdtrAcct_nm': 'Raline',
+            'Ustrd': 'RFP Reason',
             'SplmtryData_Cdtr_tp': '01',
             'SplmtryData_Cdtr_rsdntsts': '01',
             'SplmtryData_Cdtr_twnnm': '0300',
@@ -485,10 +494,6 @@ class HTTPServerUnitTest(unittest.TestCase):
                 'Host_url': '10.170.137.115',
                 'Host_port': '18947',
                 'Fr': 'BANKDMY7',
-                'To': 'FASTIDJA',
-                'MsgDefIdr': "pacs.028.001.04",
-                "CpyDplct": "CODU",
-                "PssblDplct": False,
                 "OrgnlEndToEndId": result.get('endToEndId')
             }
             self.paymentStatusRequestTestHandler(psrRequestForm)
@@ -521,10 +526,6 @@ class HTTPServerUnitTest(unittest.TestCase):
                 'Host_url': '10.170.137.115',
                 'Host_port': '18948',
                 'Fr': 'BANKDMY8',
-                'To': 'FASTIDJA',
-                'MsgDefIdr': "pacs.028.001.04",
-                "CpyDplct": "CODU",
-                "PssblDplct": False,
                 "OrgnlEndToEndId": form.get('endToEndId')
             }
             self.paymentStatusRequestTestHandler(psrRequestForm)
@@ -577,10 +578,6 @@ class HTTPServerUnitTest(unittest.TestCase):
                 'Host_url': '10.170.137.115',
                 'Host_port': '18947',
                 'Fr': 'BANKDMY7',
-                'To': 'FASTIDJA',
-                'MsgDefIdr': "pacs.028.001.04",
-                "CpyDplct": "CODU",
-                "PssblDplct": False,
                 "OrgnlEndToEndId": result.get('endToEndId')
             }
             self.paymentStatusRequestTestHandler(psrRequestForm)
@@ -613,10 +610,6 @@ class HTTPServerUnitTest(unittest.TestCase):
                 'Host_url': '10.170.137.115',
                 'Host_port': '18948',
                 'Fr': 'BANKDMY8',
-                'To': 'FASTIDJA',
-                'MsgDefIdr': "pacs.028.001.04",
-                "CpyDplct": "CODU",
-                "PssblDplct": False,
                 "OrgnlEndToEndId": form.get('endToEndId')
             }
             self.paymentStatusRequestTestHandler(psrRequestForm)
@@ -668,16 +661,18 @@ class HTTPServerUnitTest(unittest.TestCase):
                 'Host_url': '10.170.137.115',
                 'Host_port': '18948',
                 'Fr': 'BANKDMY8',
-                'To': 'FASTIDJA',
-                'MsgDefIdr': "pacs.028.001.04",
-                "CpyDplct": "CODU",
-                "PssblDplct": False,
                 "OrgnlEndToEndId": result.get('endToEndId')
             }
             self.paymentStatusRequestTestHandler(psrRequestForm)
 
-    def eMandateEnquiryByMandateID(self):
-        pass
+    def eMandateEnquiryByMandateID(self, mandateForm):
+        mandateForm['Payment_url'] = '/MandateEnquiry'
+        mandateForm['To'] = 'FASTIDJA'
+        mandateForm['MsgDefIdr'] = 'pain.017.001.02'
+        mandateForm['CpyDplct'] = 'CODU'
+        mandateForm['PssblDplct'] = False
+        mandateForm['TrckgInd'] = True
+        return self.requestHandler(mandateForm)
 
     def eMandateRegistrationByCreditingTest(self):
         mandateRegistRequestForm = {
@@ -692,13 +687,13 @@ class HTTPServerUnitTest(unittest.TestCase):
             "PssblDplct": "false",
             'CtgyPurp': "01",
             'LclInstrm': "FixedAmt",
-            'SeqTp' : "RCUR",
+            'SeqTp': "RCUR",
             'Frqcy_tp': "MNTH",
             'Frqcy_cntPerPrd': "12",
-            'FrDt': "", # Fill if need a custom date
-            'ToDt': "", # Fill if need a custom date
-            'FrstColltnDt': "", # Fill if need a custom date
-            'FnlColltnDt': "", # Fill if need a custom date
+            'FrDt': "",  # Fill if need a custom date
+            'ToDt': "",  # Fill if need a custom date
+            'FrstColltnDt': "",  # Fill if need a custom date
+            'FnlColltnDt': "",  # Fill if need a custom date
             'TrckgInd': True,
             'FrstColltnAmt_ccy': "IDR",
             'FrstColltnAmt_value': "13001.01",
@@ -720,24 +715,82 @@ class HTTPServerUnitTest(unittest.TestCase):
             'DbtrAcct_nm': "Naufal Afif",
             'DbtrAgt': "BANKDMY8",
             'CdtrRef': "BANKDMY7_MERCH_100"
-
         }
         result = self.requestHandler(mandateRegistRequestForm)
 
-        # if result.get('txSts') == "ACTC":
-        #     time.sleep(15)
-        #     mandateEnquiryRequestForm = {
-        #         'Host_url': '10.170.137.115',
-        #         'Host_port': '18948',
-        #         'Fr': 'BANKDMY8',
-        #         'To': 'FASTIDJA',
-        #         'MsgDefIdr': "pacs.028.001.04",
-        #         "CpyDplct": "CODU",
-        #         "PssblDplct": False,
-        #         "OrgnlEndToEndId": result.get('endToEndId')
-        #     }
-        #     self.paymentStatusRequestTestHandler(psrRequestForm)
+        if result.get('txSts') == "ACTC":
+            time.sleep(15)
+            mandateEnquiryRequestForm = {
+                'Host_url': '10.170.137.115',
+                'Host_port': '18947',
+                'Fr': 'BANKDMY7',
+                "MndtId": result.get('mndtId'),
+                "CtgyPurp": "802",
+                # "CtgyPurp": mandateRegistRequestForm.get('CtgyPurp'),
+                "Cdtr_nm": mandateRegistRequestForm.get('Cdtr_nm'),
+                "Dbtr_nm": mandateRegistRequestForm.get('Dbtr_nm'),
+                "DbtrAgt": mandateRegistRequestForm.get('DbtrAgt')
+            }
+            self.eMandateEnquiryByMandateID(mandateEnquiryRequestForm)
 
+    def eMandateApproveByCreditingTest(self, mandateResultForm):
+        # Mandate Enquiry to get mandate info
+        mandateEnquiryRequestForm = {
+            'Host_url': '10.170.137.115',
+            'Host_port': '18948',
+            'Fr': 'BANKDMY8',
+            "MndtId": mandateResultForm.get('mndtId'),
+            "CtgyPurp": "802",
+            # "CtgyPurp": mandateRegistRequestForm.get('CtgyPurp'),
+            # "Cdtr_nm": mandateRegistRequestForm.get('Cdtr_nm'),
+            # "Dbtr_nm": mandateRegistRequestForm.get('Dbtr_nm'),
+            # "DbtrAgt": mandateRegistRequestForm.get('DbtrAgt')
+        }
+        mandate = self.eMandateEnquiryByMandateID(mandateEnquiryRequestForm)
+
+        mandateApproveRequestForm = {
+            'Payment_url': '/MandateRegistByCreditOFI',
+            'Host_url': '10.170.137.115',
+            'Host_port': '18947',
+            'Fr': 'BANKDMY7',
+            'To': 'FASTIDJA',
+            'MsgDefIdr': "pain.012.001.06",
+            "BizSvc": "BI",
+            "CpyDplct": "CODU",
+            "PssblDplct": "false",
+            "OrgnlMsgInf_msgid": ,
+            "OrgnlMsgInf_msgnmid": "pain.009.001.06",
+            "AccptncRslt": True,
+            "OrgnlMndt_mndtid": ,
+            "OrgnlMndt_mndtreqid": ,
+            "SeqTp": ,
+            "FrDt": ,
+            "ToDt": ,
+            "FrstColltnDt": ,
+            "FnlColltnDt": ,
+            "TrckgInd": True,
+            "Cdtr_nm": ,
+            "Cdtr_orgid": ,
+            "CdtrAgt": ,
+            "Dbtr_nm": ,
+            "DbtrAgt": ,
+            "OrgnlMndt_sts":}
+        result = self.requestHandler(mandateRegistRequestForm)
+
+        if result.get('txSts') == "ACTC":
+            time.sleep(15)
+            mandateEnquiryRequestForm = {
+                'Host_url': '10.170.137.115',
+                'Host_port': '18947',
+                'Fr': 'BANKDMY7',
+                "MndtId": result.get('mndtId'),
+                "CtgyPurp": "802",
+                # "CtgyPurp": mandateRegistRequestForm.get('CtgyPurp'),
+                "Cdtr_nm": mandateRegistRequestForm.get('Cdtr_nm'),
+                "Dbtr_nm": mandateRegistRequestForm.get('Dbtr_nm'),
+                "DbtrAgt": mandateRegistRequestForm.get('DbtrAgt')
+            }
+            self.eMandateEnquiryByMandateID(mandateEnquiryRequestForm)
 
 
 if __name__ == '__main__':

@@ -105,6 +105,9 @@
 							},
 							"Nm": "{{ CDTR_ACCT_NM_VALUE }}"
 						},
+						"RmtInf": {
+							"Ustrd": ["{{ RMTINF_USTRD_VALUE }}"]
+						},
 						"SplmtryData": [{
 							"Envlp": {
 								"Dtl": {

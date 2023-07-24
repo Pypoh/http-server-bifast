@@ -56,7 +56,7 @@ def ctproxyHandlerOFI():
 @app.route('/PaymentStatusOFI', methods=['POST'])
 def psrctHandlerOFI():
     if request.method == 'POST':
-        return paymentStatusReportHandler.requestMessage(request.form)
+        return paymentStatusReportHandler.requestMessagePSR(request.form)
 
 # Proxy Registration
 @app.route('/ProxyRegistrationOFI', methods=['POST'])
@@ -184,11 +184,11 @@ def mandateRegistByCreditingHandlerOFI():
 #     if request.method == 'POST':
 #         return requestForPaymentHandler.requestMessage()
 
-# # E-Mandate Enquiry by MandateID
-# @app.route('/MandateAmendByDebitOFI', methods=['POST'])
-# def rfpHandlerOFI():
-#     if request.method == 'POST':
-#         return requestForPaymentHandler.requestMessage()
+# E-Mandate Enquiry by MandateID
+@app.route('/MandateEnquiry', methods=['POST'])
+def mandateEnquiryHandlerOFI():
+    if request.method == 'POST':
+        return paymentStatusReportHandler.requestMessageMandateEnquiry(request.form)
 
 # # Direct Debit
 # @app.route('/DirectDebitOFI', methods=['POST'])
