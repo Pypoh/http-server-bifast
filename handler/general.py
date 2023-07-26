@@ -132,9 +132,9 @@ def extract_values(json_data):
                 item_dict = _extract(item, item_tag)
                 if item_dict:
                     result_dict.update(item_dict)
-        elif isinstance(data, dict):
+        elif isinstance(data, dict):    
             for key, value in data.items():
-                if key == "BusMsg":
+                if key == "BusMsg": 
                     result_dict.update(_extract(value, parent_tag))
                 else:
                     if isinstance(value, (dict, list)):

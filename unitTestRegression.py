@@ -93,20 +93,24 @@ class HTTPServerUnitTest(unittest.TestCase):
 
         # # E-Mandate Registration by Debiting
 
-        # # E-Mandate Approval by Crediting
-        # time.sleep(10)
-        # eMandateApprovalCrediting = self.eMandateApproveByCreditingTest(
-        #     eMandateRegistrationCrediting)
+        # E-Mandate Approval by Crediting
+        time.sleep(10)
+        eMandateApprovalCrediting = self.eMandateApproveByCreditingTest(
+            eMandateRegistrationCrediting)
 
         # E-Mandate Approval by Debiting
 
         # E-Mandate Amendment by Crediting
-        # time.sleep(10)
-
+        time.sleep(10)
+        eMandateAmendmentByCreditingTest = self.eMandateAmendmentByCreditingTest(
+            eMandateRegistrationCrediting)
 
         # E-Mandate Amendment by Debiting
 
         # E-Mandate Amendment Approval by Crediting
+        time.sleep(10)
+        eMandateAmendApproveByCreditingTest = self.eMandateAmendApproveByCreditingTest(
+            eMandateRegistrationCrediting)
 
         # E-Mandate Amendment Approval by Debiting
 
@@ -164,10 +168,12 @@ class HTTPServerUnitTest(unittest.TestCase):
         # exclude_tags = ["BusMsg"]
         json_string = json.dumps(jsonResponse)
         resultExtract = generalHandler.extract_values(json_string)
-        resultExtract["endToEndId"] = resultExtract.get('Document_MndtAccptncRpt_UndrlygAccptncDtls0_OrgnlMndt_OrgnlMndt_MndtReqId')
-        resultExtract["txSts"] = resultExtract.get('Document_MndtAccptncRpt_UndrlygAccptncDtls0_SplmtryData0_Envlp_Dtl_Rslt_TxSts')
-        resultExtract["stsRsnInf"] = resultExtract.get('Document_MndtAccptncRpt_UndrlygAccptncDtls0_SplmtryData0_Envlp_Dtl_Rslt_StsRsnInf_Rsn_Prtry')
-        
+        resultExtract["endToEndId"] = resultExtract.get(
+            'Document_MndtAccptncRpt_UndrlygAccptncDtls0_OrgnlMndt_OrgnlMndt_MndtReqId')
+        resultExtract["txSts"] = resultExtract.get(
+            'Document_MndtAccptncRpt_UndrlygAccptncDtls0_SplmtryData0_Envlp_Dtl_Rslt_TxSts')
+        resultExtract["stsRsnInf"] = resultExtract.get(
+            'Document_MndtAccptncRpt_UndrlygAccptncDtls0_SplmtryData0_Envlp_Dtl_Rslt_StsRsnInf_Rsn_Prtry')
         # self.logger.info(f"resultExtract: {resultExtract}")
 
         return resultExtract
@@ -269,7 +275,7 @@ class HTTPServerUnitTest(unittest.TestCase):
                 self.paymentStatusRequestTestHandler(psrRequestForm)
                 return result
         except AttributeError as e:
-            self.logger.info(response.data)
+            # self.logger.info(response.data)
             print("Attribute occurred!")
             print("Attribute that caused the error:", e.args[0])
             print("Error message:", e)
@@ -326,7 +332,7 @@ class HTTPServerUnitTest(unittest.TestCase):
                 }
                 self.paymentStatusRequestTestHandler(psrRequestForm)
         except AttributeError as e:
-            self.logger.info(response.data)
+            # self.logger.info(response.data)
             print("Attribute occurred!")
             print("Attribute that caused the error:", e.args[0])
             print("Error message:", e)
@@ -383,7 +389,7 @@ class HTTPServerUnitTest(unittest.TestCase):
                 }
                 self.paymentStatusRequestTestHandler(psrRequestForm)
         except AttributeError as e:
-            self.logger.info(response.data)
+            # self.logger.info(response.data)
             print("Attribute occurred!")
             print("Attribute that caused the error:", e.args[0])
             print("Error message:", e)
@@ -556,7 +562,7 @@ class HTTPServerUnitTest(unittest.TestCase):
                 time.sleep(15)
                 return self.requestForPaymentAccountTestHandler()
         except AttributeError as e:
-            self.logger.info(response.data)
+            # self.logger.info(response.data)
             print("Attribute occurred!")
             print("Attribute that caused the error:", e.args[0])
             print("Error message:", e)
@@ -594,7 +600,7 @@ class HTTPServerUnitTest(unittest.TestCase):
                 self.paymentStatusRequestTestHandler(psrRequestForm)
                 return result
         except AttributeError as e:
-            self.logger.info(response.data)
+            # self.logger.info(response.data)
             print("Attribute occurred!")
             print("Attribute that caused the error:", e.args[0])
             print("Error message:", e)
@@ -655,7 +661,7 @@ class HTTPServerUnitTest(unittest.TestCase):
             else:
                 self.requestForPaymentProxyTestHandler(proxyForm)
         except AttributeError as e:
-            self.logger.info(response.data)
+            # self.logger.info(response.data)
             print("Attribute occurred!")
             print("Attribute that caused the error:", e.args[0])
             print("Error message:", e)
@@ -694,7 +700,7 @@ class HTTPServerUnitTest(unittest.TestCase):
                 self.paymentStatusRequestTestHandler(psrRequestForm)
                 return result
         except AttributeError as e:
-            self.logger.info(response.data)
+            # self.logger.info(response.data)
             print("Attribute occurred!")
             print("Attribute that caused the error:", e.args[0])
             print("Error message:", e)
@@ -752,7 +758,7 @@ class HTTPServerUnitTest(unittest.TestCase):
             else:
                 self.creditTransferRFPTestHandler(rfpForm, rfpResult)
         except AttributeError as e:
-            self.logger.info(response.data)
+            # self.logger.info(response.data)
             print("Attribute occurred!")
             print("Attribute that caused the error:", e.args[0])
             print("Error message:", e)
@@ -775,6 +781,7 @@ class HTTPServerUnitTest(unittest.TestCase):
             'Host_port': '18947',
             'Fr': 'BANKDMY7',
             'To': 'FASTIDJA',
+            'Payment_type': '802',
             'MsgDefIdr': "pain.009.001.06",
             "BizSvc": "BI",
             "CpyDplct": "CODU",
@@ -830,7 +837,7 @@ class HTTPServerUnitTest(unittest.TestCase):
             else:
                 return self.eMandateRegistrationByCreditingTest()
         except AttributeError as e:
-            self.logger.info(response.data)
+            # self.logger.info(response.data)
             print("Attribute occurred!")
             print("Attribute that caused the error:", e.args[0])
             print("Error message:", e)
@@ -848,13 +855,13 @@ class HTTPServerUnitTest(unittest.TestCase):
             "DbtrAgt": "BANKDMY7"  # TODO: Change later
         }
         mandate = self.eMandateEnquiryByMandateID(mandateEnquiryRequestForm)
-        # self.logger.info(mandate)
         mandateApproveRequestForm = {
             'Payment_url': '/MandateApprovalByCreditOFI',
             'Host_url': '10.170.137.115',
             'Host_port': '18948',
             'Fr': 'BANKDMY8',
             'To': 'FASTIDJA',
+            'Payment_type': '803',
             'MsgDefIdr': "pain.012.001.06",
             "BizSvc": "BI",
             "CpyDplct": "CODU",
@@ -895,7 +902,7 @@ class HTTPServerUnitTest(unittest.TestCase):
                 }
                 self.eMandateEnquiryByMandateID(mandateEnquiryRequestForm)
         except AttributeError as e:
-            self.logger.info(response.data)
+            # self.logger.info(response.data)
             print("Attribute occurred!")
             print("Attribute that caused the error:", e.args[0])
             print("Error message:", e)
@@ -921,33 +928,68 @@ class HTTPServerUnitTest(unittest.TestCase):
             'Mndt_SeqTp': "RCUR",
             'Mndt_Frqcy_tp': "YEAR",
             'Mndt_Frqcy_cntPerPrd': "1",
-            'Mndt_FrDt': mandateForm.get('FrDt'),  # Fill if need a custom date
-            'Mndt_ToDt': mandateForm.get('ToDt'),  # Fill if need a custom date
-            'Mndt_FrstColltnDt': mandateForm.get('FrstColltnDt'),  # Fill if need a custom date
-            'Mndt_FnlColltnDt': mandateForm.get('FnlColltnDt'),  # Fill if need a custom date
+            'Mndt_FrDt': mandateForm.get('FrDt'),
+            'Mndt_ToDt': mandateForm.get('ToDt'),
+            'Mndt_FrstColltnDt': mandateForm.get('FrstColltnDt'),
+            'Mndt_FnlColltnDt': mandateForm.get('FnlColltnDt'),
             'Mndt_TrckgInd': True,
-            'Mndt_FrstColltnAmt_ccy': "IDR",
-            'Mndt_FrstColltnAmt_value': "13001.01",
-            'Mndt_ColltnAmt_ccy': "IDR",
-            'Mndt_ColltnAmt_value': "13001.01",
-            'Mndt_MaxAmt_ccy': "IDR",
-            'Mndt_MaxAmt_value': "13001.01",
-            'Mndt_Rsn':  "Credit Pay Insurance",
-            'Mndt_Cdtr_nm': "PT. Bank Dummy 7",
-            'Mndt_Cdtr_orgid': "BANKDMY7_MERCH_100",
-            'Mndt_CdtrAcct_id': "12345677789",
-            'Mndt_CdtrAcct_tp': "CACC",
-            'Mndt_CdtrAcct_nm': "Dummy Account 7",
-            'Mndt_CdtrAgt': "BANKDMY7",
-            'Mndt_Dbtr_nm': "PT. Pypoh",
-            'Mndt_Dbtr_prvtid': "3171234567890",
-            'Mndt_DbtrAcct_id': "12347856999",
-            'Mndt_DbtrAcct_tp': "SVGS",
-            'Mndt_DbtrAcct_nm': "Naufal Afif",
-            'Mndt_DbtrAgt': "BANKDMY8",
-            'Mndt_CdtrRef': "BANKDMY7_MERCH_100"
+            'Mndt_FrstColltnAmt_ccy': mandateForm.get('FrDt'),
+            'Mndt_FrstColltnAmt_value': mandateForm.get('FrDt'),
+            'Mndt_ColltnAmt_ccy': mandateForm.get('FrDt'),
+            'Mndt_ColltnAmt_value': mandateForm.get('FrDt'),
+            'Mndt_MaxAmt_ccy': mandateForm.get('FrDt'),
+            'Mndt_MaxAmt_value': mandateForm.get('FrDt'),
+            'Mndt_Rsn':  mandateForm.get('FrDt'),
+            'Mndt_Cdtr_nm': mandateForm.get('FrDt'),
+            'Mndt_Cdtr_orgid': mandateForm.get('FrDt'),
+            'Mndt_CdtrAcct_id': mandateForm.get('FrDt'),
+            'Mndt_CdtrAcct_tp': mandateForm.get('FrDt'),
+            'Mndt_CdtrAcct_nm': mandateForm.get('FrDt'),
+            'Mndt_CdtrAgt': mandateForm.get('FrDt'),
+            'Mndt_Dbtr_nm': mandateForm.get('FrDt'),
+            'Mndt_Dbtr_prvtid': mandateForm.get('FrDt'),
+            'Mndt_DbtrAcct_id': mandateForm.get('FrDt'),
+            'Mndt_DbtrAcct_tp': mandateForm.get('FrDt'),
+            'Mndt_DbtrAcct_nm': mandateForm.get('FrDt'),
+            'Mndt_DbtrAgt': mandateForm.get('FrDt'),
+            'Mndt_CdtrRef': mandateForm.get('FrDt'),
+            "OrgnlMndt_MndtId": mandateForm.get('mndtId'),
+            "OrgnlMndt_MndtReqId": mandateForm.get('mndtReqId'),
+            'OrgnlMndt_CtgyPurp': mandateForm.get('mndtReqId'),
+            'OrgnlMndt_LclInstrm': mandateForm.get('mndtReqId'),
+            'OrgnlMndt_SeqTp': mandateForm.get('mndtReqId'),
+            'OrgnlMndt_Frqcy_tp': mandateForm.get('mndtReqId'),
+            'OrgnlMndt_Frqcy_cntPerPrd': mandateForm.get('mndtReqId'),
+            'OrgnlMndt_FrDt': mandateForm.get('FrDt'),
+            'OrgnlMndt_ToDt': mandateForm.get('ToDt'),
+            'OrgnlMndt_FrstColltnDt': mandateForm.get('FrstColltnDt'),
+            'OrgnlMndt_FnlColltnDt': mandateForm.get('FnlColltnDt'),
+            'OrgnlMndt_TrckgInd': True,
+            'OrgnlMndt_FrstColltnAmt_ccy': mandateForm.get('FrDt'),
+            'OrgnlMndt_FrstColltnAmt_value': mandateForm.get('FrDt'),
+            'OrgnlMndt_ColltnAmt_ccy': mandateForm.get('FrDt'),
+            'OrgnlMndt_ColltnAmt_value': mandateForm.get('FrDt'),
+            'OrgnlMndt_MaxAmt_ccy': mandateForm.get('FrDt'),
+            'OrgnlMndt_MaxAmt_value': mandateForm.get('FrDt'),
+            'OrgnlMndt_Rsn':  mandateForm.get('FrDt'),
+            'OrgnlMndt_Cdtr_nm': mandateForm.get('FrDt'),
+            'OrgnlMndt_Cdtr_orgid': mandateForm.get('FrDt'),
+            'OrgnlMndt_CdtrAcct_id': mandateForm.get('FrDt'),
+            'OrgnlMndt_CdtrAcct_tp': mandateForm.get('FrDt'),
+            'OrgnlMndt_CdtrAcct_nm': mandateForm.get('FrDt'),
+            'OrgnlMndt_CdtrAgt': mandateForm.get('FrDt'),
+            'OrgnlMndt_Dbtr_nm': mandateForm.get('FrDt'),
+            'OrgnlMndt_Dbtr_prvtid': mandateForm.get('FrDt'),
+            'OrgnlMndt_DbtrAcct_id': mandateForm.get('FrDt'),
+            'OrgnlMndt_DbtrAcct_tp': mandateForm.get('FrDt'),
+            'OrgnlMndt_DbtrAcct_nm': mandateForm.get('FrDt'),
+            'OrgnlMndt_DbtrAgt': mandateForm.get('FrDt'),
+            'OrgnlMndt_CdtrRef': mandateForm.get('FrDt'),
+            'OrgnlMndt_Sts': mandateForm.get('FrDt'),
+            'Mndt_Sts': mandateForm.get('FrDt'),
+
         }
-        result = self.requestHandler(mandateRegistRequestForm)
+        result = self.requestHandler(mandateAmendRequestForm)
         time.sleep(15)
         try:
             if result.get('txSts') == "ACTC":
@@ -957,21 +999,89 @@ class HTTPServerUnitTest(unittest.TestCase):
                     'Fr': 'BANKDMY7',
                     "MndtId": result.get('mndtId'),
                     "CtgyPurp": "802",  # TODO: Change later to dynamic
-                    # "CtgyPurp": mandateRegistRequestForm.get('CtgyPurp'),
-                    "Cdtr_nm": mandateRegistRequestForm.get('Cdtr_nm'),
-                    "Dbtr_nm": mandateRegistRequestForm.get('Dbtr_nm'),
-                    "DbtrAgt": mandateRegistRequestForm.get('DbtrAgt')
+                    # "CtgyPurp": mandateAmendRequestForm.get('CtgyPurp'),
+                    "Cdtr_nm": mandateAmendRequestForm.get('Cdtr_nm'),
+                    "Dbtr_nm": mandateAmendRequestForm.get('Dbtr_nm'),
+                    "DbtrAgt": mandateAmendRequestForm.get('DbtrAgt')
                 }
                 self.eMandateEnquiryByMandateID(mandateEnquiryRequestForm)
                 return result
             else:
                 return self.eMandateRegistrationByCreditingTest()
         except AttributeError as e:
-            self.logger.info(response.data)
+            # self.logger.info(response.data)
             print("Attribute occurred!")
             print("Attribute that caused the error:", e.args[0])
             print("Error message:", e)
             print("Full traceback:", e.__traceback__)
+
+
+    def eMandateAmendApproveByCreditingTest(self, mandateResultForm):
+        # Mandate Enquiry to get mandate info
+        mandateEnquiryRequestForm = {
+            'Host_url': '10.170.137.115',
+            'Host_port': '18948',
+            'Fr': 'BANKDMY8',
+            "MndtId": mandateResultForm.get('mndtId'),
+            "CtgyPurp": "761",  # TODO: Change later to dynamic
+            # "CtgyPurp": mandateRegistRequestForm.get('CtgyPurp'),
+            "DbtrAgt": "BANKDMY7"  # TODO: Change later
+        }
+        mandate = self.eMandateEnquiryByMandateID(mandateEnquiryRequestForm)
+        mandateApproveRequestForm = {
+            'Payment_url': '/MandateApprovalByCreditOFI',
+            'Host_url': '10.170.137.115',
+            'Host_port': '18948',
+            'Fr': 'BANKDMY8',
+            'To': 'FASTIDJA',
+            'Payment_type': '771',
+            'MsgDefIdr': "pain.012.001.06",
+            "BizSvc": "BI",
+            "CpyDplct": "CODU",
+            "PssblDplct": "false",
+            "OrgnlMsgInf_msgid": mandate.get('msgId'),
+            # "OrgnlMsgInf_msgnmid": mandate.get('msgNmId'),
+            "OrgnlMsgInf_msgnmid": "pain.009.001.06",
+            "AccptncRslt": True,
+            "OrgnlMndt_mndtid": mandate.get('mndtId'),
+            "OrgnlMndt_mndtreqid": mandate.get('mndtReqId'),
+            "SeqTp": mandate.get('seqTp'),
+            "FrDt": mandate.get('frDt'),
+            "ToDt": mandate.get('toDt'),
+            "FrstColltnDt": mandate.get('frstColltnDt'),
+            "FnlColltnDt": mandate.get('fnlColltnDt'),
+            "TrckgInd": True,
+            "Cdtr_nm": mandate.get('cdtrNm'),
+            "Cdtr_orgid": mandate.get('cdtrOrgId'),
+            "CdtrAgt": mandate.get('cdtrAgt'),
+            "Dbtr_nm": mandate.get('dbtrNm'),
+            "DbtrAgt": mandate.get('dbtrAgt'),
+            "OrgnlMndt_sts": "ACTV"
+        }
+        result = self.requestHandler(mandateApproveRequestForm)
+        time.sleep(15)
+        try:
+            if result.get('txSts') == "ACTC":
+                mandateEnquiryRequestForm = {
+                    'Host_url': '10.170.137.115',
+                    'Host_port': '18948',
+                    'Fr': 'BANKDMY8',
+                    "MndtId": mandate.get('mndtId'),
+                    "CtgyPurp": "802",
+                    # "CtgyPurp": mandateRegistRequestForm.get('CtgyPurp'),
+                    "Cdtr_nm": mandateApproveRequestForm.get('Cdtr_nm'),
+                    "Dbtr_nm": mandateApproveRequestForm.get('Dbtr_nm'),
+                    "DbtrAgt": mandateApproveRequestForm.get('DbtrAgt')
+                }
+                self.eMandateEnquiryByMandateID(mandateEnquiryRequestForm)
+        except AttributeError as e:
+            # self.logger.info(response.data)
+            print("Attribute occurred!")
+            print("Attribute that caused the error:", e.args[0])
+            print("Error message:", e)
+            print("Full traceback:", e.__traceback__)
+
+
 
 if __name__ == '__main__':
     unittest.main()

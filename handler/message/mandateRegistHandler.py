@@ -16,8 +16,8 @@ def requestMessageByCreditor(requestData):
         current_app.config["FORMAT_PATH"], 'pain.009.001.06_MandateRegist.json')
 
     generatedBizMsgIdr = handler.generateBizMsgIdr(
-        requestData.get('Fr'), "802")
-    generatedMsgId = handler.generateMsgId(requestData.get('Fr'), "802")
+        requestData.get('Fr'), requestData.get('Payment_type'))
+    generatedMsgId = handler.generateMsgId(requestData.get('Fr'), requestData.get('Payment_type'))
 
     timestamp_now = datetime.now()
     timestamp_formatted = timestamp_now.strftime('%Y-%m-%d')
