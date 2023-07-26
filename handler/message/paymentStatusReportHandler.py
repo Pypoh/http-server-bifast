@@ -60,6 +60,7 @@ def requestMessageMandateEnquiry(requestData):
             "TO_BIC_VALUE": requestData.get('To'),
             "BIZ_MSG_IDR_VALUE": generatedBizMsgIdr,
             "MSG_DEF_IDR_VALUE": requestData.get('MsgDefIdr'),
+            "BIZ_SVC_VALUE": requestData.get('BizSvc'),
             "CRE_DT_VALUE": handler.getCreDt(),
             "CPYDPLCT_VALUE": requestData.get('CpyDplct'),
             "PSSBLDPLCT_VALUE": requestData.get('PssblDplct'),

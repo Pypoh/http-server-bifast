@@ -30,74 +30,79 @@ class HTTPServerUnitTest(unittest.TestCase):
         pass
 
     def test_regression(self):
-        # Account Enquiry
+        # # Account Enquiry
         # self.accountEnquiryTestHandler()
 
-        # # Credit Transfer (pause for 10 seconds)
+        # # # Credit Transfer (pause for 10 seconds)
         # time.sleep(10)
         # ct = self.creditTransferTestHandler()
 
-        # # Credit Transfer Reversal (pause for 40 seconds)
+        # # # Credit Transfer Reversal (pause for 40 seconds)
         # time.sleep(40)
         # if (ct.get('txSts') == "ACTC"):
         #     self.creditTransferReversalTestHandler(ct.get('endToEndId'))
 
-        # # Credit Transfer Proxy
-        # time.sleep(10)
-        # self.creditTransferProxyHandler()
+        # # # Credit Transfer Proxy
+        # # time.sleep(10)
+        # # self.creditTransferProxyHandler()
 
-        # # Proxy Registration
-        # time.sleep(10)
-        # proxy = self.proxyRegisterTestHandler()
+        # # # Proxy Registration
+        # # time.sleep(10)
+        # # proxy = self.proxyRegisterTestHandler()
 
-        # # Proxy Resolution
-        # time.sleep(10)
-        # self.proxyLookupTestHandler(proxy)
+        # # # Proxy Resolution
+        # # time.sleep(10)
+        # # self.proxyLookupTestHandler(proxy)
 
-        # # Proxy Enquiry
-        # time.sleep(10)
-        # self.proxyEnquiryTestHandler(proxy)
+        # # # Proxy Enquiry
+        # # time.sleep(10)
+        # # self.proxyEnquiryTestHandler(proxy)
 
-        # Proxy Porting
+        # # Proxy Porting
 
-        # Proxy Deactivate
+        # # Proxy Deactivate
 
-        # # Request for Payment by Account
+        # # # Request for Payment by Account
         # time.sleep(10)
         # rfpAccountRequest, rfpAccountResult = self.requestForPaymentAccountTestHandler()
 
-        # # Request for Payment Rejection by Account
+        # # # Request for Payment Rejection by Account
         # time.sleep(15)
         # self.requestForPaymentAccountRejectTestHandler(rfpAccountResult)
 
-        # # Request for Payment by Proxy
+        # # # Request for Payment by Proxy
         # time.sleep(10)
         # proxy = self.proxyRegisterTestHandler()
         # time.sleep(10)
-        # rfpProxyRequest, rfpProxyResult = self.requestForPaymentProxyTestHandler(proxy)
+        # rfpProxyRequest, rfpProxyResult = self.requestForPaymentProxyTestHandler(
+        #     proxy)
 
-        # # Request for Payment Rejection by Proxy
+        # # # Request for Payment Rejection by Proxy
         # time.sleep(10)
         # self.requestForPaymentProxyRejectTestHandler(rfpProxyResult)
 
-        # Credit Transfer RFP
+        # # Credit Transfer RFP
         # time.sleep(10)
         # rfpAccountRequest, rfpAccountResult = self.requestForPaymentAccountTestHandler()
         # time.sleep(10)
         # self.creditTransferRFPTestHandler(rfpAccountRequest, rfpAccountResult)
 
-        # E-Mandate Registration by Crediting
+        # # E-Mandate Registration by Crediting
         # time.sleep(10)
-        # emandateRegistrationCrediting = self.eMandateRegistrationByCreditingTest()
+        eMandateRegistrationCrediting = self.eMandateRegistrationByCreditingTest()
 
-        # E-Mandate Registration by Debiting
+        # # E-Mandate Registration by Debiting
 
-        # E-Mandate Approval by Crediting
+        # # E-Mandate Approval by Crediting
         # time.sleep(10)
+        # eMandateApprovalCrediting = self.eMandateApproveByCreditingTest(
+        #     eMandateRegistrationCrediting)
 
         # E-Mandate Approval by Debiting
 
         # E-Mandate Amendment by Crediting
+        # time.sleep(10)
+
 
         # E-Mandate Amendment by Debiting
 
@@ -119,46 +124,76 @@ class HTTPServerUnitTest(unittest.TestCase):
 
         pass
 
+    def pacs0200110(self, jsonResponse):
+        # TODO: Change this with extract method version
+        msgId = jsonResponse["BusMsg"]["Document"]["FIToFIPmtStsRpt"]["OrgnlGrpInfAndSts"][0]["OrgnlMsgId"]
+        endToEndId = jsonResponse["BusMsg"]["Document"]["FIToFIPmtStsRpt"]["TxInfAndSts"][0]["OrgnlEndToEndId"]
+        txSts = jsonResponse["BusMsg"]["Document"]["FIToFIPmtStsRpt"]["TxInfAndSts"][0]["TxSts"]
+        stsRsnInf = jsonResponse["BusMsg"]["Document"]["FIToFIPmtStsRpt"]["TxInfAndSts"][0]["StsRsnInf"][0]["Rsn"]["Prtry"]
+        mndtId = jsonResponse.get("BusMsg", {}).get("Document", {}).get("FIToFIPmtStsRpt", {}).get(
+            "TxInfAndSts", [])[0].get("OrgnlTxRef", {}).get("MndtRltdInf", {}).get("MndtId")
+        return {
+            'msgId': msgId,
+            'endToEndId': endToEndId,
+            'txSts': txSts,
+            'stsRsnInf': stsRsnInf,
+            'mndtId': mndtId
+        }
+
+    def pain01200106(self, jsonResponse):
+        # resultForm = {
+        #     'msgId': jsonResponse["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMsgInf"]["MsgId"],
+        #     'msgNmId': jsonResponse["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMsgInf"]["MsgNmId"],
+        #     'mndtId': jsonResponse["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["MndtId"],
+        #     'mndtReqId': jsonResponse["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["MndtReqId"],
+        #     'seqTp': jsonResponse["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["Ocrncs"]["SeqTp"],
+        #     'frDt': jsonResponse["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["Ocrncs"]["Drtn"]["FrDt"],
+        #     'toDt': jsonResponse["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["Ocrncs"]["Drtn"]["ToDt"],
+        #     'frstColltnDt': jsonResponse["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["Ocrncs"]["FrstColltnDt"],
+        #     'fnlColltnDt': jsonResponse["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["Ocrncs"]["FnlColltnDt"],
+        #     'cdtrNm': jsonResponse["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["Cdtr"]["Nm"],
+        #     'cdtrOrgId': jsonResponse["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["Cdtr"]["Id"]["OrgId"]["Othr"][0]["Id"],
+        #     'cdtrAgt': jsonResponse["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["CdtrAgt"]["FinInstnId"]["Othr"]["Id"],
+        #     'dbtrAgt': jsonResponse["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["DbtrAgt"]["FinInstnId"]["Othr"]["Id"],
+        #     'dbtrNm': jsonResponse["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["Dbtr"]["Nm"],
+        #     'txSts': jsonResponse["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["SplmtryData"][0]["Envlp"]["Dtl"]["Rslt"]["TxSts"],
+        #     'stsRsnInf': jsonResponse["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["SplmtryData"][0]["Envlp"]["Dtl"]["Rslt"]["StsRsnInf"]["Rsn"]["Prtry"],
+        # }
+
+        # self.logger.info(resultForm)
+        # exclude_tags = ["BusMsg"]
+        json_string = json.dumps(jsonResponse)
+        resultExtract = generalHandler.extract_values(json_string)
+        resultExtract["endToEndId"] = resultExtract.get('Document_MndtAccptncRpt_UndrlygAccptncDtls0_OrgnlMndt_OrgnlMndt_MndtReqId')
+        resultExtract["txSts"] = resultExtract.get('Document_MndtAccptncRpt_UndrlygAccptncDtls0_SplmtryData0_Envlp_Dtl_Rslt_TxSts')
+        resultExtract["stsRsnInf"] = resultExtract.get('Document_MndtAccptncRpt_UndrlygAccptncDtls0_SplmtryData0_Envlp_Dtl_Rslt_StsRsnInf_Rsn_Prtry')
+        
+        # self.logger.info(f"resultExtract: {resultExtract}")
+
+        return resultExtract
+
     def requestHandler(self, form):
         startTime = time.time()
         response = self.client.post(form.get('Payment_url'), data=form)
         duration = "{:.2f}".format(time.time() - startTime)
-        self.logger.info(response.data)
         jsonResponse = json.loads(response.data)
+        # self.logger.info(jsonResponse)
         try:
             msgNmId = jsonResponse["BusMsg"]["AppHdr"]["MsgDefIdr"]
-            if msgNmId == "pacs.028.001.04":
-                msgId = jsonResponse["BusMsg"]["Document"]["FIToFIPmtStsRpt"]["OrgnlGrpInfAndSts"][0]["OrgnlMsgId"]
-                endToEndId = jsonResponse["BusMsg"]["Document"]["FIToFIPmtStsRpt"]["TxInfAndSts"][0]["OrgnlEndToEndId"]
-                txSts = jsonResponse["BusMsg"]["Document"]["FIToFIPmtStsRpt"]["TxInfAndSts"][0]["TxSts"]
-                stsRsnInf = jsonResponse["BusMsg"]["Document"]["FIToFIPmtStsRpt"]["TxInfAndSts"][0]["StsRsnInf"][0]["Rsn"]["Prtry"]
-                resultForm = {
-                    'msgId': msgId,
-                    'endToEndId': endToEndId,
-                    'txSts': txSts,
-                    'stsRsnInf': stsRsnInf,
-                }
-                return resultForm
-            else:
-                msgId = jsonResponse["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"]["OrgnlMsgInf"]["MsgId"]
-                mndtId = jsonResponse.get("BusMsg", {}).get("Document", {}).get("FIToFIPmtStsRpt", {}).get(
-                    "TxInfAndSts", [])[0].get("OrgnlTxRef", {}).get("MndtRltdInf", {}).get("MndtId")
-                # seqTp =
-                # frDt =
-                # toDt =
-                # frstColltnDt =
-                # fnlColltnDt =
-                # cdtrNm =
-                # cdtrOrgId =
-                # dbtrNm =
-                return resultForm
-
+            messageType = {
+                "pacs.002.001.10": lambda: self.pacs0200110(jsonResponse),
+                "pain.012.001.06": lambda: self.pain01200106(jsonResponse)
+            }
+            result = messageType[msgNmId]()
             self.logger.info(datetime.now().strftime("%Y-%m-%d %H:%M:%S") +
-                             f" ({duration} seconds) {form.get('Payment_url')} {endToEndId} {txSts} {stsRsnInf}")
-        except KeyError:
+                             f" ({duration} seconds) {form.get('Payment_url')} {(result.get('endToEndId'))} {result.get('txSts')} {result.get('stsRsnInf')}")
+            return result
+        except KeyError as e:
             self.logger.info(response.data)
-
-        # return resultForm
+            print("KeyError occurred!")
+            print("Key that caused the error:", e.args[0])
+            print("Error message:", e)
+            print("Full traceback:", e.__traceback__)
 
     def accountEnquiryTestHandler(self):
         accountEnquiryRequestForm = {
@@ -222,17 +257,23 @@ class HTTPServerUnitTest(unittest.TestCase):
             'SplmtryData_Cdtr_twnnm': '0300',
         }
         result = self.requestHandler(creditTransferRequestForm)
-
-        if result.get('txSts') == "ACTC":
-            time.sleep(15)
-            psrRequestForm = {
-                'Host_url': '10.170.137.115',
-                'Host_port': '18947',
-                'Fr': 'BANKDMY7',
-                "OrgnlEndToEndId": result.get('endToEndId')
-            }
-            self.paymentStatusRequestTestHandler(psrRequestForm)
-            return result
+        try:
+            if result.get('txSts') == "ACTC":
+                time.sleep(15)
+                psrRequestForm = {
+                    'Host_url': '10.170.137.115',
+                    'Host_port': '18947',
+                    'Fr': 'BANKDMY7',
+                    "OrgnlEndToEndId": result.get('endToEndId')
+                }
+                self.paymentStatusRequestTestHandler(psrRequestForm)
+                return result
+        except AttributeError as e:
+            self.logger.info(response.data)
+            print("Attribute occurred!")
+            print("Attribute that caused the error:", e.args[0])
+            print("Error message:", e)
+            print("Full traceback:", e.__traceback__)
 
     def creditTransferReversalTestHandler(self, rltdEndToEndId=None):
         creditTransferReversalRequestForm = {
@@ -274,15 +315,22 @@ class HTTPServerUnitTest(unittest.TestCase):
         }
         result = self.requestHandler(creditTransferReversalRequestForm)
 
-        if result.get('txSts') == "ACTC":
-            time.sleep(15)
-            psrRequestForm = {
-                'Host_url': '10.170.137.115',
-                'Host_port': '18948',
-                'Fr': 'BANKDMY8',
-                "OrgnlEndToEndId": result.get('endToEndId')
-            }
-            self.paymentStatusRequestTestHandler(psrRequestForm)
+        try:
+            if result.get('txSts') == "ACTC":
+                time.sleep(15)
+                psrRequestForm = {
+                    'Host_url': '10.170.137.115',
+                    'Host_port': '18948',
+                    'Fr': 'BANKDMY8',
+                    "OrgnlEndToEndId": result.get('endToEndId')
+                }
+                self.paymentStatusRequestTestHandler(psrRequestForm)
+        except AttributeError as e:
+            self.logger.info(response.data)
+            print("Attribute occurred!")
+            print("Attribute that caused the error:", e.args[0])
+            print("Error message:", e)
+            print("Full traceback:", e.__traceback__)
 
     def creditTransferProxyHandler(self):
         creditTransferRequestForm = {
@@ -324,16 +372,22 @@ class HTTPServerUnitTest(unittest.TestCase):
             'SplmtryData_Cdtr_twnnm': '0300',
         }
         result = self.requestHandler(creditTransferRequestForm)
-
-        if result.get('txSts') == "ACTC":
-            time.sleep(15)
-            psrRequestForm = {
-                'Host_url': '10.170.137.115',
-                'Host_port': '18947',
-                'Fr': 'BANKDMY7',
-                "OrgnlEndToEndId": result.get('endToEndId')
-            }
-            self.paymentStatusRequestTestHandler(psrRequestForm)
+        try:
+            if result.get('txSts') == "ACTC":
+                time.sleep(15)
+                psrRequestForm = {
+                    'Host_url': '10.170.137.115',
+                    'Host_port': '18947',
+                    'Fr': 'BANKDMY7',
+                    "OrgnlEndToEndId": result.get('endToEndId')
+                }
+                self.paymentStatusRequestTestHandler(psrRequestForm)
+        except AttributeError as e:
+            self.logger.info(response.data)
+            print("Attribute occurred!")
+            print("Attribute that caused the error:", e.args[0])
+            print("Error message:", e)
+            print("Full traceback:", e.__traceback__)
 
     def proxyRegisterTestHandler(self):
         uniqueId = random.randint(10000, 99999)
@@ -487,17 +541,26 @@ class HTTPServerUnitTest(unittest.TestCase):
             'SplmtryData_Cdtr_twnnm': '0300',
         }
         result = self.requestHandler(rfpAccountRequestForm)
-
-        if result.get('txSts') == "ACTC":
-            time.sleep(15)
-            psrRequestForm = {
-                'Host_url': '10.170.137.115',
-                'Host_port': '18947',
-                'Fr': 'BANKDMY7',
-                "OrgnlEndToEndId": result.get('endToEndId')
-            }
-            self.paymentStatusRequestTestHandler(psrRequestForm)
-            return rfpAccountRequestForm, result
+        try:
+            if result.get('txSts') == "ACTC":
+                time.sleep(15)
+                psrRequestForm = {
+                    'Host_url': '10.170.137.115',
+                    'Host_port': '18947',
+                    'Fr': 'BANKDMY7',
+                    "OrgnlEndToEndId": result.get('endToEndId')
+                }
+                self.paymentStatusRequestTestHandler(psrRequestForm)
+                return rfpAccountRequestForm, result
+            else:
+                time.sleep(15)
+                return self.requestForPaymentAccountTestHandler()
+        except AttributeError as e:
+            self.logger.info(response.data)
+            print("Attribute occurred!")
+            print("Attribute that caused the error:", e.args[0])
+            print("Error message:", e)
+            print("Full traceback:", e.__traceback__)
 
     def requestForPaymentAccountRejectTestHandler(self, form):
         rfpAccountRejectRequestForm = {
@@ -519,17 +582,23 @@ class HTTPServerUnitTest(unittest.TestCase):
             "StsRsnInf": "U110",
         }
         result = self.requestHandler(rfpAccountRejectRequestForm)
-
-        if result.get('txSts') == "ACTC":
-            time.sleep(15)
-            psrRequestForm = {
-                'Host_url': '10.170.137.115',
-                'Host_port': '18948',
-                'Fr': 'BANKDMY8',
-                "OrgnlEndToEndId": form.get('endToEndId')
-            }
-            self.paymentStatusRequestTestHandler(psrRequestForm)
-            return result
+        try:
+            if result.get('txSts') == "ACTC":
+                time.sleep(15)
+                psrRequestForm = {
+                    'Host_url': '10.170.137.115',
+                    'Host_port': '18948',
+                    'Fr': 'BANKDMY8',
+                    "OrgnlEndToEndId": form.get('endToEndId')
+                }
+                self.paymentStatusRequestTestHandler(psrRequestForm)
+                return result
+        except AttributeError as e:
+            self.logger.info(response.data)
+            print("Attribute occurred!")
+            print("Attribute that caused the error:", e.args[0])
+            print("Error message:", e)
+            print("Full traceback:", e.__traceback__)
 
     def requestForPaymentProxyTestHandler(self, proxyForm):
         timestamp_now = datetime.now()
@@ -572,16 +641,25 @@ class HTTPServerUnitTest(unittest.TestCase):
         }
         result = self.requestHandler(rfpProxyRequestForm)
 
-        if result.get('txSts') == "ACTC":
-            time.sleep(15)
-            psrRequestForm = {
-                'Host_url': '10.170.137.115',
-                'Host_port': '18947',
-                'Fr': 'BANKDMY7',
-                "OrgnlEndToEndId": result.get('endToEndId')
-            }
-            self.paymentStatusRequestTestHandler(psrRequestForm)
-            return rfpProxyRequestForm, result
+        try:
+            if result.get('txSts') == "ACTC":
+                time.sleep(15)
+                psrRequestForm = {
+                    'Host_url': '10.170.137.115',
+                    'Host_port': '18947',
+                    'Fr': 'BANKDMY7',
+                    "OrgnlEndToEndId": result.get('endToEndId')
+                }
+                self.paymentStatusRequestTestHandler(psrRequestForm)
+                return rfpProxyRequestForm, result
+            else:
+                self.requestForPaymentProxyTestHandler(proxyForm)
+        except AttributeError as e:
+            self.logger.info(response.data)
+            print("Attribute occurred!")
+            print("Attribute that caused the error:", e.args[0])
+            print("Error message:", e)
+            print("Full traceback:", e.__traceback__)
 
     def requestForPaymentProxyRejectTestHandler(self, form):
         rfpProxyRejectRequestForm = {
@@ -604,16 +682,23 @@ class HTTPServerUnitTest(unittest.TestCase):
         }
         result = self.requestHandler(rfpProxyRejectRequestForm)
 
-        if result.get('txSts') == "ACTC":
-            time.sleep(15)
-            psrRequestForm = {
-                'Host_url': '10.170.137.115',
-                'Host_port': '18948',
-                'Fr': 'BANKDMY8',
-                "OrgnlEndToEndId": form.get('endToEndId')
-            }
-            self.paymentStatusRequestTestHandler(psrRequestForm)
-            return result
+        try:
+            if result.get('txSts') == "ACTC":
+                time.sleep(15)
+                psrRequestForm = {
+                    'Host_url': '10.170.137.115',
+                    'Host_port': '18948',
+                    'Fr': 'BANKDMY8',
+                    "OrgnlEndToEndId": form.get('endToEndId')
+                }
+                self.paymentStatusRequestTestHandler(psrRequestForm)
+                return result
+        except AttributeError as e:
+            self.logger.info(response.data)
+            print("Attribute occurred!")
+            print("Attribute that caused the error:", e.args[0])
+            print("Error message:", e)
+            print("Full traceback:", e.__traceback__)
 
     def creditTransferRFPTestHandler(self, rfpForm, rfpResult):
         ctRFPRequestForm = {
@@ -654,21 +739,30 @@ class HTTPServerUnitTest(unittest.TestCase):
             'SplmtryData_rltdEndToEndId': rfpResult.get('endToEndId')
         }
         result = self.requestHandler(ctRFPRequestForm)
-
-        if result.get('txSts') == "ACTC":
-            time.sleep(15)
-            psrRequestForm = {
-                'Host_url': '10.170.137.115',
-                'Host_port': '18948',
-                'Fr': 'BANKDMY8',
-                "OrgnlEndToEndId": result.get('endToEndId')
-            }
-            self.paymentStatusRequestTestHandler(psrRequestForm)
+        try:
+            if result.get('txSts') == "ACTC":
+                time.sleep(15)
+                psrRequestForm = {
+                    'Host_url': '10.170.137.115',
+                    'Host_port': '18948',
+                    'Fr': 'BANKDMY8',
+                    "OrgnlEndToEndId": result.get('endToEndId')
+                }
+                self.paymentStatusRequestTestHandler(psrRequestForm)
+            else:
+                self.creditTransferRFPTestHandler(rfpForm, rfpResult)
+        except AttributeError as e:
+            self.logger.info(response.data)
+            print("Attribute occurred!")
+            print("Attribute that caused the error:", e.args[0])
+            print("Error message:", e)
+            print("Full traceback:", e.__traceback__)
 
     def eMandateEnquiryByMandateID(self, mandateForm):
         mandateForm['Payment_url'] = '/MandateEnquiry'
         mandateForm['To'] = 'FASTIDJA'
         mandateForm['MsgDefIdr'] = 'pain.017.001.02'
+        mandateForm['BizSvc'] = 'BI'
         mandateForm['CpyDplct'] = 'CODU'
         mandateForm['PssblDplct'] = False
         mandateForm['TrckgInd'] = True
@@ -681,7 +775,7 @@ class HTTPServerUnitTest(unittest.TestCase):
             'Host_port': '18947',
             'Fr': 'BANKDMY7',
             'To': 'FASTIDJA',
-            'MsgDefIdr': "pacs.008.001.08",
+            'MsgDefIdr': "pain.009.001.06",
             "BizSvc": "BI",
             "CpyDplct": "CODU",
             "PssblDplct": "false",
@@ -717,21 +811,30 @@ class HTTPServerUnitTest(unittest.TestCase):
             'CdtrRef': "BANKDMY7_MERCH_100"
         }
         result = self.requestHandler(mandateRegistRequestForm)
-
-        if result.get('txSts') == "ACTC":
-            time.sleep(15)
-            mandateEnquiryRequestForm = {
-                'Host_url': '10.170.137.115',
-                'Host_port': '18947',
-                'Fr': 'BANKDMY7',
-                "MndtId": result.get('mndtId'),
-                "CtgyPurp": "802",
-                # "CtgyPurp": mandateRegistRequestForm.get('CtgyPurp'),
-                "Cdtr_nm": mandateRegistRequestForm.get('Cdtr_nm'),
-                "Dbtr_nm": mandateRegistRequestForm.get('Dbtr_nm'),
-                "DbtrAgt": mandateRegistRequestForm.get('DbtrAgt')
-            }
-            self.eMandateEnquiryByMandateID(mandateEnquiryRequestForm)
+        time.sleep(15)
+        try:
+            if result.get('txSts') == "ACTC":
+                mandateEnquiryRequestForm = {
+                    'Host_url': '10.170.137.115',
+                    'Host_port': '18947',
+                    'Fr': 'BANKDMY7',
+                    "MndtId": result.get('mndtId'),
+                    "CtgyPurp": "802",  # TODO: Change later to dynamic
+                    # "CtgyPurp": mandateRegistRequestForm.get('CtgyPurp'),
+                    "Cdtr_nm": mandateRegistRequestForm.get('Cdtr_nm'),
+                    "Dbtr_nm": mandateRegistRequestForm.get('Dbtr_nm'),
+                    "DbtrAgt": mandateRegistRequestForm.get('DbtrAgt')
+                }
+                self.eMandateEnquiryByMandateID(mandateEnquiryRequestForm)
+                return result
+            else:
+                return self.eMandateRegistrationByCreditingTest()
+        except AttributeError as e:
+            self.logger.info(response.data)
+            print("Attribute occurred!")
+            print("Attribute that caused the error:", e.args[0])
+            print("Error message:", e)
+            print("Full traceback:", e.__traceback__)
 
     def eMandateApproveByCreditingTest(self, mandateResultForm):
         # Mandate Enquiry to get mandate info
@@ -740,58 +843,135 @@ class HTTPServerUnitTest(unittest.TestCase):
             'Host_port': '18948',
             'Fr': 'BANKDMY8',
             "MndtId": mandateResultForm.get('mndtId'),
-            "CtgyPurp": "802",
+            "CtgyPurp": "802",  # TODO: Change later to dynamic
             # "CtgyPurp": mandateRegistRequestForm.get('CtgyPurp'),
-            # "Cdtr_nm": mandateRegistRequestForm.get('Cdtr_nm'),
-            # "Dbtr_nm": mandateRegistRequestForm.get('Dbtr_nm'),
-            # "DbtrAgt": mandateRegistRequestForm.get('DbtrAgt')
+            "DbtrAgt": "BANKDMY7"  # TODO: Change later
         }
         mandate = self.eMandateEnquiryByMandateID(mandateEnquiryRequestForm)
-
+        # self.logger.info(mandate)
         mandateApproveRequestForm = {
-            'Payment_url': '/MandateRegistByCreditOFI',
+            'Payment_url': '/MandateApprovalByCreditOFI',
             'Host_url': '10.170.137.115',
-            'Host_port': '18947',
-            'Fr': 'BANKDMY7',
+            'Host_port': '18948',
+            'Fr': 'BANKDMY8',
             'To': 'FASTIDJA',
             'MsgDefIdr': "pain.012.001.06",
             "BizSvc": "BI",
             "CpyDplct": "CODU",
             "PssblDplct": "false",
-            "OrgnlMsgInf_msgid": ,
+            "OrgnlMsgInf_msgid": mandate.get('msgId'),
+            # "OrgnlMsgInf_msgnmid": mandate.get('msgNmId'),
             "OrgnlMsgInf_msgnmid": "pain.009.001.06",
             "AccptncRslt": True,
-            "OrgnlMndt_mndtid": ,
-            "OrgnlMndt_mndtreqid": ,
-            "SeqTp": ,
-            "FrDt": ,
-            "ToDt": ,
-            "FrstColltnDt": ,
-            "FnlColltnDt": ,
+            "OrgnlMndt_mndtid": mandate.get('mndtId'),
+            "OrgnlMndt_mndtreqid": mandate.get('mndtReqId'),
+            "SeqTp": mandate.get('seqTp'),
+            "FrDt": mandate.get('frDt'),
+            "ToDt": mandate.get('toDt'),
+            "FrstColltnDt": mandate.get('frstColltnDt'),
+            "FnlColltnDt": mandate.get('fnlColltnDt'),
             "TrckgInd": True,
-            "Cdtr_nm": ,
-            "Cdtr_orgid": ,
-            "CdtrAgt": ,
-            "Dbtr_nm": ,
-            "DbtrAgt": ,
-            "OrgnlMndt_sts":}
+            "Cdtr_nm": mandate.get('cdtrNm'),
+            "Cdtr_orgid": mandate.get('cdtrOrgId'),
+            "CdtrAgt": mandate.get('cdtrAgt'),
+            "Dbtr_nm": mandate.get('dbtrNm'),
+            "DbtrAgt": mandate.get('dbtrAgt'),
+            "OrgnlMndt_sts": "ACTV"
+        }
+        result = self.requestHandler(mandateApproveRequestForm)
+        time.sleep(15)
+        try:
+            if result.get('txSts') == "ACTC":
+                mandateEnquiryRequestForm = {
+                    'Host_url': '10.170.137.115',
+                    'Host_port': '18948',
+                    'Fr': 'BANKDMY8',
+                    "MndtId": mandate.get('mndtId'),
+                    "CtgyPurp": "802",
+                    # "CtgyPurp": mandateRegistRequestForm.get('CtgyPurp'),
+                    "Cdtr_nm": mandateApproveRequestForm.get('Cdtr_nm'),
+                    "Dbtr_nm": mandateApproveRequestForm.get('Dbtr_nm'),
+                    "DbtrAgt": mandateApproveRequestForm.get('DbtrAgt')
+                }
+                self.eMandateEnquiryByMandateID(mandateEnquiryRequestForm)
+        except AttributeError as e:
+            self.logger.info(response.data)
+            print("Attribute occurred!")
+            print("Attribute that caused the error:", e.args[0])
+            print("Error message:", e)
+            print("Full traceback:", e.__traceback__)
+
+    def eMandateAmendmentByCreditingTest(self, mandateForm):
+        mandateAmendRequestForm = {
+            'Payment_url': '/MandateAmendByCreditOFI',
+            'Host_url': '10.170.137.115',
+            'Host_port': '18947',
+            'Fr': 'BANKDMY7',
+            'To': 'FASTIDJA',
+            'MsgDefIdr': "pain.010.001.06",
+            "BizSvc": "BI",
+            "CpyDplct": "CODU",
+            "PssblDplct": "false",
+            "AmdmntRsn_rsn": "MD18",
+            "AmdmntRsn_addtlInf": "1234",
+            "Mndt_MndtId": mandateForm.get('mndtId'),
+            "Mndt_MndtReqId": mandateForm.get('mndtReqId'),
+            'Mndt_CtgyPurp': "01",
+            'Mndt_LclInstrm': "FixedAmt",
+            'Mndt_SeqTp': "RCUR",
+            'Mndt_Frqcy_tp': "YEAR",
+            'Mndt_Frqcy_cntPerPrd': "1",
+            'Mndt_FrDt': mandateForm.get('FrDt'),  # Fill if need a custom date
+            'Mndt_ToDt': mandateForm.get('ToDt'),  # Fill if need a custom date
+            'Mndt_FrstColltnDt': mandateForm.get('FrstColltnDt'),  # Fill if need a custom date
+            'Mndt_FnlColltnDt': mandateForm.get('FnlColltnDt'),  # Fill if need a custom date
+            'Mndt_TrckgInd': True,
+            'Mndt_FrstColltnAmt_ccy': "IDR",
+            'Mndt_FrstColltnAmt_value': "13001.01",
+            'Mndt_ColltnAmt_ccy': "IDR",
+            'Mndt_ColltnAmt_value': "13001.01",
+            'Mndt_MaxAmt_ccy': "IDR",
+            'Mndt_MaxAmt_value': "13001.01",
+            'Mndt_Rsn':  "Credit Pay Insurance",
+            'Mndt_Cdtr_nm': "PT. Bank Dummy 7",
+            'Mndt_Cdtr_orgid': "BANKDMY7_MERCH_100",
+            'Mndt_CdtrAcct_id': "12345677789",
+            'Mndt_CdtrAcct_tp': "CACC",
+            'Mndt_CdtrAcct_nm': "Dummy Account 7",
+            'Mndt_CdtrAgt': "BANKDMY7",
+            'Mndt_Dbtr_nm': "PT. Pypoh",
+            'Mndt_Dbtr_prvtid': "3171234567890",
+            'Mndt_DbtrAcct_id': "12347856999",
+            'Mndt_DbtrAcct_tp': "SVGS",
+            'Mndt_DbtrAcct_nm': "Naufal Afif",
+            'Mndt_DbtrAgt': "BANKDMY8",
+            'Mndt_CdtrRef': "BANKDMY7_MERCH_100"
+        }
         result = self.requestHandler(mandateRegistRequestForm)
-
-        if result.get('txSts') == "ACTC":
-            time.sleep(15)
-            mandateEnquiryRequestForm = {
-                'Host_url': '10.170.137.115',
-                'Host_port': '18947',
-                'Fr': 'BANKDMY7',
-                "MndtId": result.get('mndtId'),
-                "CtgyPurp": "802",
-                # "CtgyPurp": mandateRegistRequestForm.get('CtgyPurp'),
-                "Cdtr_nm": mandateRegistRequestForm.get('Cdtr_nm'),
-                "Dbtr_nm": mandateRegistRequestForm.get('Dbtr_nm'),
-                "DbtrAgt": mandateRegistRequestForm.get('DbtrAgt')
-            }
-            self.eMandateEnquiryByMandateID(mandateEnquiryRequestForm)
-
+        time.sleep(15)
+        try:
+            if result.get('txSts') == "ACTC":
+                mandateEnquiryRequestForm = {
+                    'Host_url': '10.170.137.115',
+                    'Host_port': '18947',
+                    'Fr': 'BANKDMY7',
+                    "MndtId": result.get('mndtId'),
+                    "CtgyPurp": "802",  # TODO: Change later to dynamic
+                    # "CtgyPurp": mandateRegistRequestForm.get('CtgyPurp'),
+                    "Cdtr_nm": mandateRegistRequestForm.get('Cdtr_nm'),
+                    "Dbtr_nm": mandateRegistRequestForm.get('Dbtr_nm'),
+                    "DbtrAgt": mandateRegistRequestForm.get('DbtrAgt')
+                }
+                self.eMandateEnquiryByMandateID(mandateEnquiryRequestForm)
+                return result
+            else:
+                return self.eMandateRegistrationByCreditingTest()
+        except AttributeError as e:
+            self.logger.info(response.data)
+            print("Attribute occurred!")
+            print("Attribute that caused the error:", e.args[0])
+            print("Error message:", e)
+            print("Full traceback:", e.__traceback__)
 
 if __name__ == '__main__':
     unittest.main()

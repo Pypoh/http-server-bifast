@@ -122,3 +122,36 @@ def getDt():
     currentTime = datetime.now(wibTimeZone)
     DtValue = currentTime.strftime('%Y-%m-%d')
     return DtValue
+
+def extract_values(json_data):
+    def _extract(data, parent_tag=""):
+        result_dict = {}
+        if isinstance(data, list):
+            for i, item in enumerate(data):
+                item_tag = parent_tag + str(i)  # Append index to parent_tag
+                item_dict = _extract(item, item_tag)
+                if item_dict:
+                    result_dict.update(item_dict)
+        elif isinstance(data, dict):
+            for key, value in data.items():
+                if key == "BusMsg":
+                    result_dict.update(_extract(value, parent_tag))
+                else:
+                    if isinstance(value, (dict, list)):
+                        if not parent_tag:
+                            result_dict.update(_extract(value, key))
+                        else:
+                            result_dict.update(_extract(value, f"{parent_tag}_{key}"))
+                    else:
+                        if not parent_tag:
+                            result_dict[key] = value
+                        else:
+                            result_dict[f"{parent_tag}_{key}"] = value
+        return result_dict
+
+    try:
+        parsed_data = json.loads(json_data)
+        return _extract(parsed_data)
+    except json.JSONDecodeError as e:
+        print("JSON decoding error:", e)
+        return None

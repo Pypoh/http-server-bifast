@@ -16,8 +16,8 @@ def requestMessageByCreditor(requestData):
         current_app.config["FORMAT_PATH"], 'pain.012.001.06_MandateApproval.json')
 
     generatedBizMsgIdr = handler.generateBizMsgIdr(
-        requestData.get('Fr'), "802")
-    generatedMsgId = handler.generateMsgId(requestData.get('Fr'), "802")
+        requestData.get('Fr'), "803")
+    generatedMsgId = handler.generateMsgId(requestData.get('Fr'), "803")
 
     timestamp_now = datetime.now()
     timestamp_formatted = timestamp_now.strftime('%Y-%m-%d')
@@ -28,52 +28,43 @@ def requestMessageByCreditor(requestData):
         template_data = json.load(file)
         value_dict = {
             "FR_BIC_VALUE": requestData.get('Fr'),
-            "TO_BIC_VALUE": requestData.get('Fr'),
-            "BIZ_MSG_IDR_VALUE": requestData.get('Fr'),
-            "MSG_DEF_IDR_VALUE": requestData.get('Fr'),
-            "BIZ_SVC_VALUE": requestData.get('Fr'),
-            "CRE_DT_VALUE": requestData.get('Fr'),
-            "CPYDPLCT_VALUE": requestData.get('Fr'),
-            "PSSBLDPLCT_VALUE": requestData.get('Fr'),
-            "MSG_ID_VALUE": requestData.get('Fr'),
-            "CRE_DT_TM_VALUE": requestData.get('Fr'),
-            "ORGNL_MSG_ID_VALUE": requestData.get('Fr'),
-            "ORGNL_MSG_NM_VALUE": requestData.get('Fr'),
-            "ACCPTNCRSLT_VALUE": requestData.get('Fr'),
-            "ORGNL_MNDT_ID_VALUE": requestData.get('Fr'),
-            "ORGNL_MNDT_REQ_ID_VALUE": requestData.get('Fr'),
-            "ORGNL_SEQTP_VALUE": requestData.get('Fr'),
-            "ORGNL_FR_DT_VALUE": requestData.get('Fr'),
-            "ORGNL_TO_DT_VALUE": requestData.get('Fr'),
-            "ORGNL_FRST_COLLTN_DT_VALUE": requestData.get('Fr'),
-            "ORGNL_FNL_COLLTN_DT_VALUE": requestData.get('Fr'),
-            "TRCKGIND_VALUE": requestData.get('Fr'),
-            "CDTR_NM_VALUE": requestData.get('Fr'),
-            "CDTR_ORG_ID_VALUE": requestData.get('Fr'),
-            "CDTR_AGT_VALUE": requestData.get('Fr'),
-            "DBTR_NM_VALUE": requestData.get('Fr'),
-            "DBTR_AGT_VALUE": requestData.get('Fr'),
-            "ORGNL_MNDT_STS_VALUE": requestData.get('Fr')
+            "TO_BIC_VALUE": requestData.get('To'),
+            "BIZ_MSG_IDR_VALUE": generatedBizMsgIdr,
+            "MSG_DEF_IDR_VALUE": requestData.get('MsgDefIdr'),
+            "BIZ_SVC_VALUE": requestData.get('BizSvc'),
+            "CRE_DT_VALUE": handler.getCreDt(),
+            "CPYDPLCT_VALUE": requestData.get('CpyDplct'),
+            "PSSBLDPLCT_VALUE": requestData.get('PssblDplct'),
+            "MSG_ID_VALUE": generatedMsgId,
+            "CRE_DT_TM_VALUE": handler.getCreDtTm(),
+            "ORGNL_MSG_ID_VALUE": requestData.get('OrgnlMsgInf_msgid'),
+            "ORGNL_MSG_NM_VALUE": requestData.get('OrgnlMsgInf_msgnmid'),
+            "ACCPTNCRSLT_VALUE": requestData.get('AccptncRslt'),
+            "ORGNL_MNDT_ID_VALUE": requestData.get('OrgnlMndt_mndtid'),
+            "ORGNL_MNDT_REQ_ID_VALUE": requestData.get('OrgnlMndt_mndtreqid'),
+            "ORGNL_SEQTP_VALUE": requestData.get('SeqTp'),
+            "ORGNL_FR_DT_VALUE": requestData.get('FrDt'),
+            "ORGNL_TO_DT_VALUE": requestData.get('ToDt'),
+            "ORGNL_FRST_COLLTN_DT_VALUE": requestData.get('FrstColltnDt'),
+            "ORGNL_FNL_COLLTN_DT_VALUE": requestData.get('FnlColltnDt'),
+            "TRCKGIND_VALUE": requestData.get('TrckgInd'),
+            "CDTR_NM_VALUE": requestData.get('Cdtr_nm'),
+            "CDTR_ORG_ID_VALUE": requestData.get('Cdtr_orgid'),
+            "CDTR_AGT_VALUE": requestData.get('CdtrAgt'),
+            "DBTR_NM_VALUE": requestData.get('Dbtr_nm'),
+            "DBTR_AGT_VALUE": requestData.get('DbtrAgt'),
+            "ORGNL_MNDT_STS_VALUE": requestData.get('OrgnlMndt_sts')
             }
 
     filled_data = handler.replace_placeholders(template_data, value_dict)
 
-    # print(filled_data)
-
     filled_data["BusMsg"]["AppHdr"]["PssblDplct"] = False
-    filled_data["BusMsg"]["Document"]["MndtInitnReq"]["Mndt"][0]["TrckgInd"] = True
-    filled_data["BusMsg"]["Document"]["MndtInitnReq"]["Mndt"][0]["FrstColltnAmt"]["value"] = float(
-        requestData.get('FrstColltnAmt_value'))
-    filled_data["BusMsg"]["Document"]["MndtInitnReq"]["Mndt"][0]["ColltnAmt"]["value"] = float(
-        requestData.get('ColltnAmt_value'))
-    filled_data["BusMsg"]["Document"]["MndtInitnReq"]["Mndt"][0]["MaxAmt"]["value"] = float(
-        requestData.get('MaxAmt_value'))
-    filled_data["BusMsg"]["Document"]["MndtInitnReq"]["Mndt"][0]["Ocrncs"]["Frqcy"]["Prd"]["CntPerPrd"] = float(
-        requestData.get('Frqcy_cntPerPrd'))
+    filled_data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["TrckgInd"] = True
+    filled_data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["AccptncRslt"]["Accptd"] = True
     headers = {
         "Content-Type": "application/json",
         "Content-Length": str(filled_data),
-        "message": "/MandateInitiationRequestV06"
+        "message": "/MandateAcceptanceReportV06"
     }
 
     response = requests.post(

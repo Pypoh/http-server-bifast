@@ -43,12 +43,8 @@
                   }
                 },
                 "TrckgInd": "{{ TRCKGIND_VALUE }}",
-                "Cdtr": {
-                  "Nm": "{{ CDTR_NM_VALUE }}"
-                },
-                "Dbtr": {
-                  "Nm": "{{ DBTR_NM_VALUE }}"
-                },
+                "Cdtr": {},
+                "Dbtr": {},
                 "DbtrAgt": {
                   "FinInstnId": {
                     "Othr": {

@@ -41,8 +41,8 @@ def requestMessageByCreditor(requestData):
             "MNDT_LCLINSTRM_VALUE": requestData.get('LclInstrm'),
             "MNDT_CTGYPURP_VALUE": requestData.get('CtgyPurp'),
             "OCRNCS_SEQTP_VALUE": requestData.get('SeqTp'),
-            "OCNCS_FRQCY_VALUE": requestData.get('Frqcy_tp'),
-            "OCNCS_CNTPERPRD_VALUE": requestData.get('Frqcy_cntPerPrd'),
+            "OCRNCS_FRQCY_VALUE": requestData.get('Frqcy_tp'),
+            "OCRNCS_CNTPERPRD_VALUE": requestData.get('Frqcy_cntPerPrd'),
             "DRTN_FRDT_VALUE": requestData.get('FrDt') or timestamp_formatted,
             "DRTN_TODT_VALUE": requestData.get('ToDt') or timestamp_future_formatted,
             "FRST_COLLTNDT_VALUE": requestData.get('FrstColltnDt') or timestamp_formatted,
@@ -72,7 +72,6 @@ def requestMessageByCreditor(requestData):
 
     filled_data = handler.replace_placeholders(template_data, value_dict)
 
-    # print(filled_data)
 
     filled_data["BusMsg"]["AppHdr"]["PssblDplct"] = False
     filled_data["BusMsg"]["Document"]["MndtInitnReq"]["Mndt"][0]["TrckgInd"] = True

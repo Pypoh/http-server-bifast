@@ -11,6 +11,7 @@ import handler.message.requestForPaymentHandler as requestForPaymentHandler
 import handler.message.requestForPaymentRejectHandler as requestForPaymentRejectHandler
 import handler.message.creditTransferRFPHandler as creditTransferRFPHandler
 import handler.message.mandateRegistHandler as mandateRegistHandler
+import handler.message.mandateApprovalHandler as mandateApprovalHandler
 import os
 import config.serverConfig as serverConfig
 
@@ -130,11 +131,11 @@ def mandateRegistByCreditingHandlerOFI():
 #     if request.method == 'POST':
 #         return requestForPaymentHandler.requestMessage()
 
-# # E-Mandate Approval by Crediting
-# @app.route('/MandateApprovalByCreditOFI', methods=['POST'])
-# def rfpHandlerOFI():
-#     if request.method == 'POST':
-#         return requestForPaymentHandler.requestMessage()
+# E-Mandate Approval by Crediting
+@app.route('/MandateApprovalByCreditOFI', methods=['POST'])
+def mandateApprovalByCreditingHandlerOFI():
+    if request.method == 'POST':
+        return mandateApprovalHandler.requestMessageByCreditor(request.form)
 
 # # E-Mandate Approval by Debiting
 # @app.route('/MandateApprovalByDebitOFI', methods=['POST'])
@@ -142,11 +143,11 @@ def mandateRegistByCreditingHandlerOFI():
 #     if request.method == 'POST':
 #         return requestForPaymentHandler.requestMessage()
 
-# # E-Mandate Amendment by Crediting
-# @app.route('/MandateAmendByCreditOFI', methods=['POST'])
-# def rfpHandlerOFI():
-#     if request.method == 'POST':
-#         return requestForPaymentHandler.requestMessage()
+# E-Mandate Amendment by Crediting
+@app.route('/MandateAmendByCreditOFI', methods=['POST'])
+def mandateAmendByCreditingHandlerOFI():
+    if request.method == 'POST':
+        return mandateApprovalHandler.requestMessageByCreditor(request.form)
 
 # # E-Mandate Amendment by Debiting
 # @app.route('/MandateAmendByDebitOFI', methods=['POST'])

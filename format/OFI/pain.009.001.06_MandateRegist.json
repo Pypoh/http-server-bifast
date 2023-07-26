@@ -47,8 +47,8 @@
               "SeqTp": "{{ OCRNCS_SEQTP_VALUE }}",
               "Frqcy": {
                 "Prd": {
-                  "Tp": "{{ OCNCS_FRQCY_VALUE }}",
-                  "CntPerPrd": "{{ OCNCS_CNTPERPRD_VALUE }}"
+                  "Tp": "{{ OCRNCS_FRQCY_VALUE }}",
+                  "CntPerPrd": "{{ OCRNCS_CNTPERPRD_VALUE }}"
                 }
               },
               "Drtn": {
