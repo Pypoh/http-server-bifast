@@ -13,11 +13,12 @@ from config.serverConfig import SCHEME_VALUE, HOST_URL_VALUE, HOST_PORT_VALUE
 
 def requestMessageByCreditor(requestData):
     filePath = os.path.join(
-        current_app.config["FORMAT_PATH"], 'pain.010.001.06_MandateRegist.json')
+        current_app.config["FORMAT_PATH"], 'pain.010.001.06_MandateAmend.json')
 
     generatedBizMsgIdr = handler.generateBizMsgIdr(
-        requestData.get('Fr'), "761")
-    generatedMsgId = handler.generateMsgId(requestData.get('Fr'), "761")
+        requestData.get('Fr'), requestData.get('Payment_type'))
+    generatedMsgId = handler.generateMsgId(
+        requestData.get('Fr'), requestData.get('Payment_type'))
 
     timestamp_now = datetime.now()
     timestamp_formatted = timestamp_now.strftime('%Y-%m-%d')
@@ -37,40 +38,40 @@ def requestMessageByCreditor(requestData):
             "PSSBLDPLCT_VALUE": requestData.get('PssblDplct'),
             "MSG_ID_VALUE": generatedMsgId,
             "CRE_DT_TM_VALUE": handler.getCreDtTm(),
-            "AMDMNTRSN_RSN_VALUE": requestData.get('CtgyPurp'),
-            "AMDMNTRSN_ADDTLINF_VALUE": requestData.get('CtgyPurp'),
-            "MNDT_MNDTID_VALUE": requestData.get('CtgyPurp'),
+            "AMDMNTRSN_RSN_VALUE": requestData.get('AmdmntRsn_rsn'),
+            "AMDMNTRSN_ADDTLINF_VALUE": requestData.get('AmdmntRsn_addtlInf'),
+            "MNDT_MNDTID_VALUE": requestData.get('Mndt_MndtId'),
             "MNDT_REQ_ID_VALUE": generatedBizMsgIdr,
-            "MNDT_LCLINSTRM_VALUE": requestData.get('CtgyPurp'),
-            "MNDT_CTGYPURP_VALUE": requestData.get('CtgyPurp'),
-            "OCRNCS_SEQTP_VALUE": requestData.get('SeqTp'),
-            "OCRNCS_FRQCY_VALUE": requestData.get('Frqcy_tp'),
-            "OCRNCS_CNTPERPRD_VALUE": requestData.get('Frqcy_cntPerPrd'),
-            "DRTN_FRDT_VALUE": requestData.get('FrDt') or timestamp_formatted,
-            "DRTN_TODT_VALUE": requestData.get('ToDt') or timestamp_future_formatted,
-            "FRST_COLLTNDT_VALUE": requestData.get('FrstColltnDt') or timestamp_formatted,
-            "FNL_COLLTNDT_VALUE": requestData.get('FnlColltnDt') or timestamp_future_formatted,
-            "TRCKGIND_VALUE": requestData.get('TrckgInd'),
-            "FRST_COLLTNAMT_CCY_VALUE": requestData.get('FrstColltnAmt_ccy'),
-            "FRST_COLLTNAMT_VALUE": requestData.get('FrstColltnAmt_value'),
-            "COLLTNAMT_CCY_VALUE": requestData.get('ColltnAmt_ccy'),
-            "COLLTNAMT_VALUE": requestData.get('ColltnAmt_value'),
-            "MAX_AMT_CCY_VALUE": requestData.get('MaxAmt_ccy'),
-            "MAX_AMT_VALUE": requestData.get('MaxAmt_value'),
-            "MNDT_RSN_VALUE": requestData.get('Rsn'),
-            "CDTR_NM_VALUE": requestData.get('Cdtr_nm'),
-            "CDTR_ORG_ID_VALUE": requestData.get('Cdtr_orgid'),
-            "CDTR_ACCT_VALUE": requestData.get('CdtrAcct_id'),
-            "CDTR_ACCT_TP_VALUE": requestData.get('CdtrAcct_tp'),
-            "CDTR_ACCT_NM_VALUE": requestData.get('CdtrAcct_nm'),
-            "CDTR_AGT_VALUE": requestData.get('CdtrAgt'),
-            "DBTR_NM_VALUE": requestData.get('Dbtr_nm'),
-            "DBTR_PRVT_ID_VALUE": requestData.get('Dbtr_prvtid'),
-            "DBTR_ACCT_VALUE": requestData.get('DbtrAcct_id'),
-            "DBTR_ACCT_TP_VALUE": requestData.get('DbtrAcct_tp'),
-            "DBTR_ACCT_NM_VALUE": requestData.get('DbtrAcct_nm'),
-            "DBTR_AGT_VALUE": requestData.get('DbtrAgt'),
-            "RFRD_DOC_CDTR_REF_VALUE": requestData.get('CdtrRef'),
+            "MNDT_LCLINSTRM_VALUE": requestData.get('Mndt_LclInstrm'),
+            "MNDT_CTGYPURP_VALUE": requestData.get('Mndt_CtgyPurp'),
+            "OCRNCS_SEQTP_VALUE": requestData.get('Mndt_SeqTp'),
+            "OCRNCS_FRQCY_VALUE": requestData.get('Mndt_Frqcy_tp'),
+            "OCRNCS_CNTPERPRD_VALUE": requestData.get('Mndt_Frqcy_cntPerPrd'),
+            "DRTN_FRDT_VALUE": requestData.get('Mndt_FrDt') or timestamp_formatted,
+            "DRTN_TODT_VALUE": requestData.get('Mndt_ToDt') or timestamp_future_formatted,
+            "FRST_COLLTNDT_VALUE": requestData.get('Mndt_FrstColltnDt') or timestamp_formatted,
+            "FNL_COLLTNDT_VALUE": requestData.get('Mndt_FnlColltnDt') or timestamp_future_formatted,
+            "TRCKGIND_VALUE": requestData.get('Mndt_TrckgInd'),
+            "FRST_COLLTNAMT_CCY_VALUE": requestData.get('Mndt_FrstColltnAmt_ccy'),
+            "FRST_COLLTNAMT_VALUE": requestData.get('Mndt_FrstColltnAmt_value'),
+            "COLLTNAMT_CCY_VALUE": requestData.get('Mndt_ColltnAmt_ccy'),
+            "COLLTNAMT_VALUE": requestData.get('Mndt_ColltnAmt_value'),
+            "MAX_AMT_CCY_VALUE": requestData.get('Mndt_MaxAmt_ccy'),
+            "MAX_AMT_VALUE": requestData.get('Mndt_MaxAmt_value'),
+            "MNDT_RSN_VALUE": requestData.get('Mndt_Rsn'),
+            "CDTR_NM_VALUE": requestData.get('Mndt_Cdtr_nm'),
+            "CDTR_ORG_ID_VALUE": requestData.get('Mndt_Cdtr_orgid'),
+            "CDTR_ACCT_VALUE": requestData.get('Mndt_CdtrAcct_id'),
+            "CDTR_ACCT_TP_VALUE": requestData.get('Mndt_CdtrAcct_tp'),
+            "CDTR_ACCT_NM_VALUE": requestData.get('Mndt_CdtrAcct_nm'),
+            "CDTR_AGT_VALUE": requestData.get('Mndt_CdtrAgt'),
+            "DBTR_NM_VALUE": requestData.get('Mndt_Dbtr_nm'),
+            "DBTR_PRVT_ID_VALUE": requestData.get('Mndt_Dbtr_prvtid'),
+            "DBTR_ACCT_VALUE": requestData.get('Mndt_DbtrAcct_id'),
+            "DBTR_ACCT_TP_VALUE": requestData.get('Mndt_DbtrAcct_tp'),
+            "DBTR_ACCT_NM_VALUE": requestData.get('Mndt_DbtrAcct_nm'),
+            "DBTR_AGT_VALUE": requestData.get('Mndt_DbtrAgt'),
+            "RFRD_DOC_CDTR_REF_VALUE": requestData.get('Mndt_CdtrRef'),
             "ORGNLMNDT_MNDTID_VALUE": requestData.get('OrgnlMndt_MndtId'),
             "ORGNLMNDT_REQ_ID_VALUE": requestData.get('OrgnlMndt_MndtReqId'),
             "ORGNLMNDT_LCLINSTRM_VALUE": requestData.get('OrgnlMndt_LclInstrm'),
@@ -110,20 +111,31 @@ def requestMessageByCreditor(requestData):
     filled_data = handler.replace_placeholders(template_data, value_dict)
 
     filled_data["BusMsg"]["AppHdr"]["PssblDplct"] = False
-    filled_data["BusMsg"]["Document"]["MndtInitnReq"]["Mndt"][0]["TrckgInd"] = True
-    filled_data["BusMsg"]["Document"]["MndtInitnReq"]["Mndt"][0]["FrstColltnAmt"]["value"] = float(
-        requestData.get('FrstColltnAmt_value'))
-    filled_data["BusMsg"]["Document"]["MndtInitnReq"]["Mndt"][0]["ColltnAmt"]["value"] = float(
-        requestData.get('ColltnAmt_value'))
-    filled_data["BusMsg"]["Document"]["MndtInitnReq"]["Mndt"][0]["MaxAmt"]["value"] = float(
-        requestData.get('MaxAmt_value'))
-    filled_data["BusMsg"]["Document"]["MndtInitnReq"]["Mndt"][0]["Ocrncs"]["Frqcy"]["Prd"]["CntPerPrd"] = float(
-        requestData.get('Frqcy_cntPerPrd'))
+    filled_data["BusMsg"]["Document"]["MndtAmdmntReq"]["UndrlygAmdmntDtls"][0]["Mndt"]["TrckgInd"] = True
+    filled_data["BusMsg"]["Document"]["MndtAmdmntReq"]["UndrlygAmdmntDtls"][0]["Mndt"]["Ocrncs"]["Frqcy"]["Prd"]["CntPerPrd"] = int(float(
+        requestData.get('Mndt_Frqcy_cntPerPrd')))
+    filled_data["BusMsg"]["Document"]["MndtAmdmntReq"]["UndrlygAmdmntDtls"][0]["Mndt"]["FrstColltnAmt"]["value"] = float(
+        requestData.get('Mndt_FrstColltnAmt_value'))
+    filled_data["BusMsg"]["Document"]["MndtAmdmntReq"]["UndrlygAmdmntDtls"][0]["Mndt"]["ColltnAmt"]["value"] = float(
+        requestData.get('Mndt_ColltnAmt_value'))
+    filled_data["BusMsg"]["Document"]["MndtAmdmntReq"]["UndrlygAmdmntDtls"][0]["Mndt"]["MaxAmt"]["value"] = float(
+        requestData.get('Mndt_ColltnAmt_value'))
+    filled_data["BusMsg"]["Document"]["MndtAmdmntReq"]["UndrlygAmdmntDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["TrckgInd"] = True
+    filled_data["BusMsg"]["Document"]["MndtAmdmntReq"]["UndrlygAmdmntDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["Ocrncs"]["Frqcy"]["Prd"]["CntPerPrd"] = int(float(
+        requestData.get('OrgnlMndt_Frqcy_cntPerPrd')))
+    filled_data["BusMsg"]["Document"]["MndtAmdmntReq"]["UndrlygAmdmntDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["FrstColltnAmt"]["value"] = float(
+        requestData.get('OrgnlMndt_FrstColltnAmt_value'))
+    filled_data["BusMsg"]["Document"]["MndtAmdmntReq"]["UndrlygAmdmntDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["ColltnAmt"]["value"] = float(
+        requestData.get('OrgnlMndt_ColltnAmt_value'))
+    filled_data["BusMsg"]["Document"]["MndtAmdmntReq"]["UndrlygAmdmntDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["MaxAmt"]["value"] = float(
+        requestData.get('OrgnlMndt_MaxAmt_value'))
     headers = {
         "Content-Type": "application/json",
         "Content-Length": str(filled_data),
         "message": "/MandateAmendmentRequestV06"
     }
+
+    # print(filled_data)
 
     response = requests.post(
         f"{SCHEME_VALUE}{requestData.get('Host_url')}:{requestData.get('Host_port')}", json=filled_data, headers=headers)

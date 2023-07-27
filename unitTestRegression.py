@@ -105,7 +105,7 @@ class HTTPServerUnitTest(unittest.TestCase):
         eMandateAmendmentByCreditingTest = self.eMandateAmendmentByCreditingTest(
             eMandateRegistrationCrediting)
 
-        # E-Mandate Amendment by Debiting
+        # # E-Mandate Amendment by Debiting
 
         # E-Mandate Amendment Approval by Crediting
         time.sleep(10)
@@ -165,15 +165,18 @@ class HTTPServerUnitTest(unittest.TestCase):
         # }
 
         # self.logger.info(resultForm)
-        # exclude_tags = ["BusMsg"]
+        exclude_tags = ["BusMsg", "Document"]
+        exclude_path = "Document_MndtAccptncRpt_UndrlygAccptncDtls0".split(
+            "_")  # Convert the path to a list of keys
+
         json_string = json.dumps(jsonResponse)
         resultExtract = generalHandler.extract_values(json_string)
         resultExtract["endToEndId"] = resultExtract.get(
-            'Document_MndtAccptncRpt_UndrlygAccptncDtls0_OrgnlMndt_OrgnlMndt_MndtReqId')
+            'MndtReqId')
         resultExtract["txSts"] = resultExtract.get(
-            'Document_MndtAccptncRpt_UndrlygAccptncDtls0_SplmtryData0_Envlp_Dtl_Rslt_TxSts')
+            'SplmtryData0_Envlp_Dtl_Rslt_TxSts')
         resultExtract["stsRsnInf"] = resultExtract.get(
-            'Document_MndtAccptncRpt_UndrlygAccptncDtls0_SplmtryData0_Envlp_Dtl_Rslt_StsRsnInf_Rsn_Prtry')
+            'SplmtryData0_Envlp_Dtl_Rslt_StsRsnInf_Rsn_Prtry')
         # self.logger.info(f"resultExtract: {resultExtract}")
 
         return resultExtract
@@ -832,7 +835,7 @@ class HTTPServerUnitTest(unittest.TestCase):
                     "Dbtr_nm": mandateRegistRequestForm.get('Dbtr_nm'),
                     "DbtrAgt": mandateRegistRequestForm.get('DbtrAgt')
                 }
-                self.eMandateEnquiryByMandateID(mandateEnquiryRequestForm)
+                # self.eMandateEnquiryByMandateID(mandateEnquiryRequestForm)
                 return result
             else:
                 return self.eMandateRegistrationByCreditingTest()
@@ -870,19 +873,19 @@ class HTTPServerUnitTest(unittest.TestCase):
             # "OrgnlMsgInf_msgnmid": mandate.get('msgNmId'),
             "OrgnlMsgInf_msgnmid": "pain.009.001.06",
             "AccptncRslt": True,
-            "OrgnlMndt_mndtid": mandate.get('mndtId'),
-            "OrgnlMndt_mndtreqid": mandate.get('mndtReqId'),
-            "SeqTp": mandate.get('seqTp'),
-            "FrDt": mandate.get('frDt'),
-            "ToDt": mandate.get('toDt'),
-            "FrstColltnDt": mandate.get('frstColltnDt'),
-            "FnlColltnDt": mandate.get('fnlColltnDt'),
+            "OrgnlMndt_mndtid": mandate.get('MndtId'),
+            "OrgnlMndt_mndtreqid": mandate.get('MndtReqId'),
+            "SeqTp": mandate.get('Ocrncs_SeqTp'),
+            "FrDt": mandate.get('Ocrncs_Drtn_FrDt'),
+            "ToDt": mandate.get('Ocrncs_Drtn_ToDt'),
+            "FrstColltnDt": mandate.get('Ocrncs_FrstColltnDt'),
+            "FnlColltnDt": mandate.get('Ocrncs_FnlColltnDt'),
             "TrckgInd": True,
-            "Cdtr_nm": mandate.get('cdtrNm'),
-            "Cdtr_orgid": mandate.get('cdtrOrgId'),
-            "CdtrAgt": mandate.get('cdtrAgt'),
-            "Dbtr_nm": mandate.get('dbtrNm'),
-            "DbtrAgt": mandate.get('dbtrAgt'),
+            "Cdtr_nm": mandate.get('Cdtr_Nm'),
+            "Cdtr_orgid": mandate.get('Cdtr_Id_OrgId_Othr0_Id'),
+            "CdtrAgt": mandate.get('CdtrAgt_FinInstnId_Othr_Id'),
+            "Dbtr_nm": mandate.get('Dbtr_Nm'),
+            "DbtrAgt": mandate.get('DbtrAgt_FinInstnId_Othr_Id'),
             "OrgnlMndt_sts": "ACTV"
         }
         result = self.requestHandler(mandateApproveRequestForm)
@@ -893,14 +896,15 @@ class HTTPServerUnitTest(unittest.TestCase):
                     'Host_url': '10.170.137.115',
                     'Host_port': '18948',
                     'Fr': 'BANKDMY8',
-                    "MndtId": mandate.get('mndtId'),
+                    "MndtId": mandateResultForm.get('mndtId'),
                     "CtgyPurp": "802",
                     # "CtgyPurp": mandateRegistRequestForm.get('CtgyPurp'),
                     "Cdtr_nm": mandateApproveRequestForm.get('Cdtr_nm'),
                     "Dbtr_nm": mandateApproveRequestForm.get('Dbtr_nm'),
                     "DbtrAgt": mandateApproveRequestForm.get('DbtrAgt')
                 }
-                self.eMandateEnquiryByMandateID(mandateEnquiryRequestForm)
+                # self.eMandateEnquiryByMandateID(mandateEnquiryRequestForm)
+                return result
         except AttributeError as e:
             # self.logger.info(response.data)
             print("Attribute occurred!")
@@ -909,87 +913,102 @@ class HTTPServerUnitTest(unittest.TestCase):
             print("Full traceback:", e.__traceback__)
 
     def eMandateAmendmentByCreditingTest(self, mandateForm):
+        # Mandate Enquiry to get mandate info
+        mandateEnquiryRequestForm = {
+            'Host_url': '10.170.137.115',
+            'Host_port': '18947',
+            'Fr': 'BANKDMY7',
+            "MndtId": mandateForm.get('mndtId'),
+            "CtgyPurp": "802",  # TODO: Change later to dynamic
+            # "CtgyPurp": mandateRegistRequestForm.get('CtgyPurp'),
+            "DbtrAgt": "BANKDMY8"  # TODO: Change later
+        }
+        mandate = self.eMandateEnquiryByMandateID(mandateEnquiryRequestForm)
+
         mandateAmendRequestForm = {
             'Payment_url': '/MandateAmendByCreditOFI',
             'Host_url': '10.170.137.115',
             'Host_port': '18947',
             'Fr': 'BANKDMY7',
             'To': 'FASTIDJA',
+            'Payment_type': '761',
             'MsgDefIdr': "pain.010.001.06",
             "BizSvc": "BI",
             "CpyDplct": "CODU",
             "PssblDplct": "false",
             "AmdmntRsn_rsn": "MD18",
             "AmdmntRsn_addtlInf": "1234",
-            "Mndt_MndtId": mandateForm.get('mndtId'),
-            "Mndt_MndtReqId": mandateForm.get('mndtReqId'),
+            "Mndt_MndtId": mandate.get('MndtId'),
+            "Mndt_MndtReqId": mandate.get('endToEndId'),
             'Mndt_CtgyPurp': "01",
             'Mndt_LclInstrm': "FixedAmt",
             'Mndt_SeqTp': "RCUR",
             'Mndt_Frqcy_tp': "YEAR",
             'Mndt_Frqcy_cntPerPrd': "1",
-            'Mndt_FrDt': mandateForm.get('FrDt'),
-            'Mndt_ToDt': mandateForm.get('ToDt'),
-            'Mndt_FrstColltnDt': mandateForm.get('FrstColltnDt'),
-            'Mndt_FnlColltnDt': mandateForm.get('FnlColltnDt'),
+            'Mndt_FrDt': mandate.get('Ocrncs_Drtn_FrDt'),
+            'Mndt_ToDt': mandate.get('Ocrncs_Drtn_ToDt'),
+            'Mndt_FrstColltnDt': mandate.get('Ocrncs_FrstColltnDt'),
+            'Mndt_FnlColltnDt': mandate.get('Ocrncs_FnlColltnDt'),
             'Mndt_TrckgInd': True,
-            'Mndt_FrstColltnAmt_ccy': mandateForm.get('FrDt'),
-            'Mndt_FrstColltnAmt_value': mandateForm.get('FrDt'),
-            'Mndt_ColltnAmt_ccy': mandateForm.get('FrDt'),
-            'Mndt_ColltnAmt_value': mandateForm.get('FrDt'),
-            'Mndt_MaxAmt_ccy': mandateForm.get('FrDt'),
-            'Mndt_MaxAmt_value': mandateForm.get('FrDt'),
-            'Mndt_Rsn':  mandateForm.get('FrDt'),
-            'Mndt_Cdtr_nm': mandateForm.get('FrDt'),
-            'Mndt_Cdtr_orgid': mandateForm.get('FrDt'),
-            'Mndt_CdtrAcct_id': mandateForm.get('FrDt'),
-            'Mndt_CdtrAcct_tp': mandateForm.get('FrDt'),
-            'Mndt_CdtrAcct_nm': mandateForm.get('FrDt'),
-            'Mndt_CdtrAgt': mandateForm.get('FrDt'),
-            'Mndt_Dbtr_nm': mandateForm.get('FrDt'),
-            'Mndt_Dbtr_prvtid': mandateForm.get('FrDt'),
-            'Mndt_DbtrAcct_id': mandateForm.get('FrDt'),
-            'Mndt_DbtrAcct_tp': mandateForm.get('FrDt'),
-            'Mndt_DbtrAcct_nm': mandateForm.get('FrDt'),
-            'Mndt_DbtrAgt': mandateForm.get('FrDt'),
-            'Mndt_CdtrRef': mandateForm.get('FrDt'),
-            "OrgnlMndt_MndtId": mandateForm.get('mndtId'),
-            "OrgnlMndt_MndtReqId": mandateForm.get('mndtReqId'),
-            'OrgnlMndt_CtgyPurp': mandateForm.get('mndtReqId'),
-            'OrgnlMndt_LclInstrm': mandateForm.get('mndtReqId'),
-            'OrgnlMndt_SeqTp': mandateForm.get('mndtReqId'),
-            'OrgnlMndt_Frqcy_tp': mandateForm.get('mndtReqId'),
-            'OrgnlMndt_Frqcy_cntPerPrd': mandateForm.get('mndtReqId'),
-            'OrgnlMndt_FrDt': mandateForm.get('FrDt'),
-            'OrgnlMndt_ToDt': mandateForm.get('ToDt'),
-            'OrgnlMndt_FrstColltnDt': mandateForm.get('FrstColltnDt'),
-            'OrgnlMndt_FnlColltnDt': mandateForm.get('FnlColltnDt'),
+            'Mndt_FrstColltnAmt_ccy': mandate.get('FrstColltnAmt_Ccy'),
+            'Mndt_FrstColltnAmt_value': mandate.get('FrstColltnAmt_value'),
+            'Mndt_ColltnAmt_ccy': mandate.get('ColltnAmt_Ccy'),
+            'Mndt_ColltnAmt_value': mandate.get('ColltnAmt_value'),
+            'Mndt_MaxAmt_ccy': mandate.get('MaxAmt_Ccy'),
+            'Mndt_MaxAmt_value': mandate.get('MaxAmt_value'),
+            'Mndt_Rsn':  mandate.get('Rsn_Prtry'),
+            'Mndt_Cdtr_nm': mandate.get('Cdtr_Nm'),
+            'Mndt_Cdtr_orgid': mandate.get('Cdtr_Id_OrgId_Othr0_Id'),
+            'Mndt_CdtrAcct_id': mandate.get('CdtrAcct_Id_Othr_Id'),
+            'Mndt_CdtrAcct_tp': mandate.get('CdtrAcct_Tp_Prtry'),
+            'Mndt_CdtrAcct_nm': mandate.get('CdtrAcct_Nm'),
+            'Mndt_CdtrAgt': mandate.get('CdtrAgt_FinInstnId_Othr_Id'),
+            'Mndt_Dbtr_nm': mandate.get('Dbtr_Nm'),
+            'Mndt_Dbtr_prvtid': mandate.get('Dbtr_Id_PrvtId_Othr0_Id'),
+            'Mndt_DbtrAcct_id': mandate.get('DbtrAcct_Id_Othr_Id'),
+            'Mndt_DbtrAcct_tp': mandate.get('DbtrAcct_Tp_Prtry'),
+            'Mndt_DbtrAcct_nm': mandate.get('DbtrAcct_Nm'),
+            'Mndt_DbtrAgt': mandate.get('DbtrAgt_FinInstnId_Othr_Id'),
+            'Mndt_CdtrRef': mandate.get('RfrdDoc0_CdtrRef'),
+            "OrgnlMndt_MndtId": mandate.get('mndtId'),
+            "OrgnlMndt_MndtReqId": mandate.get('endToEndId'),
+            'OrgnlMndt_CtgyPurp': mandate.get('Tp_CtgyPurp_Prtry'),
+            'OrgnlMndt_LclInstrm': mandate.get('Tp_LclInstrm_Prtry'),
+            'OrgnlMndt_SeqTp': mandate.get('Ocrncs_SeqTp'),
+            'OrgnlMndt_Frqcy_tp': mandate.get('Ocrncs_Frqcy_Prd_Tp'),
+            'OrgnlMndt_Frqcy_cntPerPrd': mandate.get('Ocrncs_Frqcy_Prd_CntPerPrd'),
+            'OrgnlMndt_FrDt': mandate.get('Ocrncs_Drtn_FrDt'),
+            'OrgnlMndt_ToDt': mandate.get('Ocrncs_Drtn_ToDt'),
+            'OrgnlMndt_FrstColltnDt': mandate.get('Ocrncs_FrstColltnDt'),
+            'OrgnlMndt_FnlColltnDt': mandate.get('Ocrncs_FnlColltnDt'),
             'OrgnlMndt_TrckgInd': True,
-            'OrgnlMndt_FrstColltnAmt_ccy': mandateForm.get('FrDt'),
-            'OrgnlMndt_FrstColltnAmt_value': mandateForm.get('FrDt'),
-            'OrgnlMndt_ColltnAmt_ccy': mandateForm.get('FrDt'),
-            'OrgnlMndt_ColltnAmt_value': mandateForm.get('FrDt'),
-            'OrgnlMndt_MaxAmt_ccy': mandateForm.get('FrDt'),
-            'OrgnlMndt_MaxAmt_value': mandateForm.get('FrDt'),
-            'OrgnlMndt_Rsn':  mandateForm.get('FrDt'),
-            'OrgnlMndt_Cdtr_nm': mandateForm.get('FrDt'),
-            'OrgnlMndt_Cdtr_orgid': mandateForm.get('FrDt'),
-            'OrgnlMndt_CdtrAcct_id': mandateForm.get('FrDt'),
-            'OrgnlMndt_CdtrAcct_tp': mandateForm.get('FrDt'),
-            'OrgnlMndt_CdtrAcct_nm': mandateForm.get('FrDt'),
-            'OrgnlMndt_CdtrAgt': mandateForm.get('FrDt'),
-            'OrgnlMndt_Dbtr_nm': mandateForm.get('FrDt'),
-            'OrgnlMndt_Dbtr_prvtid': mandateForm.get('FrDt'),
-            'OrgnlMndt_DbtrAcct_id': mandateForm.get('FrDt'),
-            'OrgnlMndt_DbtrAcct_tp': mandateForm.get('FrDt'),
-            'OrgnlMndt_DbtrAcct_nm': mandateForm.get('FrDt'),
-            'OrgnlMndt_DbtrAgt': mandateForm.get('FrDt'),
-            'OrgnlMndt_CdtrRef': mandateForm.get('FrDt'),
-            'OrgnlMndt_Sts': mandateForm.get('FrDt'),
-            'Mndt_Sts': mandateForm.get('FrDt'),
+            'OrgnlMndt_FrstColltnAmt_ccy': mandate.get('FrstColltnAmt_Ccy'),
+            'OrgnlMndt_FrstColltnAmt_value': mandate.get('FrstColltnAmt_value'),
+            'OrgnlMndt_ColltnAmt_ccy': mandate.get('ColltnAmt_Ccy'),
+            'OrgnlMndt_ColltnAmt_value': mandate.get('ColltnAmt_value'),
+            'OrgnlMndt_MaxAmt_ccy': mandate.get('MaxAmt_Ccy'),
+            'OrgnlMndt_MaxAmt_value': mandate.get('MaxAmt_value'),
+            'OrgnlMndt_Rsn':  mandate.get('Rsn_Prtry'),
+            'OrgnlMndt_Cdtr_nm': mandate.get('Cdtr_Nm'),
+            'OrgnlMndt_Cdtr_orgid': mandate.get('Cdtr_Id_OrgId_Othr0_Id'),
+            'OrgnlMndt_CdtrAcct_id': mandate.get('CdtrAcct_Id_Othr_Id'),
+            'OrgnlMndt_CdtrAcct_tp': mandate.get('CdtrAcct_Tp_Prtry'),
+            'OrgnlMndt_CdtrAcct_nm': mandate.get('CdtrAcct_Nm'),
+            'OrgnlMndt_CdtrAgt': mandate.get('CdtrAgt_FinInstnId_Othr_Id'),
+            'OrgnlMndt_Dbtr_nm': mandate.get('Dbtr_Nm'),
+            'OrgnlMndt_Dbtr_prvtid': mandate.get('Dbtr_Id_PrvtId_Othr0_Id'),
+            'OrgnlMndt_DbtrAcct_id': mandate.get('DbtrAcct_Id_Othr_Id'),
+            'OrgnlMndt_DbtrAcct_tp': mandate.get('DbtrAcct_Tp_Prtry'),
+            'OrgnlMndt_DbtrAcct_nm': mandate.get('DbtrAcct_Nm'),
+            'OrgnlMndt_DbtrAgt': mandate.get('DbtrAgt_FinInstnId_Othr_Id'),
+            'OrgnlMndt_CdtrRef': mandate.get('RfrdDoc0_CdtrRef'),
+            'OrgnlMndt_Sts': "ACTV",
+            'Mndt_Sts': "ACTV",
 
         }
+        # self.logger.info(mandateAmendRequestForm)
         result = self.requestHandler(mandateAmendRequestForm)
+        # self.logger.info(f'Mandate enquiry result after amend : {result}')
         time.sleep(15)
         try:
             if result.get('txSts') == "ACTC":
@@ -997,8 +1016,8 @@ class HTTPServerUnitTest(unittest.TestCase):
                     'Host_url': '10.170.137.115',
                     'Host_port': '18947',
                     'Fr': 'BANKDMY7',
-                    "MndtId": result.get('mndtId'),
-                    "CtgyPurp": "802",  # TODO: Change later to dynamic
+                    "MndtId": mandate.get('MndtId'),
+                    "CtgyPurp": "761",  # TODO: Change later to dynamic
                     # "CtgyPurp": mandateAmendRequestForm.get('CtgyPurp'),
                     "Cdtr_nm": mandateAmendRequestForm.get('Cdtr_nm'),
                     "Dbtr_nm": mandateAmendRequestForm.get('Dbtr_nm'),
@@ -1007,7 +1026,7 @@ class HTTPServerUnitTest(unittest.TestCase):
                 self.eMandateEnquiryByMandateID(mandateEnquiryRequestForm)
                 return result
             else:
-                return self.eMandateRegistrationByCreditingTest()
+                return self.eMandateAmendmentByCreditingTest(mandateForm)
         except AttributeError as e:
             # self.logger.info(response.data)
             print("Attribute occurred!")
@@ -1015,17 +1034,16 @@ class HTTPServerUnitTest(unittest.TestCase):
             print("Error message:", e)
             print("Full traceback:", e.__traceback__)
 
-
-    def eMandateAmendApproveByCreditingTest(self, mandateResultForm):
+    def eMandateAmendApproveByCreditingTest(self, mandateForm):
         # Mandate Enquiry to get mandate info
         mandateEnquiryRequestForm = {
             'Host_url': '10.170.137.115',
             'Host_port': '18948',
             'Fr': 'BANKDMY8',
-            "MndtId": mandateResultForm.get('mndtId'),
+            "MndtId": mandateForm.get('mndtId'),
             "CtgyPurp": "761",  # TODO: Change later to dynamic
             # "CtgyPurp": mandateRegistRequestForm.get('CtgyPurp'),
-            "DbtrAgt": "BANKDMY7"  # TODO: Change later
+            "DbtrAgt": "BANKDMY8"  # TODO: Change later
         }
         mandate = self.eMandateEnquiryByMandateID(mandateEnquiryRequestForm)
         mandateApproveRequestForm = {
@@ -1041,21 +1059,21 @@ class HTTPServerUnitTest(unittest.TestCase):
             "PssblDplct": "false",
             "OrgnlMsgInf_msgid": mandate.get('msgId'),
             # "OrgnlMsgInf_msgnmid": mandate.get('msgNmId'),
-            "OrgnlMsgInf_msgnmid": "pain.009.001.06",
+            "OrgnlMsgInf_msgnmid": "pain.010.001.06",
             "AccptncRslt": True,
-            "OrgnlMndt_mndtid": mandate.get('mndtId'),
-            "OrgnlMndt_mndtreqid": mandate.get('mndtReqId'),
-            "SeqTp": mandate.get('seqTp'),
-            "FrDt": mandate.get('frDt'),
-            "ToDt": mandate.get('toDt'),
-            "FrstColltnDt": mandate.get('frstColltnDt'),
-            "FnlColltnDt": mandate.get('fnlColltnDt'),
+            "OrgnlMndt_mndtid": mandate.get('MndtId'),
+            "OrgnlMndt_mndtreqid": mandate.get('MndtReqId'),
+            "SeqTp": mandate.get('Ocrncs_SeqTp'),
+            "FrDt": mandate.get('Ocrncs_Drtn_FrDt'),
+            "ToDt": mandate.get('Ocrncs_Drtn_ToDt'),
+            "FrstColltnDt": mandate.get('Ocrncs_FrstColltnDt'),
+            "FnlColltnDt": mandate.get('Ocrncs_FnlColltnDt'),
             "TrckgInd": True,
-            "Cdtr_nm": mandate.get('cdtrNm'),
-            "Cdtr_orgid": mandate.get('cdtrOrgId'),
-            "CdtrAgt": mandate.get('cdtrAgt'),
-            "Dbtr_nm": mandate.get('dbtrNm'),
-            "DbtrAgt": mandate.get('dbtrAgt'),
+            "Cdtr_nm": mandate.get('Cdtr_Nm'),
+            "Cdtr_orgid": mandate.get('Cdtr_Id_OrgId_Othr0_Id'),
+            "CdtrAgt": mandate.get('CdtrAgt_FinInstnId_Othr_Id'),
+            "Dbtr_nm": mandate.get('Dbtr_Nm'),
+            "DbtrAgt": mandate.get('DbtrAgt_FinInstnId_Othr_Id'),
             "OrgnlMndt_sts": "ACTV"
         }
         result = self.requestHandler(mandateApproveRequestForm)
@@ -1066,8 +1084,8 @@ class HTTPServerUnitTest(unittest.TestCase):
                     'Host_url': '10.170.137.115',
                     'Host_port': '18948',
                     'Fr': 'BANKDMY8',
-                    "MndtId": mandate.get('mndtId'),
-                    "CtgyPurp": "802",
+                    "MndtId": mandateForm.get('mndtId'),
+                    "CtgyPurp": "761",
                     # "CtgyPurp": mandateRegistRequestForm.get('CtgyPurp'),
                     "Cdtr_nm": mandateApproveRequestForm.get('Cdtr_nm'),
                     "Dbtr_nm": mandateApproveRequestForm.get('Dbtr_nm'),
@@ -1080,7 +1098,6 @@ class HTTPServerUnitTest(unittest.TestCase):
             print("Attribute that caused the error:", e.args[0])
             print("Error message:", e)
             print("Full traceback:", e.__traceback__)
-
 
 
 if __name__ == '__main__':

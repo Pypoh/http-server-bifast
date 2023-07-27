@@ -12,6 +12,7 @@ import handler.message.requestForPaymentRejectHandler as requestForPaymentReject
 import handler.message.creditTransferRFPHandler as creditTransferRFPHandler
 import handler.message.mandateRegistHandler as mandateRegistHandler
 import handler.message.mandateApprovalHandler as mandateApprovalHandler
+import handler.message.mandateAmendHandler as mandateAmendHandler
 import os
 import config.serverConfig as serverConfig
 
@@ -147,7 +148,7 @@ def mandateApprovalByCreditingHandlerOFI():
 @app.route('/MandateAmendByCreditOFI', methods=['POST'])
 def mandateAmendByCreditingHandlerOFI():
     if request.method == 'POST':
-        return mandateApprovalHandler.requestMessageByCreditor(request.form)
+        return mandateAmendHandler.requestMessageByCreditor(request.form)
 
 # # E-Mandate Amendment by Debiting
 # @app.route('/MandateAmendByDebitOFI', methods=['POST'])

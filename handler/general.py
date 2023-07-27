@@ -123,6 +123,7 @@ def getDt():
     DtValue = currentTime.strftime('%Y-%m-%d')
     return DtValue
 
+
 def extract_values(json_data):
     def _extract(data, parent_tag=""):
         result_dict = {}
@@ -132,16 +133,18 @@ def extract_values(json_data):
                 item_dict = _extract(item, item_tag)
                 if item_dict:
                     result_dict.update(item_dict)
-        elif isinstance(data, dict):    
+        elif isinstance(data, dict):
             for key, value in data.items():
-                if key == "BusMsg": 
+                if key == "BusMsg":
+                    # Exclude "BusMsg" key from parent_tag
                     result_dict.update(_extract(value, parent_tag))
                 else:
                     if isinstance(value, (dict, list)):
                         if not parent_tag:
                             result_dict.update(_extract(value, key))
                         else:
-                            result_dict.update(_extract(value, f"{parent_tag}_{key}"))
+                            result_dict.update(
+                                _extract(value, f"{parent_tag}_{key}"))
                     else:
                         if not parent_tag:
                             result_dict[key] = value
@@ -151,7 +154,12 @@ def extract_values(json_data):
 
     try:
         parsed_data = json.loads(json_data)
-        return _extract(parsed_data)
+        extracted_data = _extract(parsed_data)
+        # Remove the prefix "Document_MndtAccptncRpt_UndrlygAccptncDtls_0_" from the keys
+        result_dict1 = {key.replace("Document_MndtAccptncRpt_UndrlygAccptncDtls0_", "")
+                                   : value for key, value in extracted_data.items()}
+        result_dict = {key.replace("OrgnlMndt_", ""): value for key, value in result_dict1.items()}
+        return result_dict
     except json.JSONDecodeError as e:
         print("JSON decoding error:", e)
         return None
