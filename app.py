@@ -1,5 +1,5 @@
 from blueprints.RequestForPayment import requestForPaymentBlueprint
-from flask import Flask, request
+from flask import Flask, request, render_template
 import handler.general as handler
 import handler.message.accountEnquiryHandler as accountEnquiryHandler
 import handler.message.creditTransferHandler as creditTransferHandler
@@ -16,14 +16,25 @@ import handler.message.mandateAmendHandler as mandateAmendHandler
 import os
 import config.serverConfig as serverConfig
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="templates")
 app.register_blueprint(requestForPaymentBlueprint)
 app.config['FORMAT_PATH'] = os.path.join(app.root_path, 'format/OFI')
 
-# @app.route('/', methods=['POST'])
-# def rfpHandlerRFI():
-#     if request.method == 'POST':
-#         return requestForPaymentHandler.generateResponse(request.json)
+@app.route('/', methods=['GET'])
+def index():
+    cards = [
+        {'title': 'Card 1', 'content': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'},
+        {'title': 'Card 2', 'content': 'Vestibulum ultricies feugiat magna eu pretium.'},
+        {'title': 'Card 3', 'content': 'Phasellus non urna eu mauris cursus bibendum.'},
+        {'title': 'Card 1', 'content': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'},
+        {'title': 'Card 2', 'content': 'Vestibulum ultricies feugiat magna eu pretium.'},
+        {'title': 'Card 3', 'content': 'Phasellus non urna eu mauris cursus bibendum.'},
+        {'title': 'Card 1', 'content': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'},
+        {'title': 'Card 2', 'content': 'Vestibulum ultricies feugiat magna eu pretium.'},
+        {'title': 'Card 3', 'content': 'Phasellus non urna eu mauris cursus bibendum.'}
+        # Add more card data here as needed
+    ]
+    return render_template('home.html', cards=cards)
 
 # Account Enquiry
 @app.route('/AccountEnquiryOFI', methods=['POST'])

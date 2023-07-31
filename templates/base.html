@@ -1,12 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<title>Template Inheritance</title>
-</head>
-<body>
-	<h1> This heading is common in all webpages </h1>
-	{% block content %}
-	{% endblock %}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Website</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+  </head>
+  <body>
+    <!-- Navigation Drawer -->
+    <div class="drawer open">
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Simulator</a></li>
+        <li><a href="#">History</a></li>
+        <li><a href="#">Data</a></li>
+        <li><a href="#">Setting</a></li>
+      </ul>
+    </div>
 
-</body>
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- <button class="open-btn" onclick="openDrawer()">☰ Open</button> -->
+      <h1>Welcome to My Website</h1>
+
+      <!-- Card List -->
+      <div class="card-list">
+        {% for card in cards %}
+        <div class="card" onclick="handleCardClick('{{ card.title }}')">
+          <h2>{{ card.title }}</h2>
+          <p>{{ card.content }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Console-like Windows -->
+    <div class="console-container">
+      <div class="console-window" id="console-1">
+        <div class="console-header">Console 1</div>
+        <div class="console-content" id="console-content-1">
+          <!-- Console 1 content goes here -->
+        </div>
+      </div>
+      <div class="console-window" id="console-2">
+        <div class="console-header">Console 2</div>
+        <div class="console-content" id="console-content-2">
+          <!-- Console 2 content goes here -->
+        </div>
+      </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
 </html>

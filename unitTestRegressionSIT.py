@@ -30,21 +30,21 @@ class HTTPServerUnitTest(unittest.TestCase):
         pass
 
     def test_regression(self):
-        # # Account Enquiry
-        # self.accountEnquiryTestHandler()
+        # Account Enquiry
+        self.accountEnquiryTestHandler()
 
-        # # # Credit Transfer (pause for 10 seconds)
+        # # Credit Transfer (pause for 10 seconds)
+        time.sleep(10)
+        ct = self.creditTransferTestHandler()
+
+        # # Credit Transfer Reversal (pause for 40 seconds)
+        time.sleep(40)
+        if (ct.get('txSts') == "ACTC"):
+            self.creditTransferReversalTestHandler(ct.get('endToEndId'))
+
+        # # Credit Transfer Proxy
         # time.sleep(10)
-        # ct = self.creditTransferTestHandler()
-
-        # # # Credit Transfer Reversal (pause for 40 seconds)
-        # time.sleep(40)
-        # if (ct.get('txSts') == "ACTC"):
-        #     self.creditTransferReversalTestHandler(ct.get('endToEndId'))
-
-        # # # Credit Transfer Proxy
-        # # time.sleep(10)
-        # # self.creditTransferProxyHandler()
+        # self.creditTransferProxyHandler()
 
         # # # Proxy Registration
         # # time.sleep(10)
@@ -62,33 +62,33 @@ class HTTPServerUnitTest(unittest.TestCase):
 
         # # Proxy Deactivate
 
-        # # # Request for Payment by Account
-        # time.sleep(10)
-        # rfpAccountRequest, rfpAccountResult = self.requestForPaymentAccountTestHandler()
+        # Request for Payment by Account
+        time.sleep(10)
+        rfpAccountRequest, rfpAccountResult = self.requestForPaymentAccountTestHandler()
 
-        # # # Request for Payment Rejection by Account
-        # time.sleep(15)
-        # self.requestForPaymentAccountRejectTestHandler(rfpAccountResult)
+        # Request for Payment Rejection by Account
+        time.sleep(15)
+        self.requestForPaymentAccountRejectTestHandler(rfpAccountResult)
 
-        # # # Request for Payment by Proxy
-        # time.sleep(10)
-        # proxy = self.proxyRegisterTestHandler()
-        # time.sleep(10)
-        # rfpProxyRequest, rfpProxyResult = self.requestForPaymentProxyTestHandler(
-        #     proxy)
+        # Request for Payment by Proxy
+        time.sleep(10)
+        proxy = self.proxyRegisterTestHandler()
+        time.sleep(10)
+        rfpProxyRequest, rfpProxyResult = self.requestForPaymentProxyTestHandler(
+            proxy)
 
-        # # # Request for Payment Rejection by Proxy
-        # time.sleep(10)
-        # self.requestForPaymentProxyRejectTestHandler(rfpProxyResult)
+        # Request for Payment Rejection by Proxy
+        time.sleep(10)
+        self.requestForPaymentProxyRejectTestHandler(rfpProxyResult)
 
-        # # Credit Transfer RFP
-        # time.sleep(10)
-        # rfpAccountRequest, rfpAccountResult = self.requestForPaymentAccountTestHandler()
-        # time.sleep(10)
-        # self.creditTransferRFPTestHandler(rfpAccountRequest, rfpAccountResult)
+        # Credit Transfer RFP
+        time.sleep(10)
+        rfpAccountRequest, rfpAccountResult = self.requestForPaymentAccountTestHandler()
+        time.sleep(10)
+        self.creditTransferRFPTestHandler(rfpAccountRequest, rfpAccountResult)
 
         # # E-Mandate Registration by Crediting
-        # time.sleep(10)
+        time.sleep(10)
         eMandateRegistrationCrediting = self.eMandateRegistrationByCreditingTest()
 
         # # E-Mandate Registration by Debiting
@@ -207,9 +207,9 @@ class HTTPServerUnitTest(unittest.TestCase):
     def accountEnquiryTestHandler(self):
         accountEnquiryRequestForm = {
             'Payment_url': '/AccountEnquiryOFI',
-            'Host_url': '10.170.137.115',
-            'Host_port': '18947',
-            'Fr': 'BANKDMY7',
+            'Host_url': '10.170.136.163',
+            'Host_port': '18939',
+            'Fr': 'GNESIDJA',
             'To': 'FASTIDJA',
             'MsgDefIdr': "pacs.008.001.08",
             'NbOfTxs': "1",
@@ -221,8 +221,8 @@ class HTTPServerUnitTest(unittest.TestCase):
             'Dbtr_nm': "Naufal Afif",
             'DbtrAcct_value': '123456789',
             'DbtrAcct_type': 'SVGS',
-            'DbtrAgt': 'BANKDMY7',
-            'CdtrAgt': 'BANKDMY8',
+            'DbtrAgt': 'GNESIDJA',
+            'CdtrAgt': 'HNBNIDJA',
             'Cdtr_nm': 'Bunyamin',
             'CdtrAcct_value': '987654321'
         }
@@ -231,9 +231,9 @@ class HTTPServerUnitTest(unittest.TestCase):
     def creditTransferTestHandler(self):
         creditTransferRequestForm = {
             'Payment_url': '/CreditTransferOFI',
-            'Host_url': '10.170.137.115',
-            'Host_port': '18947',
-            'Fr': 'BANKDMY7',
+            'Host_url': '10.170.136.163',
+            'Host_port': '18939',
+            'Fr': 'GNESIDJA',
             'To': 'FASTIDJA',
             'MsgDefIdr': "pacs.008.001.08",
             "BizSvc": "BI",
@@ -250,8 +250,8 @@ class HTTPServerUnitTest(unittest.TestCase):
             'Dbtr_orgid': "PT. Abhimata Persada",
             'DbtrAcct_value': '123456789',
             'DbtrAcct_type': 'SVGS',
-            'DbtrAgt': 'BANKDMY7',
-            'CdtrAgt': 'BANKDMY8',
+            'DbtrAgt': 'GNESIDJA',
+            'CdtrAgt': 'HNBNIDJA',
             'Cdtr_nm': 'Bunyamin',
             'Cdtr_orgid': 'PT. Telkom Indonesia',
             'CdtrAcct_value': '987654321',
@@ -270,9 +270,9 @@ class HTTPServerUnitTest(unittest.TestCase):
             if result.get('txSts') == "ACTC":
                 time.sleep(15)
                 psrRequestForm = {
-                    'Host_url': '10.170.137.115',
-                    'Host_port': '18947',
-                    'Fr': 'BANKDMY7',
+                    'Host_url': '10.170.136.163',
+                    'Host_port': '18939',
+                    'Fr': 'GNESIDJA',
                     "OrgnlEndToEndId": result.get('endToEndId')
                 }
                 self.paymentStatusRequestTestHandler(psrRequestForm)
@@ -287,9 +287,9 @@ class HTTPServerUnitTest(unittest.TestCase):
     def creditTransferReversalTestHandler(self, rltdEndToEndId=None):
         creditTransferReversalRequestForm = {
             'Payment_url': '/CreditTransferReversalOFI',
-            'Host_url': '10.170.137.115',
-            'Host_port': '18948',
-            'Fr': 'BANKDMY8',
+            'Host_url': '10.170.136.163',
+            'Host_port': '18940',
+            'Fr': 'HNBNIDJA',
             'To': 'FASTIDJA',
             'MsgDefIdr': "pacs.008.001.08",
             "BizSvc": "BI",
@@ -306,8 +306,8 @@ class HTTPServerUnitTest(unittest.TestCase):
             'Cdtr_orgid': "PT. Abhimata Persada",
             'CdtrAcct_value': '123456789',
             'CdtrAcct_type': 'SVGS',
-            'DbtrAgt': 'BANKDMY8',
-            'CdtrAgt': 'BANKDMY7',
+            'DbtrAgt': 'HNBNIDJA',
+            'CdtrAgt': 'GNESIDJA',
             'Dbtr_nm': 'Bunyamin',
             'Dbtr_orgid': 'PT. Telkom Indonesia',
             'DbtrAcct_value': '987654321',
@@ -328,9 +328,9 @@ class HTTPServerUnitTest(unittest.TestCase):
             if result.get('txSts') == "ACTC":
                 time.sleep(15)
                 psrRequestForm = {
-                    'Host_url': '10.170.137.115',
-                    'Host_port': '18948',
-                    'Fr': 'BANKDMY8',
+                    'Host_url': '10.170.136.163',
+                    'Host_port': '18940',
+                    'Fr': 'HNBNIDJA',
                     "OrgnlEndToEndId": result.get('endToEndId')
                 }
                 self.paymentStatusRequestTestHandler(psrRequestForm)
@@ -344,9 +344,9 @@ class HTTPServerUnitTest(unittest.TestCase):
     def creditTransferProxyHandler(self):
         creditTransferRequestForm = {
             'Payment_url': '/CreditTransferOFI',
-            'Host_url': '10.170.137.115',
-            'Host_port': '18947',
-            'Fr': 'BANKDMY7',
+            'Host_url': '10.170.136.163',
+            'Host_port': '18939',
+            'Fr': 'GNESIDJA',
             'To': 'FASTIDJA',
             'MsgDefIdr': "pacs.008.001.08",
             "BizSvc": "BI",
@@ -363,8 +363,8 @@ class HTTPServerUnitTest(unittest.TestCase):
             'Dbtr_orgid': "PT. Abhimata Persada",
             'DbtrAcct_value': '123456789',
             'DbtrAcct_type': 'SVGS',
-            'DbtrAgt': 'BANKDMY7',
-            'CdtrAgt': 'BANKDMY8',
+            'DbtrAgt': 'GNESIDJA',
+            'CdtrAgt': 'HNBNIDJA',
             'Cdtr_nm': 'Bunyamin',
             'Cdtr_orgid': 'PT. Telkom Indonesia',
             'CdtrAcct_value': '987654321',
@@ -385,9 +385,9 @@ class HTTPServerUnitTest(unittest.TestCase):
             if result.get('txSts') == "ACTC":
                 time.sleep(15)
                 psrRequestForm = {
-                    'Host_url': '10.170.137.115',
-                    'Host_port': '18947',
-                    'Fr': 'BANKDMY7',
+                    'Host_url': '10.170.136.163',
+                    'Host_port': '18939',
+                    'Fr': 'GNESIDJA',
                     "OrgnlEndToEndId": result.get('endToEndId')
                 }
                 self.paymentStatusRequestTestHandler(psrRequestForm)
@@ -401,22 +401,22 @@ class HTTPServerUnitTest(unittest.TestCase):
     def proxyRegisterTestHandler(self):
         uniqueId = random.randint(10000, 99999)
         proxyRegisterRequestForm = {
-            'Host_url': '10.170.137.115',
-            'Host_port': '18948',
-            'Fr': 'BANKDMY8',
+            'Host_url': '10.170.136.163',
+            'Host_port': '18940',
+            'Fr': 'HNBNIDJA',
             'To': 'FASTIDJA',
             'MsgDefIdr': "prxy.001.001.01",
             "BizSvc": "BI",
             "CpyDplct": "CODU",
             "PssblDplct": False,
-            'MsgSndr_agt': "BANKDMY8",
+            'MsgSndr_agt': "HNBNIDJA",
             'MsgSndr_acct': f'312{uniqueId}',
             'RegnTp': 'NEWR',
             'Prxy_tp': '02',
             'Prxy_val': f'Proxy Value {uniqueId}',
             'DsplNm': f'Proxy Display Name {uniqueId}',
             'PrxyRegn_Agt_nm': 'PT. Abhimata Persada',
-            'PrxyRegn_Agt_id': 'BANKDMY8',
+            'PrxyRegn_Agt_id': 'HNBNIDJA',
             'PrxyRegn_acct': f'312{uniqueId}',
             'PrxyRegn_tp': 'CACC',
             'PrxyRegn_nm': f'Proxy Name {uniqueId}',
@@ -442,15 +442,15 @@ class HTTPServerUnitTest(unittest.TestCase):
 
     def proxyLookupTestHandler(self, form):
         proxyLookupRequestForm = {
-            'Host_url': '10.170.137.115',
-            'Host_port': '18948',
-            'Fr': 'BANKDMY8',
+            'Host_url': '10.170.136.163',
+            'Host_port': '18940',
+            'Fr': 'HNBNIDJA',
             'To': 'FASTIDJA',
             'MsgDefIdr': "prxy.003.001.01",
             "BizSvc": "BI",
             "CpyDplct": "CODU",
             "PssblDplct": False,
-            'MsgSndr_agt': "BANKDMY8",
+            'MsgSndr_agt': "HNBNIDJA",
             'MsgSndr_acct': form.get('MsgSndr_acct'),
             'PrxyOnly_LkUpTp': "PXRS",
             'PrxyRtrvl_tp': form.get('Prxy_tp'),
@@ -470,15 +470,15 @@ class HTTPServerUnitTest(unittest.TestCase):
     def proxyEnquiryTestHandler(self, form):
         time.sleep(10)
         proxyEnquiryRequestForm = {
-            'Host_url': '10.170.137.115',
-            'Host_port': '18948',
-            'Fr': 'BANKDMY8',
+            'Host_url': '10.170.136.163',
+            'Host_port': '18940',
+            'Fr': 'HNBNIDJA',
             'To': 'FASTIDJA',
             'MsgDefIdr': "prxy.005.001.01",
             "BizSvc": "BI",
             "CpyDplct": "CODU",
             "PssblDplct": False,
-            'MsgSndr_agt': "BANKDMY8",
+            'MsgSndr_agt': "HNBNIDJA",
             'MsgSndr_acct': form.get('MsgSndr_acct'),
             'ScndId_tp': form.get('ScndId_tp'),
             'ScndId_val': form.get('ScndId_val')
@@ -519,9 +519,9 @@ class HTTPServerUnitTest(unittest.TestCase):
 
         rfpAccountRequestForm = {
             'Payment_url': '/RequestForPayByAccountOFI',
-            'Host_url': '10.170.137.115',
-            'Host_port': '18947',
-            'Fr': 'BANKDMY7',
+            'Host_url': '10.170.136.163',
+            'Host_port': '18939',
+            'Fr': 'GNESIDJA',
             'To': 'FASTIDJA',
             'MsgDefIdr': "pain.013.001.08",
             "BizSvc": "BI",
@@ -535,11 +535,11 @@ class HTTPServerUnitTest(unittest.TestCase):
             'ReqdExctnDt': timestamp_formatted,
             'XpryDt': timestamp_future_formatted,
             'DbtrAcct_value': '123456789',
-            'DbtrAgt': 'BANKDMY8',
+            'DbtrAgt': 'HNBNIDJA',
             'InstdAmt_value': 853.01,
             'InstdAmt_ccy': "IDR",
             'ChrgBr': "DEBT",
-            'CdtrAgt': 'BANKDMY7',
+            'CdtrAgt': 'GNESIDJA',
             'Cdtr_orgid': 'PT. Telkom Indonesia',
             'CdtrAcct_value': '987654321',
             'CdtrAcct_type': 'SVGS',
@@ -554,9 +554,9 @@ class HTTPServerUnitTest(unittest.TestCase):
             if result.get('txSts') == "ACTC":
                 time.sleep(15)
                 psrRequestForm = {
-                    'Host_url': '10.170.137.115',
-                    'Host_port': '18947',
-                    'Fr': 'BANKDMY7',
+                    'Host_url': '10.170.136.163',
+                    'Host_port': '18939',
+                    'Fr': 'GNESIDJA',
                     "OrgnlEndToEndId": result.get('endToEndId')
                 }
                 self.paymentStatusRequestTestHandler(psrRequestForm)
@@ -574,15 +574,15 @@ class HTTPServerUnitTest(unittest.TestCase):
     def requestForPaymentAccountRejectTestHandler(self, form):
         rfpAccountRejectRequestForm = {
             'Payment_url': '/RequestForPayRejectByAccountOFI',
-            'Host_url': '10.170.137.115',
-            'Host_port': '18948',
-            'Fr': 'BANKDMY8',
+            'Host_url': '10.170.136.163',
+            'Host_port': '18940',
+            'Fr': 'HNBNIDJA',
             'To': 'FASTIDJA',
             'MsgDefIdr': "pain.014.001.08",
             "BizSvc": "BI",
             "CpyDplct": "CODU",
             "PssblDplct": False,
-            'CdtrAgt': "BANKDMY7",
+            'CdtrAgt': "GNESIDJA",
             "OrgnlMsgId": form.get('msgId'),
             "OrgnlMsgNmId": "pain.013.001.08",
             "OrgnlPmtInfId": form.get('msgId'),
@@ -595,9 +595,9 @@ class HTTPServerUnitTest(unittest.TestCase):
             if result.get('txSts') == "ACTC":
                 time.sleep(15)
                 psrRequestForm = {
-                    'Host_url': '10.170.137.115',
-                    'Host_port': '18948',
-                    'Fr': 'BANKDMY8',
+                    'Host_url': '10.170.136.163',
+                    'Host_port': '18940',
+                    'Fr': 'HNBNIDJA',
                     "OrgnlEndToEndId": form.get('endToEndId')
                 }
                 self.paymentStatusRequestTestHandler(psrRequestForm)
@@ -617,9 +617,9 @@ class HTTPServerUnitTest(unittest.TestCase):
 
         rfpProxyRequestForm = {
             'Payment_url': '/RequestForPayByProxyOFI',
-            'Host_url': '10.170.137.115',
-            'Host_port': '18947',
-            'Fr': 'BANKDMY7',
+            'Host_url': '10.170.136.163',
+            'Host_port': '18939',
+            'Fr': 'GNESIDJA',
             'To': 'FASTIDJA',
             'MsgDefIdr': "pain.013.001.08",
             "BizSvc": "BI",
@@ -635,11 +635,11 @@ class HTTPServerUnitTest(unittest.TestCase):
             'DbtrAcct_value': proxyForm.get('MsgSndr_acct'),
             'DbtrAcct_Prxy_tp': proxyForm.get('Prxy_tp'),
             'DbtrAcct_Prxy_id': proxyForm.get('Prxy_val'),
-            'DbtrAgt': 'BANKDMY8',
+            'DbtrAgt': 'HNBNIDJA',
             'InstdAmt_value': 851.01,
             'InstdAmt_ccy': "IDR",
             'ChrgBr': "DEBT",
-            'CdtrAgt': 'BANKDMY7',
+            'CdtrAgt': 'GNESIDJA',
             'Cdtr_orgid': 'PT. Telkom Indonesia',
             'CdtrAcct_value': '987654321',
             'CdtrAcct_type': 'SVGS',
@@ -654,9 +654,9 @@ class HTTPServerUnitTest(unittest.TestCase):
             if result.get('txSts') == "ACTC":
                 time.sleep(15)
                 psrRequestForm = {
-                    'Host_url': '10.170.137.115',
-                    'Host_port': '18947',
-                    'Fr': 'BANKDMY7',
+                    'Host_url': '10.170.136.163',
+                    'Host_port': '18939',
+                    'Fr': 'GNESIDJA',
                     "OrgnlEndToEndId": result.get('endToEndId')
                 }
                 self.paymentStatusRequestTestHandler(psrRequestForm)
@@ -673,15 +673,15 @@ class HTTPServerUnitTest(unittest.TestCase):
     def requestForPaymentProxyRejectTestHandler(self, form):
         rfpProxyRejectRequestForm = {
             'Payment_url': '/RequestForPayRejectByProxyOFI',
-            'Host_url': '10.170.137.115',
-            'Host_port': '18948',
-            'Fr': 'BANKDMY8',
+            'Host_url': '10.170.136.163',
+            'Host_port': '18940',
+            'Fr': 'HNBNIDJA',
             'To': 'FASTIDJA',
             'MsgDefIdr': "pain.014.001.08",
             "BizSvc": "BI",
             "CpyDplct": "CODU",
             "PssblDplct": False,
-            'CdtrAgt': "BANKDMY7",
+            'CdtrAgt': "GNESIDJA",
             "OrgnlMsgId": form.get('msgId'),
             "OrgnlMsgNmId": "pain.013.001.08",
             "OrgnlPmtInfId": form.get('msgId'),
@@ -695,9 +695,9 @@ class HTTPServerUnitTest(unittest.TestCase):
             if result.get('txSts') == "ACTC":
                 time.sleep(15)
                 psrRequestForm = {
-                    'Host_url': '10.170.137.115',
-                    'Host_port': '18948',
-                    'Fr': 'BANKDMY8',
+                    'Host_url': '10.170.136.163',
+                    'Host_port': '18940',
+                    'Fr': 'HNBNIDJA',
                     "OrgnlEndToEndId": form.get('endToEndId')
                 }
                 self.paymentStatusRequestTestHandler(psrRequestForm)
@@ -712,9 +712,9 @@ class HTTPServerUnitTest(unittest.TestCase):
     def creditTransferRFPTestHandler(self, rfpForm, rfpResult):
         ctRFPRequestForm = {
             'Payment_url': '/CreditTransferRFPOFI',
-            'Host_url': '10.170.137.115',
-            'Host_port': '18948',
-            'Fr': 'BANKDMY8',
+            'Host_url': '10.170.136.163',
+            'Host_port': '18940',
+            'Fr': 'HNBNIDJA',
             'To': 'FASTIDJA',
             'MsgDefIdr': "pacs.008.001.08",
             "BizSvc": "BI",
@@ -752,9 +752,9 @@ class HTTPServerUnitTest(unittest.TestCase):
             if result.get('txSts') == "ACTC":
                 time.sleep(15)
                 psrRequestForm = {
-                    'Host_url': '10.170.137.115',
-                    'Host_port': '18948',
-                    'Fr': 'BANKDMY8',
+                    'Host_url': '10.170.136.163',
+                    'Host_port': '18940',
+                    'Fr': 'HNBNIDJA',
                     "OrgnlEndToEndId": result.get('endToEndId')
                 }
                 self.paymentStatusRequestTestHandler(psrRequestForm)
@@ -780,9 +780,9 @@ class HTTPServerUnitTest(unittest.TestCase):
     def eMandateRegistrationByCreditingTest(self):
         mandateRegistRequestForm = {
             'Payment_url': '/MandateRegistByCreditOFI',
-            'Host_url': '10.170.137.115',
-            'Host_port': '18947',
-            'Fr': 'BANKDMY7',
+            'Host_url': '10.170.136.163',
+            'Host_port': '18939',
+            'Fr': 'GNESIDJA',
             'To': 'FASTIDJA',
             'Payment_type': '802',
             'MsgDefIdr': "pain.009.001.06",
@@ -806,28 +806,28 @@ class HTTPServerUnitTest(unittest.TestCase):
             'MaxAmt_ccy': "IDR",
             'MaxAmt_value': "13001.01",
             'Rsn':  "Credit Pay Insurance",
-            'Cdtr_nm': "PT. Bank Dummy 7",
-            'Cdtr_orgid': "BANKDMY7_MERCH_100",
-            'CdtrAcct_id': "12345677789",
+            'Cdtr_nm': "TELKOM INDONESIA Super",
+            'Cdtr_orgid': "GNESIDJA_MERCH_999",
+            'CdtrAcct_id': "9479638523",
             'CdtrAcct_tp': "CACC",
-            'CdtrAcct_nm': "Dummy Account 7",
-            'CdtrAgt': "BANKDMY7",
+            'CdtrAcct_nm': "Telkom Indonesia",
+            'CdtrAgt': "GNESIDJA",
             'Dbtr_nm': "PT. Pypoh",
             'Dbtr_prvtid': "3171234567890",
             'DbtrAcct_id': "12347856999",
             'DbtrAcct_tp': "SVGS",
             'DbtrAcct_nm': "Naufal Afif",
-            'DbtrAgt': "BANKDMY8",
-            'CdtrRef': "BANKDMY7_MERCH_100"
+            'DbtrAgt': "HNBNIDJA",
+            'CdtrRef': "GNESIDJA_MERCH_999"
         }
         result = self.requestHandler(mandateRegistRequestForm)
         time.sleep(15)
         try:
             if result.get('txSts') == "ACTC":
                 mandateEnquiryRequestForm = {
-                    'Host_url': '10.170.137.115',
-                    'Host_port': '18947',
-                    'Fr': 'BANKDMY7',
+                    'Host_url': '10.170.136.163',
+                    'Host_port': '18939',
+                    'Fr': 'GNESIDJA',
                     "MndtId": result.get('mndtId'),
                     "CtgyPurp": "802",  # TODO: Change later to dynamic
                     # "CtgyPurp": mandateRegistRequestForm.get('CtgyPurp'),
@@ -849,20 +849,20 @@ class HTTPServerUnitTest(unittest.TestCase):
     def eMandateApproveByCreditingTest(self, mandateResultForm):
         # Mandate Enquiry to get mandate info
         mandateEnquiryRequestForm = {
-            'Host_url': '10.170.137.115',
-            'Host_port': '18948',
-            'Fr': 'BANKDMY8',
+            'Host_url': '10.170.136.163',
+            'Host_port': '18940',
+            'Fr': 'HNBNIDJA',
             "MndtId": mandateResultForm.get('mndtId'),
             "CtgyPurp": "802",  # TODO: Change later to dynamic
             # "CtgyPurp": mandateRegistRequestForm.get('CtgyPurp'),
-            "DbtrAgt": "BANKDMY7"  # TODO: Change later
+            "DbtrAgt": "GNESIDJA"  # TODO: Change later
         }
         mandate = self.eMandateEnquiryByMandateID(mandateEnquiryRequestForm)
         mandateApproveRequestForm = {
             'Payment_url': '/MandateApprovalByCreditOFI',
-            'Host_url': '10.170.137.115',
-            'Host_port': '18948',
-            'Fr': 'BANKDMY8',
+            'Host_url': '10.170.136.163',
+            'Host_port': '18940',
+            'Fr': 'HNBNIDJA',
             'To': 'FASTIDJA',
             'Payment_type': '803',
             'MsgDefIdr': "pain.012.001.06",
@@ -893,9 +893,9 @@ class HTTPServerUnitTest(unittest.TestCase):
         try:
             if result.get('txSts') == "ACTC":
                 mandateEnquiryRequestForm = {
-                    'Host_url': '10.170.137.115',
-                    'Host_port': '18948',
-                    'Fr': 'BANKDMY8',
+                    'Host_url': '10.170.136.163',
+                    'Host_port': '18940',
+                    'Fr': 'HNBNIDJA',
                     "MndtId": mandateResultForm.get('mndtId'),
                     "CtgyPurp": "802",
                     # "CtgyPurp": mandateRegistRequestForm.get('CtgyPurp'),
@@ -915,21 +915,21 @@ class HTTPServerUnitTest(unittest.TestCase):
     def eMandateAmendmentByCreditingTest(self, mandateForm):
         # Mandate Enquiry to get mandate info
         mandateEnquiryRequestForm = {
-            'Host_url': '10.170.137.115',
-            'Host_port': '18947',
-            'Fr': 'BANKDMY7',
+            'Host_url': '10.170.136.163',
+            'Host_port': '18939',
+            'Fr': 'GNESIDJA',
             "MndtId": mandateForm.get('mndtId'),
             "CtgyPurp": "802",  # TODO: Change later to dynamic
             # "CtgyPurp": mandateRegistRequestForm.get('CtgyPurp'),
-            "DbtrAgt": "BANKDMY8"  # TODO: Change later
+            "DbtrAgt": "HNBNIDJA"  # TODO: Change later
         }
         mandate = self.eMandateEnquiryByMandateID(mandateEnquiryRequestForm)
 
         mandateAmendRequestForm = {
             'Payment_url': '/MandateAmendByCreditOFI',
-            'Host_url': '10.170.137.115',
-            'Host_port': '18947',
-            'Fr': 'BANKDMY7',
+            'Host_url': '10.170.136.163',
+            'Host_port': '18939',
+            'Fr': 'GNESIDJA',
             'To': 'FASTIDJA',
             'Payment_type': '761',
             'MsgDefIdr': "pain.010.001.06",
@@ -1013,9 +1013,9 @@ class HTTPServerUnitTest(unittest.TestCase):
         try:
             if result.get('txSts') == "ACTC":
                 mandateEnquiryRequestForm = {
-                    'Host_url': '10.170.137.115',
-                    'Host_port': '18947',
-                    'Fr': 'BANKDMY7',
+                    'Host_url': '10.170.136.163',
+                    'Host_port': '18939',
+                    'Fr': 'GNESIDJA',
                     "MndtId": mandate.get('MndtId'),
                     "CtgyPurp": "761",  # TODO: Change later to dynamic
                     # "CtgyPurp": mandateAmendRequestForm.get('CtgyPurp'),
@@ -1037,20 +1037,20 @@ class HTTPServerUnitTest(unittest.TestCase):
     def eMandateAmendApproveByCreditingTest(self, mandateForm):
         # Mandate Enquiry to get mandate info
         mandateEnquiryRequestForm = {
-            'Host_url': '10.170.137.115',
-            'Host_port': '18948',
-            'Fr': 'BANKDMY8',
+            'Host_url': '10.170.136.163',
+            'Host_port': '18940',
+            'Fr': 'HNBNIDJA',
             "MndtId": mandateForm.get('mndtId'),
             "CtgyPurp": "761",  # TODO: Change later to dynamic
             # "CtgyPurp": mandateRegistRequestForm.get('CtgyPurp'),
-            "DbtrAgt": "BANKDMY8"  # TODO: Change later
+            "DbtrAgt": "HNBNIDJA"  # TODO: Change later
         }
         mandate = self.eMandateEnquiryByMandateID(mandateEnquiryRequestForm)
         mandateApproveRequestForm = {
             'Payment_url': '/MandateApprovalByCreditOFI',
-            'Host_url': '10.170.137.115',
-            'Host_port': '18948',
-            'Fr': 'BANKDMY8',
+            'Host_url': '10.170.136.163',
+            'Host_port': '18940',
+            'Fr': 'HNBNIDJA',
             'To': 'FASTIDJA',
             'Payment_type': '771',
             'MsgDefIdr': "pain.012.001.06",
@@ -1081,9 +1081,9 @@ class HTTPServerUnitTest(unittest.TestCase):
         try:
             if result.get('txSts') == "ACTC":
                 mandateEnquiryRequestForm = {
-                    'Host_url': '10.170.137.115',
-                    'Host_port': '18948',
-                    'Fr': 'BANKDMY8',
+                    'Host_url': '10.170.136.163',
+                    'Host_port': '18940',
+                    'Fr': 'HNBNIDJA',
                     "MndtId": mandateForm.get('mndtId'),
                     "CtgyPurp": "761",
                     # "CtgyPurp": mandateRegistRequestForm.get('CtgyPurp'),
@@ -1098,6 +1098,7 @@ class HTTPServerUnitTest(unittest.TestCase):
             print("Attribute that caused the error:", e.args[0])
             print("Error message:", e)
             print("Full traceback:", e.__traceback__)
+
 
 
 if __name__ == '__main__':
