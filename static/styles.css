@@ -60,6 +60,7 @@ body {
 
 .console-window {
   width: 600px;
+  max-height: 50%;
   background-color: #f0f0f0;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -80,7 +81,6 @@ body {
 
 .console-content {
   padding: 10px;
-  max-height: 250px;
   overflow-y: auto;
   font-family: monospace;
   white-space: pre-wrap;
@@ -94,6 +94,7 @@ body {
   gap: 20px; /* Add spacing between the cards */
   flex-direction: column;
   width: 400px;
+  position: relative;
 }
 
 .card {
@@ -101,7 +102,8 @@ body {
   background-color: #f0f0f0;
   border: 1px solid #ccc;
   border-radius: 4px;
-  padding: 20px;
+  padding: 12px;
+  position: relative;
 }
 
 /* Style the card heading and content as desired */
@@ -113,4 +115,26 @@ body {
 .card p {
   font-size: 14px;
   color: #555;
+}
+
+.card-checkbox {
+  /* Add styles for the checkbox */
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.checkbox-header {
+  width: 400px;
+  display: flex;
+  align-items: center; /* Align elements vertically at the center */
+}
+
+.transaction-checkbox {
+  margin-right: 10px; /* Adjust the spacing between checkbox and heading */
+}
+
+.checkbox-header button {
+  padding: 10px;
+  margin-left: auto; /* Push the button to the right by consuming all available space */
 }

@@ -212,6 +212,7 @@ class HTTPServerUnitTest(unittest.TestCase):
             'Fr': 'BANKDMY7',
             'To': 'FASTIDJA',
             'MsgDefIdr': "pacs.008.001.08",
+            'Payment_type': '510',
             'NbOfTxs': "1",
             'SttlmMtd': "CLRG",
             'CtgyPurp': "51001",

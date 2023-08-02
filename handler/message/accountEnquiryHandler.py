@@ -14,27 +14,27 @@ def requestMessage(requestData):
     filePath = os.path.join(
         current_app.config["FORMAT_PATH"], 'pacs.008.001.10_AccountEnquiry.json')
 
-    generatedBizMsgIdr = handler.generateBizMsgIdr(requestData.get('Fr'), "510")
-    generatedMsgId = handler.generateMsgId(requestData.get('Fr'), "510")
+    generatedBizMsgIdr = handler.generateBizMsgIdr(requestData.get('Fr'), requestData.get('Payment_type') or "510")
+    generatedMsgId = handler.generateMsgId(requestData.get('Fr'), requestData.get('Payment_type') or "510")
 
     with open(filePath, 'r') as file:
         template_data = json.load(file)
         value_dict = {
             "FR_BIC_VALUE": requestData.get('Fr'),
-            "TO_BIC_VALUE": requestData.get('To'),
+            "TO_BIC_VALUE": requestData.get('To') or "FASTIDJA",
             "BIZ_MSG_IDR_VALUE": generatedBizMsgIdr,
-            "MSG_DEF_IDR_VALUE": requestData.get('MsgDefIdr'),
+            "MSG_DEF_IDR_VALUE": requestData.get('MsgDefIdr') or "pacs.008.001.08",
             "CRE_DT_VALUE": handler.getCreDt(),
             "MSG_ID_VALUE": generatedMsgId,
             "CRE_DT_TM_VALUE": handler.getCreDtTm(),
-            "NM_OF_TXS_VALUE": requestData.get('NbOfTxs'),
-            "STTLMTD_VALUE": requestData.get('SttlmMtd'),
+            "NM_OF_TXS_VALUE": requestData.get('NbOfTxs') or "1",
+            "STTLMTD_VALUE": requestData.get('SttlmMtd') or "CLRG",
             "END_TO_END_ID_VALUE": generatedBizMsgIdr,
             "TX_ID_VALUE": generatedMsgId,
-            "PMT_TP_INF_CTGYPURP_VALUE": requestData.get('CtgyPurp'),
+            "PMT_TP_INF_CTGYPURP_VALUE": requestData.get('CtgyPurp') or "51001",
             "INTR_BK_STTLM_AMT_VALUE": requestData.get('IntrBkSttlmAmt_value'),
-            "INTR_BK_STTLM_CCY_VALUE": requestData.get('IntrBkSttlmAmt_ccy'),
-            "CHRGBR_VALUE": requestData.get('ChrgBr'),
+            "INTR_BK_STTLM_CCY_VALUE": requestData.get('IntrBkSttlmAmt_ccy') or "IDR",
+            "CHRGBR_VALUE": requestData.get('ChrgBr') or "DEBT",
             "DBTR_NM_VALUE": requestData.get('Dbtr_nm'),
             "DBTR_ACCT_VALUE": requestData.get('DbtrAcct_value'),
             "DBTR_ACCT_TP_VALUE": requestData.get('DbtrAcct_type'),
@@ -47,10 +47,10 @@ def requestMessage(requestData):
 
     filled_data = handler.replace_placeholders(template_data, value_dict)
 
-    filled_data["BusMsg"]["Document"]["FIToFICstmrCdtTrf"]["CdtTrfTxInf"][0]["IntrBkSttlmAmt"]["value"] = 123.12
+    filled_data["BusMsg"]["Document"]["FIToFICstmrCdtTrf"]["CdtTrfTxInf"][0]["IntrBkSttlmAmt"]["value"] = float(requestData.get('IntrBkSttlmAmt_value'))
     # json_data = json.dumps(filled_data, indent=None)
 
-    # print(filled_data, file=sys.stderr)
+    # print(f"Request Data to Connector: {filled_data}")
 
     headers = {
         "Content-Type": "application/json",

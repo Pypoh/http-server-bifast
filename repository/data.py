@@ -1,0 +1,30 @@
+sampleData = {
+    'HOST_URL': '10.170.137.115',
+    'HOST_PORT': '18947',
+    'DBTRAGT': 'BANKDMY7',
+    'DBTR_NM': "Naufal Afif",
+    'DBTR_ORGID': 'PT. Bunyamin',
+    'DBTRACCT_VALUE': '123456789',
+    'DBTRACCT_TYPE': 'SVGS',
+    'CDTRAGT': 'BANKDMY8',
+    'CDTR_NM': 'Bunyamin',
+    'CDTR_ORGID': 'PT. Pypoh',
+    'CDTRACCT_VALUE': '987654321',
+    'CDTRACCT_TYPE': 'CACC',
+}
+
+masterData = {
+    # 'Payment_url': '/AccountEnquiryOFI',
+    'Host_url': '10.170.137.115',
+    'Host_port': '18947',
+    # 'Fr': 'BANKDMY7',
+    # 'IntrBkSttlmAmt_value': 123.12,
+    'Dbtr_nm': "Naufal Afif",
+    'DbtrAcct_value': '123456789',
+    'DbtrAcct_type': 'SVGS',
+    'DbtrAgt': 'BANKDMY7',
+    'CdtrAgt': 'BANKDMY8',
+    'Cdtr_nm': 'Bunyamin',
+    'CdtrAcct_value': '987654321',
+    'CdtrAcct_type': 'CACC',
+}

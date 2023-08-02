@@ -24,7 +24,11 @@
     <!-- Main Content -->
     <div class="main-content">
       <!-- <button class="open-btn" onclick="openDrawer()">☰ Open</button> -->
-      <h1>Welcome to My Website</h1>
+      <div class="checkbox-header">
+        <input type="checkbox" class="transaction-checkbox" onchange="checkAllCards(this)"/>
+        <h2>Select All Transaction</h2>
+        <button class="transaction-button" onclick="sendMultipleRequests()">Fire</button>
+      </div>
 
       <!-- Card List -->
       <div class="card-list">
@@ -32,26 +36,22 @@
         <div class="card" onclick="handleCardClick('{{ card.title }}')">
           <h2>{{ card.title }}</h2>
           <p>{{ card.content }}</p>
+          <input type="checkbox" class="card-checkbox" />
         </div>
         {% endfor %}
       </div>
-    </div>
 
-    <!-- Console-like Windows -->
-    <div class="console-container">
-      <div class="console-window" id="console-1">
-        <div class="console-header">Console 1</div>
-        <div class="console-content" id="console-content-1">
-          <!-- Console 1 content goes here -->
+      <!-- <div class="console-container">
+        <div class="console-window" id="console-1">
+          <div class="console-header">Console 1</div>
+          <div class="console-content" id="console-content-1"></div>
+        </div>
+        <div class="console-window" id="console-2">
+          <div class="console-header">Console 2</div>
+          <div class="console-content" id="console-content-2"></div>
         </div>
       </div>
-      <div class="console-window" id="console-2">
-        <div class="console-header">Console 2</div>
-        <div class="console-content" id="console-content-2">
-          <!-- Console 2 content goes here -->
-        </div>
-      </div>
-    </div>
+    </div> -->
 
     <script src="{{ url_for('static', filename='script.js') }}"></script>
   </body>
