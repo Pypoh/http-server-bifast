@@ -1,0 +1,33 @@
+Account Enquiry
+Credit Transfer 
+Credit Transfer Reversal - need ct
+
+Credit Transfer Proxy - need proxy
+
+PSR CT - can psr from history
+
+Request for Payment by Account
+Request for Payment Rejection by Account
+Request for Payment by Proxy
+Request for Payment Rejection by Proxy
+Credit Transfer RFP
+E-Mandate Registration by Crediting
+E-Mandate Registration by Debiting
+E-Mandate Approval by Crediting
+E-Mandate Approval by Debiting
+E-Mandate Amendment by Crediting
+E-Mandate Amendment by Debiting
+E-Mandate Amendment Approval by Crediting
+E-Mandate Amendment Approval by Debiting
+E-Mandate Termination by Crediting
+E-Mandate Termintation by Debiting
+E-Mandate Enquiry by EndToEndId
+E-Mandate Enquiry by MandateID
+Direct Debit
+PSR Direct Debit
+
+Proxy Registration
+Proxy Resolution - need proxy
+Proxy Enquiry - need proxy
+Proxy Porting - need proxy
+Proxy Deactivate - need proxy

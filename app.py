@@ -1,23 +1,25 @@
 from blueprints.RequestForPayment import requestForPaymentBlueprint
 from flask import Flask, request, render_template, jsonify
-import handler.general as handler
-import handler.message.accountEnquiryHandler as accountEnquiryHandler
-import handler.message.creditTransferHandler as creditTransferHandler
-import handler.message.creditTransferReversalHandler as creditTransferReversalHandler
-import handler.message.creditTransferProxyHandler as creditTransferProxyHandler
-import handler.message.paymentStatusReportHandler as paymentStatusReportHandler
-import handler.message.proxyHandler as proxyHandler
-import handler.message.requestForPaymentHandler as requestForPaymentHandler
-import handler.message.requestForPaymentRejectHandler as requestForPaymentRejectHandler
-import handler.message.creditTransferRFPHandler as creditTransferRFPHandler
-import handler.message.mandateRegistHandler as mandateRegistHandler
-import handler.message.mandateApprovalHandler as mandateApprovalHandler
-import handler.message.mandateAmendHandler as mandateAmendHandler
+from config import serverConfig
+from handler import general as handler
+from handler.message import (
+    accountEnquiryHandler,
+    creditTransferHandler,
+    creditTransferReversalHandler,
+    creditTransferProxyHandler,
+    paymentStatusReportHandler,
+    proxyHandler,
+    requestForPaymentHandler,
+    requestForPaymentRejectHandler,
+    creditTransferRFPHandler,
+    mandateRegistHandler,
+    mandateApprovalHandler,
+    mandateAmendHandler
+)
+from repository import data as dataDictionary
 import os
 import json
-import config.serverConfig as serverConfig
-
-import repository.data as dataDictionary
+import requests
 
 app = Flask(__name__, template_folder="templates")
 app.register_blueprint(requestForPaymentBlueprint)
@@ -76,8 +78,6 @@ def index():
     return render_template('home.html', cards=cards)
 
 # Account Enquiry
-
-
 @app.route('/AccountEnquiryOFI', methods=['POST'])
 def aeHandlerOFI():
     if request.method == 'POST':
@@ -103,120 +103,96 @@ def aeHandlerOFI():
 #         return accountEnquiryHandler.generateResponse(request.json)
 
 # Credit Transfer
-
-
 @app.route('/CreditTransferOFI', methods=['POST'])
 def ctHandlerOFI():
     if request.method == 'POST':
-        return creditTransferHandler.requestMessage(request.form)
+
+        # TODO: save to db
+
+        return creditTransferHandler.requestMessage()
 
 # Credit Transfer Reversal
-
-
 @app.route('/CreditTransferReversalOFI', methods=['POST'])
 def ctreverseHandlerOFI():
     if request.method == 'POST':
-        return creditTransferReversalHandler.requestMessage(request.form)
+        ct_response = requests.post(
+            f'http://{serverConfig.SERVER_URL_VALUE}:{serverConfig.SERVER_PORT_VALUE}/CreditTransferOFI')
+
+        return creditTransferReversalHandler.requestMessage(ct_response)
 
 # Credit Transfer
-
-
 @app.route('/CreditTransferProxyOFI', methods=['POST'])
 def ctproxyHandlerOFI():
     if request.method == 'POST':
         return creditTransferProxyHandler.requestMessage()
 
 # PSR CT
-
-
 @app.route('/PaymentStatusOFI', methods=['POST'])
 def psrctHandlerOFI():
     if request.method == 'POST':
         return paymentStatusReportHandler.requestMessagePSR(request.form)
 
 # Proxy Registration
-
-
 @app.route('/ProxyRegistrationOFI', methods=['POST'])
 def proxyregistHandlerOFI():
     if request.method == 'POST':
         return proxyHandler.requestMessageRegistration(request.form)
 
 # Proxy Porting
-
-
 @app.route('/ProxyPortingOFI', methods=['POST'])
 def proxyportingHandlerOFI():
     if request.method == 'POST':
         return proxyHandler.requestMessagePorting(request.form)
 
 # Proxy Lookup
-
-
 @app.route('/ProxyLookupOFI', methods=['POST'])
 def proxylookupHandlerOFI():
     if request.method == 'POST':
         return proxyHandler.requestMessageLookup(request.form)
 
 # Proxy Enquiry
-
-
 @app.route('/ProxyEnquiryOFI', methods=['POST'])
 def proxyenquiryHandlerOFI():
     if request.method == 'POST':
         return proxyHandler.requestMessageEnquiry(request.form)
 
 # Proxy Deactivate
-
-
 @app.route('/ProxyDeactivateOFI', methods=['POST'])
 def prpxydeactivateHandlerOFI():
     if request.method == 'POST':
         return proxyHandler.requestMessage(request.form)
 
 # Request For Payment
-
-
 @app.route('/RequestForPayByAccountOFI', methods=['POST'])
 def rfpaccountHandlerOFI():
     if request.method == 'POST':
-        return requestForPaymentHandler.requestMessageByAccount(request.form)
+        return requestForPaymentHandler.requestMessage()
 
 # Request For Payment
-
-
 @app.route('/RequestForPayByProxyOFI', methods=['POST'])
 def rfpproxyHandlerOFI():
     if request.method == 'POST':
-        return requestForPaymentHandler.requestMessageByProxy(request.form)
+        return requestForPaymentHandler.requestMessage(True)
 
 # Request For Payment Rejection
-
-
 @app.route('/RequestForPayRejectByAccountOFI', methods=['POST'])
 def rfprejectaccountHandlerOFI():
     if request.method == 'POST':
         return requestForPaymentRejectHandler.requestMessageByAccount(request.form)
 
 # Request For Payment Rejection
-
-
 @app.route('/RequestForPayRejectByProxyOFI', methods=['POST'])
 def rfprejectproxyHandlerOFI():
     if request.method == 'POST':
         return requestForPaymentRejectHandler.requestMessageByProxy(request.form)
 
 # Credit Transfer RFP
-
-
 @app.route('/CreditTransferRFPOFI', methods=['POST'])
 def ctrfpHandlerOFI():
     if request.method == 'POST':
         return creditTransferRFPHandler.requestMessage(request.form)
 
 # E-Mandate Registration by Crediting
-
-
 @app.route('/MandateRegistByCreditOFI', methods=['POST'])
 def mandateRegistByCreditingHandlerOFI():
     if request.method == 'POST':
@@ -229,8 +205,6 @@ def mandateRegistByCreditingHandlerOFI():
 #         return requestForPaymentHandler.requestMessage()
 
 # E-Mandate Approval by Crediting
-
-
 @app.route('/MandateApprovalByCreditOFI', methods=['POST'])
 def mandateApprovalByCreditingHandlerOFI():
     if request.method == 'POST':
@@ -243,8 +217,6 @@ def mandateApprovalByCreditingHandlerOFI():
 #         return requestForPaymentHandler.requestMessage()
 
 # E-Mandate Amendment by Crediting
-
-
 @app.route('/MandateAmendByCreditOFI', methods=['POST'])
 def mandateAmendByCreditingHandlerOFI():
     if request.method == 'POST':
@@ -287,8 +259,6 @@ def mandateAmendByCreditingHandlerOFI():
 #         return requestForPaymentHandler.requestMessage()
 
 # E-Mandate Enquiry by MandateID
-
-
 @app.route('/MandateEnquiry', methods=['POST'])
 def mandateEnquiryHandlerOFI():
     if request.method == 'POST':

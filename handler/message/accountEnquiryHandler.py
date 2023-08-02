@@ -6,65 +6,89 @@ import json
 import os
 import sys
 
+import repository.data as generalData
+import repository.payment as paymentData
+
 from config.bankConfig import BANK_CODE_VALUE, HUB_CODE_VALUE, RFI_BANK_CODE_VALUE
 from config.serverConfig import SCHEME_VALUE, HOST_URL_VALUE, HOST_PORT_VALUE
 
 
 def requestMessage(requestData):
-    filePath = os.path.join(
-        current_app.config["FORMAT_PATH"], 'pacs.008.001.10_AccountEnquiry.json')
+    # Construct file path
+    template_filename = 'pacs.008.001.10_AccountEnquiry.json'
+    file_path = os.path.join(
+        current_app.config["FORMAT_PATH"], template_filename)
 
-    generatedBizMsgIdr = handler.generateBizMsgIdr(requestData.get('Fr'), requestData.get('Payment_type') or "510")
-    generatedMsgId = handler.generateMsgId(requestData.get('Fr'), requestData.get('Payment_type') or "510")
+    # Generate unique IDs
+    payment_type = paymentData.creditTransfer.get('PAYMENT_TYPE')
+    dbtr_agt = generalData.sampleData.get('DBTRAGT')
+    generated_biz_msg_idr = handler.generateBizMsgIdr(dbtr_agt, payment_type)
+    generated_msg_id = handler.generateMsgId(dbtr_agt, payment_type)
 
-    with open(filePath, 'r') as file:
+    unique_id = {
+        "BIZ_MSG_IDR_VALUE": generated_biz_msg_idr,
+        "MSG_ID_VALUE": generated_msg_id,
+        "END_TO_END_ID_VALUE": generated_biz_msg_idr,
+        "TX_ID_VALUE": generated_msg_id,
+    }
+
+    # Load template data
+    with open(file_path, 'r') as file:
         template_data = json.load(file)
-        value_dict = {
-            "FR_BIC_VALUE": requestData.get('Fr'),
-            "TO_BIC_VALUE": requestData.get('To') or "FASTIDJA",
-            "BIZ_MSG_IDR_VALUE": generatedBizMsgIdr,
-            "MSG_DEF_IDR_VALUE": requestData.get('MsgDefIdr') or "pacs.008.001.08",
-            "CRE_DT_VALUE": handler.getCreDt(),
-            "MSG_ID_VALUE": generatedMsgId,
-            "CRE_DT_TM_VALUE": handler.getCreDtTm(),
-            "NM_OF_TXS_VALUE": requestData.get('NbOfTxs') or "1",
-            "STTLMTD_VALUE": requestData.get('SttlmMtd') or "CLRG",
-            "END_TO_END_ID_VALUE": generatedBizMsgIdr,
-            "TX_ID_VALUE": generatedMsgId,
-            "PMT_TP_INF_CTGYPURP_VALUE": requestData.get('CtgyPurp') or "51001",
-            "INTR_BK_STTLM_AMT_VALUE": requestData.get('IntrBkSttlmAmt_value'),
-            "INTR_BK_STTLM_CCY_VALUE": requestData.get('IntrBkSttlmAmt_ccy') or "IDR",
-            "CHRGBR_VALUE": requestData.get('ChrgBr') or "DEBT",
-            "DBTR_NM_VALUE": requestData.get('Dbtr_nm'),
-            "DBTR_ACCT_VALUE": requestData.get('DbtrAcct_value'),
-            "DBTR_ACCT_TP_VALUE": requestData.get('DbtrAcct_type'),
-            "DBTR_AGT_VALUE": requestData.get('DbtrAgt'),
-            "CDTR_AGT_VALUE": requestData.get('CdtrAgt'),
-            "CDTR_NM_VALUE": requestData.get('Cdtr_nm'),
-            "CDTR_ACCT_VALUE": requestData.get('CdtrAcct_value'),
-        }
-    # jsonResponse = Response(json_data, content_type='application/json')
 
+    # Create value dictionary for placeholders
+    value_dict = {
+        **unique_id,
+        **paymentData.base,
+        **paymentData.accountEnquiry,
+        **paymentData.cdtrData,
+        **paymentData.dbtrData,
+        **paymentData.splmtryData
+    }
+
+    # with open(filePath, 'r') as file:
+    #     template_data = json.load(file)
+    #     value_dict = {
+    #         "FR_BIC_VALUE": requestData.get('Fr'),
+    #         "TO_BIC_VALUE": requestData.get('To') or "FASTIDJA",
+    #         "BIZ_MSG_IDR_VALUE": generatedBizMsgIdr,
+    #         "MSG_DEF_IDR_VALUE": requestData.get('MsgDefIdr') or "pacs.008.001.08",
+    #         "CRE_DT_VALUE": handler.getCreDt(),
+    #         "MSG_ID_VALUE": generatedMsgId,
+    #         "CRE_DT_TM_VALUE": handler.getCreDtTm(),
+    #         "NM_OF_TXS_VALUE": requestData.get('NbOfTxs') or "1",
+    #         "STTLMTD_VALUE": requestData.get('SttlmMtd') or "CLRG",
+    #         "END_TO_END_ID_VALUE": generatedBizMsgIdr,
+    #         "TX_ID_VALUE": generatedMsgId,
+    #         "PMT_TP_INF_CTGYPURP_VALUE": requestData.get('CtgyPurp') or "51001",
+    #         "INTR_BK_STTLM_AMT_VALUE": requestData.get('IntrBkSttlmAmt_value'),
+    #         "INTR_BK_STTLM_CCY_VALUE": requestData.get('IntrBkSttlmAmt_ccy') or "IDR",
+    #         "CHRGBR_VALUE": requestData.get('ChrgBr') or "DEBT",
+    #         "DBTR_NM_VALUE": requestData.get('Dbtr_nm'),
+    #         "DBTR_ACCT_VALUE": requestData.get('DbtrAcct_value'),
+    #         "DBTR_ACCT_TP_VALUE": requestData.get('DbtrAcct_type'),
+    #         "DBTR_AGT_VALUE": requestData.get('DbtrAgt'),
+    #         "CDTR_AGT_VALUE": requestData.get('CdtrAgt'),
+    #         "CDTR_NM_VALUE": requestData.get('Cdtr_nm'),
+    #         "CDTR_ACCT_VALUE": requestData.get('CdtrAcct_value'),
+    #     }
+
+    # Replace placeholders in template data
     filled_data = handler.replace_placeholders(template_data, value_dict)
+    filled_data["BusMsg"]["Document"]["FIToFICstmrCdtTrf"]["CdtTrfTxInf"][0]["IntrBkSttlmAmt"]["value"] = float(
+        value_dict.get('INTR_BK_STTLM_AMT_VALUE'))
+    filled_data["BusMsg"]["AppHdr"]["PssblDplct"] = False
 
-    filled_data["BusMsg"]["Document"]["FIToFICstmrCdtTrf"]["CdtTrfTxInf"][0]["IntrBkSttlmAmt"]["value"] = float(requestData.get('IntrBkSttlmAmt_value'))
-    # json_data = json.dumps(filled_data, indent=None)
-
-    # print(f"Request Data to Connector: {filled_data}")
-
+    # Prepare headers
     headers = {
         "Content-Type": "application/json",
-        "Content-Length": str(filled_data),
+        "Content-Length": str(len(json.dumps(filled_data))),
         "message": "/FIToFICustomerCreditTransferV08"
     }
 
-    response = requests.post(
-        f"{SCHEME_VALUE}{requestData.get('Host_url')}:{requestData.get('Host_port')}", json=filled_data, headers=headers)
-
-    # if response.status_code == 200:
-    #     return 'POST request sent successfully!'
-    # else:
-    #     return 'Failed to send POST request.'
+    # Send POST request
+    host_url = f"{SCHEME_VALUE}{generalData.sampleData.get('HOST_URL')}:{generalData.sampleData.get('HOST_PORT')}"
+    response = requests.post(host_url, json=filled_data, headers=headers)
 
     return response.text
 

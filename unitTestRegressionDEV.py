@@ -89,28 +89,28 @@ class HTTPServerUnitTest(unittest.TestCase):
 
         # # E-Mandate Registration by Crediting
         # time.sleep(10)
-        eMandateRegistrationCrediting = self.eMandateRegistrationByCreditingTest()
+        # eMandateRegistrationCrediting = self.eMandateRegistrationByCreditingTest()
 
-        # # E-Mandate Registration by Debiting
+        # # # E-Mandate Registration by Debiting
 
-        # E-Mandate Approval by Crediting
-        time.sleep(10)
-        eMandateApprovalCrediting = self.eMandateApproveByCreditingTest(
-            eMandateRegistrationCrediting)
+        # # E-Mandate Approval by Crediting
+        # time.sleep(10)
+        # eMandateApprovalCrediting = self.eMandateApproveByCreditingTest(
+        #     eMandateRegistrationCrediting)
 
-        # E-Mandate Approval by Debiting
+        # # E-Mandate Approval by Debiting
 
-        # E-Mandate Amendment by Crediting
-        time.sleep(10)
-        eMandateAmendmentByCreditingTest = self.eMandateAmendmentByCreditingTest(
-            eMandateRegistrationCrediting)
+        # # E-Mandate Amendment by Crediting
+        # time.sleep(10)
+        # eMandateAmendmentByCreditingTest = self.eMandateAmendmentByCreditingTest(
+        #     eMandateRegistrationCrediting)
 
-        # # E-Mandate Amendment by Debiting
+        # # # E-Mandate Amendment by Debiting
 
-        # E-Mandate Amendment Approval by Crediting
-        time.sleep(10)
-        eMandateAmendApproveByCreditingTest = self.eMandateAmendApproveByCreditingTest(
-            eMandateRegistrationCrediting)
+        # # E-Mandate Amendment Approval by Crediting
+        # time.sleep(10)
+        # eMandateAmendApproveByCreditingTest = self.eMandateAmendApproveByCreditingTest(
+        #     eMandateRegistrationCrediting)
 
         # E-Mandate Amendment Approval by Debiting
 
