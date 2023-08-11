@@ -4,7 +4,7 @@ from datetime import datetime
 import random
 import json
 import pytz
-
+import xml.etree.ElementTree as ET
 
 def getTagValue(json_data, target_tag):
     if isinstance(json_data, dict):
@@ -102,6 +102,26 @@ def replace_placeholders(template, value_dict):
         json_string = json_string.replace(placeholder, str(value))
     return json.loads(json_string)
 
+def bool_to_lower(value):
+    return str(value).lower() if isinstance(value, bool) else value
+
+def replace_placeholders_xml(template, value_dict):
+    root = ET.fromstring(template)
+
+    for key, value in value_dict.items():
+        value = bool_to_lower(value)  # Convert boolean to lowercase string
+        placeholder = "{" + key + "}"
+        for element in root.iter():
+            if element.text is not None and placeholder in element.text:
+                element.text = element.text.replace(placeholder, str(value))
+
+            for attr_name, attr_value in element.attrib.items():
+                if placeholder in attr_value:
+                    attr_value = attr_value.replace(placeholder, str(value))
+                    element.attrib[attr_name] = attr_value
+
+    return ET.tostring(root, encoding='utf-8').decode()
+
 
 def getCreDt():
     wibTimeZone = pytz.timezone('Asia/Jakarta')
@@ -163,3 +183,18 @@ def extract_values(json_data):
     except json.JSONDecodeError as e:
         print("JSON decoding error:", e)
         return None
+
+def remove_tags(data, tags_to_remove):
+    for tag_path in tags_to_remove:
+        keys = tag_path.split('.')
+        current_data = data
+        for key in keys[:-1]:
+            if key.isdigit():
+                current_data = current_data[int(key)]  # Handle lists
+            else:
+                current_data = current_data[key]  # Handle dictionaries
+        last_key = keys[-1]
+        if isinstance(current_data, list) and last_key.isdigit():
+            current_data.pop(int(last_key))  # Remove item from list
+        elif last_key in current_data:
+            del current_data[last_key]  # Remove key from dictionary

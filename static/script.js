@@ -51,6 +51,18 @@ function getCheckedCheckboxes() {
   return checkedCardTitles;
 }
 
+function getCardsData() {
+  const cardList = document.querySelectorAll(".card");
+  const checkedCardTitles = [];
+
+  cardList.forEach((card) => {
+    const title = card.querySelector("p").innerText;
+    checkedCardTitles.push(title);
+  });
+
+  // console.log("Checked Card Titles:", checkedCardTitles);
+  return checkedCardTitles;
+}
 function checkAllCards(transactionCheckbox) {
   const cardCheckboxes = document.querySelectorAll(".card-checkbox");
 
@@ -91,21 +103,104 @@ function sendRequest(url) {
   // console.log("Database:", participantData); // Log the fetched data
 }
 
-function sendMultipleRequests() {
-  const requestDataArray = getCheckedCheckboxes();
+function sanityTest() {
+  // requestDataArray = getCardsData();
+  
+  // requestHandler('/AccountEnquiryOFI')
+  // requestHandler('/CreditTransferOFI')
+  // requestHandler('/CreditTransferProxyOFI') TODO: Not yet developed
+  requestHandler('/RequestForPayByAccountOFI')
 
-  console.log(requestDataArray);
-  // Create an array of Promises for each request
-  const requestPromises = requestDataArray.map((data) => sendRequest(data));
+}
 
-  // Use Promise.all() to handle all the requests simultaneously
-  Promise.all(requestPromises)
-    .then((results) => {
-      console.log("All requests completed:", results);
-      // Handle the results of the requests here if needed
-    })
-    .catch((error) => {
-      console.error("Error occurred:", error);
-      // Handle errors if needed
+async function requestHandler(payment_url) {
+  const startTime = Date.now() / 1000;
+
+  try {
+    const participantResponse = await fetch("/getParticipantData");
+    const participantData = await participantResponse.json();
+    console.log("Participant Data:", participantData);
+
+    const response = await fetch(payment_url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(participantData),
     });
+    
+    const duration = (Date.now() / 1000 - startTime).toFixed(2);
+    const jsonResponse = await response.json();
+    console.log(jsonResponse);
+    const msgNmId = jsonResponse.BusMsg.AppHdr.MsgDefIdr;
+    const messageType = {
+      "pacs.002.001.10": () => this.pacs0200110(jsonResponse),
+      "pain.012.001.06": () => this.pain01200106(jsonResponse),
+    };
+    const result = messageType[msgNmId]();
+      
+    console.log(`${new Date().toISOString()} (${duration} seconds) ${payment_url} ${result.endToEndId} ${result.txSts} ${result.stsRsnInf}`);
+    return result;
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
+  }
+}
+
+function pacs0200110(jsonResponse) {
+  const orgnlMsgId = jsonResponse.BusMsg.Document.FIToFIPmtStsRpt.OrgnlGrpInfAndSts[0].OrgnlMsgId;
+  const orgnlEndToEndId = jsonResponse.BusMsg.Document.FIToFIPmtStsRpt.TxInfAndSts[0].OrgnlEndToEndId;
+  const txSts = jsonResponse.BusMsg.Document.FIToFIPmtStsRpt.TxInfAndSts[0].TxSts;
+  const stsRsnInf = jsonResponse.BusMsg.Document.FIToFIPmtStsRpt.TxInfAndSts[0].StsRsnInf[0].Rsn.Prtry;
+  const mndtId = jsonResponse.BusMsg?.Document?.FIToFIPmtStsRpt?.TxInfAndSts[0]?.OrgnlTxRef?.MndtRltdInf?.MndtId;
+  
+  return {
+      msgId: orgnlMsgId,
+      endToEndId: orgnlEndToEndId,
+      txSts: txSts,
+      stsRsnInf: stsRsnInf,
+      mndtId: mndtId
+  };
+}
+
+function pain01200106(jsonResponse) {
+  const exclude_tags = ["BusMsg", "Document"];
+  const exclude_path = "Document_MndtAccptncRpt_UndrlygAccptncDtls0".split("_");
+
+  const json_string = JSON.stringify(jsonResponse);
+  const resultExtract = extractValues(json_string);
+
+  resultExtract.endToEndId = resultExtract.MndtReqId;
+  resultExtract.txSts = resultExtract.SplmtryData0_Envlp_Dtl_Rslt_TxSts;
+  resultExtract.stsRsnInf = resultExtract.SplmtryData0_Envlp_Dtl_Rslt_StsRsnInf_Rsn_Prtry;
+
+  return resultExtract;
+}
+
+function extractValues(jsonString) {
+  const data = JSON.parse(jsonString);
+
+  function extract(obj, path) {
+      for (const key of path) {
+          if (obj.hasOwnProperty(key)) {
+              obj = obj[key];
+          } else {
+              return undefined;
+          }
+      }
+      return obj;
+  }
+
+  const result = {};
+
+  for (const key in data) {
+      if (!exclude_tags.includes(key)) {
+          const value = extract(data[key], exclude_path);
+          if (value !== undefined) {
+              result[key] = value;
+          }
+      }
+  }
+
+  return result;
 }

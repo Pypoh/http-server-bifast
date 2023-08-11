@@ -62,7 +62,7 @@ def requestMessage():
     }
 
     # Send POST request
-    host_url = f"{SCHEME_VALUE}{generalData.sampleData.get('HOST_URL')}:{generalData.sampleData.get('HOST_PORT')}"
+    host_url = f"{SCHEME_VALUE}{generalData.sampleData.get('HOST_URL')}:{generalData.sampleData.get('DBTR_PORT')}"
     response = requests.post(host_url, json=filled_data, headers=headers)
 
     return response.text

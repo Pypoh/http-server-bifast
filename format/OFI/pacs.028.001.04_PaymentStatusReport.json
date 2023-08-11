@@ -33,6 +33,10 @@
         },
         "TxInf": [
           {
+            "OrgnlGrpInf": {
+                "OrgnlMsgId": "{{ ORGNL_MSG_ID_VALUE }}",
+                "OrgnlMsgNmId": "{{ ORGNL_MSG_NM_ID_VALUE }}" 
+            },
             "OrgnlEndToEndId": "{{ ORGNL_END_TO_END_ID_VALUE }}"
           }
         ]

@@ -14,7 +14,8 @@ from handler.message import (
     creditTransferRFPHandler,
     mandateRegistHandler,
     mandateApprovalHandler,
-    mandateAmendHandler
+    mandateAmendHandler,
+    directDebitHandler
 )
 from repository import data as dataDictionary
 import os
@@ -33,49 +34,12 @@ def getParticipantData():
 
 @app.route('/', methods=['GET'])
 def index():
-    cards = [
-        {'title': 'Account Enquiry', 'content': '/AccountEnquiryOFI'},
-        {'title': 'Credit Transfer', 'content': '/CreditTransferOFI'},
-        {'title': 'Credit Transfer Reversal',
-            'content': '/CreditTransferReversalOFI'},
-        {'title': 'Credit Transfer Proxy', 'content': '/CreditTransferProxyOFI'},
-        {'title': 'Payment Status', 'content': '/PaymentStatusOFI'},
-        {'title': 'Proxy Registration', 'content': '/ProxyRegistrationOFI'},
-        {'title': 'Proxy Porting', 'content': '/ProxyPortingOFI'},
-        {'title': 'Proxy Lookup', 'content': '/ProxyLookupOFI'},
-        {'title': 'Proxy Enquiry', 'content': '/ProxyEnquiryOFI'},
-        {'title': 'Proxy Deactivate', 'content': '/ProxyDeactivateOFI'},
-        {'title': 'Request For Pay ByAccount',
-            'content': '/RequestForPayByAccountOFI'},
-        {'title': 'Request For Pay ByProxy', 'content': '/RequestForPayByProxyOFI'},
-        {'title': 'Request For Pay RejectByAccount',
-            'content': '/RequestForPayRejectByAccountOFI'},
-        {'title': 'Request For Pay RejectByProxy',
-            'content': '/RequestForPayRejectByProxyOFI'},
-        {'title': 'Credit Transfer RFP', 'content': '/CreditTransferRFPOFI'},
-        {'title': 'Mandate Regist By Credit',
-            'content': '/MandateRegistByCreditOFI'},
-        {'title': 'Mandate Regist By Debit', 'content': '/MandateRegistByDebitOFI'},
-        {'title': 'Mandate Approval By Credit',
-            'content': '/MandateApprovalByCreditOFI'},
-        {'title': 'Mandate Approval By Debit',
-            'content': '/MandateApprovalByDebitOFI'},
-        {'title': 'Mandate Amend By Credit', 'content': '/MandateAmendByCreditOFI'},
-        {'title': 'Mandate Amend By Debit', 'content': '/MandateAmendByDebitOFI'},
-        {'title': 'Mandate Amend Approval By Credit',
-            'content': '/MandateAmendApprovalByCreditOFI'},
-        {'title': 'Mandate Amend Approval By Debit',
-            'content': '/MandateAmendApprovalByDebitOFI'},
-        {'title': 'Mandate Terminate By Credit',
-            'content': '/MandateTerminateByCreditOFI'},
-        {'title': 'Mandate Terminate By Debit',
-            'content': '/MandateTerminateByDebitOFI'},
-        {'title': 'Mandate Amend By Credit', 'content': '/MandateAmendByCreditOFI'},
-        {'title': 'Mandate Enquiry', 'content': '/MandateEnquiry'},
-        {'title': 'Direct Debit', 'content': '/DirectDebitOFI'},
-        {'title': 'Payment Status DD', 'content': '/PaymentStatusDDOFI'},
-    ]
-    return render_template('home.html', cards=cards)
+    return render_template('home.html', cards=dataDictionary.cards)
+
+# HTML Template
+@app.route('/sanity', methods=['GET'])
+def sanity():
+    return render_template('sanity.html', cards=dataDictionary.cards)
 
 # Account Enquiry
 @app.route('/AccountEnquiryOFI', methods=['POST'])
@@ -102,6 +66,8 @@ def aeHandlerOFI():
 #     if request.method == 'POST':
 #         return accountEnquiryHandler.generateResponse(request.json)
 
+
+
 # Credit Transfer
 @app.route('/CreditTransferOFI', methods=['POST'])
 def ctHandlerOFI():
@@ -115,10 +81,12 @@ def ctHandlerOFI():
 @app.route('/CreditTransferReversalOFI', methods=['POST'])
 def ctreverseHandlerOFI():
     if request.method == 'POST':
-        ct_response = requests.post(
-            f'http://{serverConfig.SERVER_URL_VALUE}:{serverConfig.SERVER_PORT_VALUE}/CreditTransferOFI')
+        # ct_response = requests.post(
+        #     f'http://{serverConfig.SERVER_URL_VALUE}:{serverConfig.SERVER_PORT_VALUE}/CreditTransferOFI')
 
-        return creditTransferReversalHandler.requestMessage(ct_response)
+        data = request.get_json()
+
+        return creditTransferReversalHandler.requestMessage(data)
 
 # Credit Transfer
 @app.route('/CreditTransferProxyOFI', methods=['POST'])
@@ -196,7 +164,9 @@ def ctrfpHandlerOFI():
 @app.route('/MandateRegistByCreditOFI', methods=['POST'])
 def mandateRegistByCreditingHandlerOFI():
     if request.method == 'POST':
-        return mandateRegistHandler.requestMessageByCreditor(request.form)
+        # return mandateRegistHandler.requestMessageByCreditor(request.form)
+        # return mandateRegistHandler.requestMessage(request.form)
+        return mandateRegistHandler.requestMessageXml(request.form)
 
 # # E-Mandate Registration by Debiting
 # @app.route('/MandateRegistByDebitOFI', methods=['POST'])
@@ -208,7 +178,8 @@ def mandateRegistByCreditingHandlerOFI():
 @app.route('/MandateApprovalByCreditOFI', methods=['POST'])
 def mandateApprovalByCreditingHandlerOFI():
     if request.method == 'POST':
-        return mandateApprovalHandler.requestMessageByCreditor(request.form)
+        return mandateApprovalHandler.requestMessage(request.form)
+        # return mandateApprovalHandler.requestMessageByCreditor(request.form)
 
 # # E-Mandate Approval by Debiting
 # @app.route('/MandateApprovalByDebitOFI', methods=['POST'])
@@ -220,7 +191,8 @@ def mandateApprovalByCreditingHandlerOFI():
 @app.route('/MandateAmendByCreditOFI', methods=['POST'])
 def mandateAmendByCreditingHandlerOFI():
     if request.method == 'POST':
-        return mandateAmendHandler.requestMessageByCreditor(request.form)
+        return mandateAmendHandler.requestMessage(request.form)
+        # return mandateAmendHandler.requestMessageByCreditor(request.form)
 
 # # E-Mandate Amendment by Debiting
 # @app.route('/MandateAmendByDebitOFI', methods=['POST'])
@@ -264,11 +236,11 @@ def mandateEnquiryHandlerOFI():
     if request.method == 'POST':
         return paymentStatusReportHandler.requestMessageMandateEnquiry(request.form)
 
-# # Direct Debit
-# @app.route('/DirectDebitOFI', methods=['POST'])
-# def rfpHandlerOFI():
-#     if request.method == 'POST':
-#         return requestForPaymentHandler.requestMessage()
+# Direct Debit
+@app.route('/DirectDebitOFI', methods=['POST'])
+def rfpHandlerOFI():
+    if request.method == 'POST':
+        return directDebitHandler.requestMessage(request.form)
 
 # # PSR Direct Debit
 # @app.route('/PaymentStatusDDOFI', methods=['POST'])

@@ -1,12 +1,14 @@
-from flask import Flask, Response, current_app
-import handler.general as handler
-from datetime import datetime, timedelta
-from dateutil.relativedelta import relativedelta
+from flask import Flask, Response, current_app, jsonify
+import requests
 import json
 import os
 import sys
-import requests
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
+import handler.general as handler
+import repository.data as generalData
+import repository.payment as paymentData
 from config.bankConfig import BANK_CODE_VALUE, HUB_CODE_VALUE, RFI_BANK_CODE_VALUE
 from config.serverConfig import SCHEME_VALUE, HOST_URL_VALUE, HOST_PORT_VALUE
 
@@ -139,6 +141,128 @@ def requestMessageByCreditor(requestData):
 
     response = requests.post(
         f"{SCHEME_VALUE}{requestData.get('Host_url')}:{requestData.get('Host_port')}", json=filled_data, headers=headers)
+
+    return response.text
+
+
+def requestMessage(mandateForm):
+    # Construct file path
+    template_filename = 'pain.010.001.06_MandateAmend.json'
+    file_path = os.path.join(
+        current_app.config["FORMAT_PATH"], template_filename)
+
+    # Generate unique IDs
+    payment_type = paymentData.emandateAmendmentByCreditor.get('PAYMENT_TYPE')
+    cdtr_agt = generalData.sampleData.get('CDTRAGT')
+    generated_biz_msg_idr = handler.generateBizMsgIdr(cdtr_agt, payment_type)
+    generated_msg_id = handler.generateMsgId(cdtr_agt, payment_type)
+
+    unique_id = {
+        "BIZ_MSG_IDR_VALUE": generated_biz_msg_idr,
+        "MSG_ID_VALUE": generated_msg_id,
+        "MNDT_REQ_ID_VALUE": generated_biz_msg_idr,
+    }
+
+    # Load template data
+    with open(file_path, 'r') as file:
+        template_data = json.load(file)
+
+    # original_data = {
+    #     "ORGNLMNDT_MNDTID_VALUE": mandateForm.get('ORGNLMNDT_MNDTID_VALUE'),
+    #     "ORGNLMNDT_REQ_ID_VALUE": mandateForm.get('ORGNLMNDT_REQ_ID_VALUE'),
+    #     "ORGNLMNDT_LCLINSTRM_VALUE": mandateForm.get('ORGNLMNDT_LCLINSTRM_VALUE'),
+    #     "ORGNLMNDT_CTGYPURP_VALUE": mandateForm.get('ORGNLMNDT_CTGYPURP_VALUE'),
+    #     "ORGNLMNDT_OCRNCS_SEQTP_VALUE": mandateForm.get('ORGNLMNDT_OCRNCS_SEQTP_VALUE'),
+    #     "ORGNLMNDT_OCRNCS_FRQCY_VALUE": mandateForm.get('ORGNLMNDT_OCRNCS_FRQCY_VALUE'),
+    #     "ORGNLMNDT_OCRNCS_CNTPERPRD_VALUE": mandateForm.get('ORGNLMNDT_OCRNCS_CNTPERPRD_VALUE'),
+    #     "ORGNLMNDT_DRTN_FRDT_VALUE": mandateForm.get('ORGNLMNDT_DRTN_FRDT_VALUE'),
+    #     "ORGNLMNDT_DRTN_TODT_VALUE": mandateForm.get('ORGNLMNDT_DRTN_TODT_VALUE'),
+    #     "ORGNLMNDT_FRST_COLLTNDT_VALUE": mandateForm.get('ORGNLMNDT_FRST_COLLTNDT_VALUE'),
+    #     "ORGNLMNDT_FNL_COLLTNDT_VALUE": mandateForm.get('ORGNLMNDT_FNL_COLLTNDT_VALUE'),
+    #     "ORGNLMNDT_TRCKGIND_VALUE": mandateForm.get('ORGNLMNDT_TRCKGIND_VALUE'),
+    #     "ORGNLMNDT_FRST_COLLTNAMT_CCY_VALUE": mandateForm.get('ORGNLMNDT_FRST_COLLTNAMT_CCY_VALUE'),
+    #     "ORGNLMNDT_FRST_COLLTNAMT_VALUE": mandateForm.get('ORGNLMNDT_FRST_COLLTNAMT_VALUE'),
+    #     "ORGNLMNDT_COLLTNAMT_CCY_VALUE": mandateForm.get('ORGNLMNDT_COLLTNAMT_CCY_VALUE'),
+    #     "ORGNLMNDT_COLLTNAMT_VALUE": mandateForm.get('ORGNLMNDT_COLLTNAMT_VALUE'),
+    #     "ORGNLMNDT_MAX_AMT_CCY_VALUE": mandateForm.get('ORGNLMNDT_MAX_AMT_CCY_VALUE'),
+    #     "ORGNLMNDT_MAX_AMT_VALUE": mandateForm.get('ORGNLMNDT_MAX_AMT_VALUE'),
+    #     "ORGNLMNDT_MNDT_RSN_VALUE": mandateForm.get('ORGNLMNDT_MNDT_RSN_VALUE'),
+    #     "ORGNLMNDT_CDTR_NM_VALUE": mandateForm.get('ORGNLMNDT_CDTR_NM_VALUE'),
+    #     "ORGNLMNDT_CDTR_ORG_ID_VALUE": mandateForm.get('ORGNLMNDT_CDTR_ORG_ID_VALUE'),
+    #     "ORGNLMNDT_CDTR_ACCT_VALUE": mandateForm.get('ORGNLMNDT_CDTR_ACCT_VALUE'),
+    #     "ORGNLMNDT_CDTR_ACCT_TP_VALUE": mandateForm.get('ORGNLMNDT_CDTR_ACCT_TP_VALUE'),
+    #     "ORGNLMNDT_CDTR_ACCT_NM_VALUE": mandateForm.get('ORGNLMNDT_CDTR_ACCT_NM_VALUE'),
+    #     "ORGNLMNDT_CDTR_AGT_VALUE": mandateForm.get('ORGNLMNDT_CDTR_AGT_VALUE'),
+    #     "ORGNLMNDT_DBTR_NM_VALUE": mandateForm.get('ORGNLMNDT_DBTR_NM_VALUE'),
+    #     "ORGNLMNDT_DBTR_PRVT_ID_VALUE": mandateForm.get('ORGNLMNDT_DBTR_PRVT_ID_VALUE'),
+    #     "ORGNLMNDT_DBTR_ACCT_VALUE": mandateForm.get('ORGNLMNDT_DBTR_ACCT_VALUE'),
+    #     "ORGNLMNDT_DBTR_ACCT_TP_VALUE": mandateForm.get('ORGNLMNDT_DBTR_ACCT_TP_VALUE'),
+    #     "ORGNLMNDT_DBTR_ACCT_NM_VALUE": mandateForm.get('ORGNLMNDT_DBTR_ACCT_NM_VALUE'),
+    #     "ORGNLMNDT_DBTR_AGT_VALUE": mandateForm.get('ORGNLMNDT_DBTR_AGT_VALUE'),
+    #     "ORGNLMNDT_RFRD_DOC_CDTR_REF_VALUE": mandateForm.get('ORGNLMNDT_RFRD_DOC_CDTR_REF_VALUE'),
+    # }
+
+    # Create value dictionary for placeholders
+    value_dict = {
+        **unique_id,
+        **mandateForm,
+        **paymentData.base,
+        **paymentData.emandateAmendmentByCreditor,
+        **paymentData.cdtrData,
+        **paymentData.dbtrData,
+    }
+
+    # Set the Date
+    timestamp_now = datetime.now()
+    timestamp_formatted = timestamp_now.strftime('%Y-%m-%d')
+    timestamp_future = timestamp_now + relativedelta(years=1)
+    timestamp_future_formatted = timestamp_future.strftime('%Y-%m-%d')
+    value_dict['DRTN_FRDT_VALUE'] = timestamp_formatted
+    value_dict['DRTN_TODT_VALUE'] = timestamp_future_formatted
+    value_dict['FRST_COLLTNDT_VALUE'] = timestamp_formatted
+    value_dict['FNL_COLLTNDT_VALUE'] = timestamp_future_formatted
+
+    # Replace placeholders in template data
+    filled_data = handler.replace_placeholders(template_data, value_dict)
+
+    # print(value_dict, file=sys.stderr)
+
+    # Convert payment data
+    filled_data["BusMsg"]["AppHdr"]["PssblDplct"] = False
+    filled_data["BusMsg"]["Document"]["MndtAmdmntReq"]["UndrlygAmdmntDtls"][0]["Mndt"]["TrckgInd"] = True
+    filled_data["BusMsg"]["Document"]["MndtAmdmntReq"]["UndrlygAmdmntDtls"][0]["Mndt"]["Ocrncs"]["Frqcy"]["Prd"]["CntPerPrd"] = int(float(
+        value_dict.get('OCRNCS_CNTPERPRD_VALUE')))
+    filled_data["BusMsg"]["Document"]["MndtAmdmntReq"]["UndrlygAmdmntDtls"][0]["Mndt"]["FrstColltnAmt"]["value"] = float(
+        value_dict.get('FRST_COLLTNAMT_VALUE'))
+    filled_data["BusMsg"]["Document"]["MndtAmdmntReq"]["UndrlygAmdmntDtls"][0]["Mndt"]["ColltnAmt"]["value"] = float(
+        value_dict.get('COLLTNAMT_VALUE'))
+    filled_data["BusMsg"]["Document"]["MndtAmdmntReq"]["UndrlygAmdmntDtls"][0]["Mndt"]["MaxAmt"]["value"] = float(
+        value_dict.get('MAX_AMT_VALUE'))
+
+    # Convert original payment data
+    filled_data["BusMsg"]["Document"]["MndtAmdmntReq"]["UndrlygAmdmntDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["TrckgInd"] = True
+    filled_data["BusMsg"]["Document"]["MndtAmdmntReq"]["UndrlygAmdmntDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["Ocrncs"]["Frqcy"]["Prd"]["CntPerPrd"] = int(float(
+        value_dict.get('ORGNLMNDT_OCRNCS_CNTPERPRD_VALUE')))
+    filled_data["BusMsg"]["Document"]["MndtAmdmntReq"]["UndrlygAmdmntDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["FrstColltnAmt"]["value"] = float(
+        value_dict.get('ORGNLMNDT_FRST_COLLTNAMT_VALUE'))
+    filled_data["BusMsg"]["Document"]["MndtAmdmntReq"]["UndrlygAmdmntDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["ColltnAmt"]["value"] = float(
+        value_dict.get('ORGNLMNDT_COLLTNAMT_VALUE'))
+    filled_data["BusMsg"]["Document"]["MndtAmdmntReq"]["UndrlygAmdmntDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["MaxAmt"]["value"] = float(
+        value_dict.get('ORGNLMNDT_MAX_AMT_VALUE'))
+
+    # Print filled data (for debugging)
+    # print(filled_data, file=sys.stderr)
+
+    # Prepare headers
+    headers = {
+        "Content-Type": "application/json",
+        "Content-Length": str(len(json.dumps(filled_data))),
+        "message": "/MandateAmendmentRequestV06"
+    }
+
+    # Send POST request
+    host_url = f"{SCHEME_VALUE}{generalData.sampleData.get('HOST_URL')}:{generalData.sampleData.get('CDTR_PORT')}"
+    response = requests.post(host_url, json=filled_data, headers=headers)
 
     return response.text
 

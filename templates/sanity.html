@@ -14,7 +14,7 @@
     <div class="drawer open">
       <ul>
         <li><a href="#">Home</a></li>
-        <li><a href="{{ url_for('sanity') }}">Sanity Test</a></li>
+        <li><a href="#">Sanity Test</a></li>
         <li><a href="#">Transaction Simulator</a></li>
         <li><a href="#">History</a></li>
         <li><a href="#">Data</a></li>
@@ -26,9 +26,9 @@
     <div class="main-content">
       <!-- <button class="open-btn" onclick="openDrawer()">☰ Open</button> -->
       <div class="checkbox-header">
-        <input type="checkbox" class="transaction-checkbox" onchange="checkAllCards(this)"/>
+        <input type="checkbox" class="transaction-checkbox"/>
         <h2>Select All Transaction</h2>
-        <button class="transaction-button" onclick="sendMultipleRequests()">Fire</button>
+        <button class="transaction-button" onclick="sanityTest()">Fire</button>
       </div>
 
       <!-- Card List -->
@@ -37,7 +37,6 @@
         <div class="card" onclick="handleCardClick('{{ card.title }}')">
           <h2>{{ card.title }}</h2>
           <p>{{ card.content }}</p>
-          <input type="checkbox" class="card-checkbox" />
         </div>
         {% endfor %}
       </div>
@@ -53,7 +52,6 @@
         </div>
       </div>
     </div> -->
-
     <script src="{{ url_for('static', filename='script.js') }}"></script>
   </body>
 </html>
