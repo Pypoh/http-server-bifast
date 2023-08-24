@@ -34,7 +34,7 @@
       <!-- Card List -->
       <div class="card-list">
         {% for card in cards %}
-        <div class="card" onclick="handleCardClick('{{ card.title }}')">
+        <div class="card" onclick="sanityTest('{{ card.title }}')">
           <h2>{{ card.title }}</h2>
           <p>{{ card.content }}</p>
         </div>

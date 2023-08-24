@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Setting
+{% endblock %}
+
+{% block external_styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='setting-styles.css') }}" />
+{% endblock %}
+
+{% block content %}
+<h2>Participant Data</h2>
+
+    <div class="forms-container">
+      <div class="left-form">
+        <form id="dbtr-form">
+          <label for="dbtragt">DbtrAgt:</label><br>
+        <input type="text" id="dbtragt" name="dbtragt" value="{{ data.get('DBTRAGT', '') }}"><br>
+
+        <label for="dbtr-nm">Dbtr Nm:</label><br>
+        <input type="text" id="dbtr-nm" name="dbtr-nm" value="{{ data.get('DBTR_NM', '') }}"><br>
+
+        <label for="dbtr-orgid">Dbtr OrgId:</label><br>
+        <input type="text" id="dbtr-orgid" name="dbtr-orgid" value="{{ data.get('DBTR_ORGID', '') }}"><br>
+
+        <label for="dbtr-prvtid">Dbtr PrvtId:</label><br>
+        <input type="text" id="dbtr-prvtid" name="dbtr-prvtid" value="{{ data.get('DBTR_PRVTID', '') }}"><br>
+
+        <label for="dbtracct-value">DbtrAcct Value:</label><br>
+        <input type="text" id="dbtracct-value" name="dbtracct-value" value="{{ data.get('DBTRACCT_VALUE', '') }}"><br>
+
+        <label for="dbtracct-type">DbtrAcct Type:</label><br>
+        <input type="text" id="dbtracct-type" name="dbtracct-type" value="{{ data.get('DBTRACCT_TYPE', '') }}"><br>
+
+        <label for="dbtracct-name">DbtrAcct Name:</label><br>
+        <input type="text" id="dbtracct-name" name="dbtracct-name" value="{{ data.get('DBTRACCT_NAME', '') }}"><br>
+
+        <label for="dbtracct-prxy-tp">DbtrAcct Prxy Tp:</label><br>
+        <input type="text" id="dbtracct-prxy-tp" name="dbtracct-prxy-tp" value="{{ data.get('DBTRACCT_PRXY_TYPE', '') }}"><br>
+
+        <label for="dbtracct-prxy-id">DbtrAcct Prxy Id:</label><br>
+        <input type="text" id="dbtracct-prxy-id" name="dbtracct-prxy-id" value="{{ data.get('DBTRACCT_PRXY_ID', '') }}"><br>
+
+        </form>
+      </div>
+      
+      <div class="right-form">
+        <form id="cdtr-form">
+          <!-- Cdtr form fields here -->
+          <label for="cdtragt">CdtrAgt:</label><br>
+          <input type="text" id="cdtragt" name="cdtragt" value="{{ data.get('CDTRAGT', '') }}"><br>
+
+          <label for="cdtr-nm">Cdtr Nm:</label><br>
+          <input type="text" id="cdtr-nm" name="cdtr-nm" value="{{ data.get('CDTR_NM', '') }}"><br>
+
+          <label for="cdtr-orgid">Cdtr OrgId:</label><br>
+          <input type="text" id="cdtr-orgid" name="cdtr-orgid" value="{{ data.get('CDTR_ORGID', '') }}"><br>
+
+          <label for="cdtr-prvtid">Cdtr PrvtId:</label><br>
+          <input type="text" id="cdtr-prvtid" name="cdtr-prvtid" value="{{ data.get('CDTR_PRVTID', '') }}"><br>
+
+          <label for="cdtracct-value">CdtrAcct Value:</label><br>
+          <input type="text" id="cdtracct-value" name="cdtracct-value" value="{{ data.get('CDTRACCT_VALUE', '') }}"><br>
+
+          <label for="cdtracct-type">CdtrAcct Type:</label><br>
+          <input type="text" id="cdtracct-type" name="cdtracct-type" value="{{ data.get('CDTRACCT_TYPE', '') }}"><br>
+
+          <label for="cdtracct-name">CdtrAcct Name:</label><br>
+          <input type="text" id="cdtracct-name" name="cdtracct-name" value="{{ data.get('CDTRACCT_NAME', '') }}"><br>
+
+          <label for="cdtracct-prxy-tp">CdtrAcct Prxy Tp:</label><br>
+          <input type="text" id="cdtracct-prxy-tp" name="cdtracct-prxy-tp" value="{{ data.get('CDTRACCT_PRXY_TYPE', '') }}"><br>
+
+          <label for="cdtracct-prxy-id">CdtrAcct Prxy Id:</label><br>
+          <input type="text" id="cdtracct-prxy-id" name="cdtracct-prxy-id" value="{{ data.get('CDTRACCT_PRXY_ID', '') }}"><br>
+
+        </form>
+      </div>
+{% endblock %}
+
+{% block externals_script %}
+<script src="{{ url_for('static', filename='setting-script.js') }}"></script>
+{% endblock %}
+
+</html>

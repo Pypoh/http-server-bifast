@@ -1,0 +1,66 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 200px;
+  height: 100%;
+  background-color: #333;
+  color: #fff;
+  padding-top: 20px;
+  z-index: 1; /* Ensure drawer is above other elements */
+}
+
+.main-content {
+  margin-left: 220px; /* Adjust to create space for the drawer and the card list */
+  padding: 20px;
+}
+
+.drawer.open {
+  left: 0;  /* Ensures drawer is always open */
+}
+
+.drawer ul {
+  list-style: none;
+  padding: 0;
+}
+
+.drawer li {
+  padding: 10px 20px;
+}
+
+.drawer a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.main-content {
+  margin-left: 250px;  /* Added to adjust content position with open drawer */
+  padding: 20px;
+}
+
+.open-btn {
+  display: none;  /* Hide the open button when drawer is always open */
+}
+.forms-container {
+  display: flex;
+}
+
+.left-form, .right-form {
+  width: 50%; /* Each form takes 50% width of the container */
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.left-form {
+  float: left;
+}
+
+.right-form {
+  float: right;
+}

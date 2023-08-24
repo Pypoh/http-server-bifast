@@ -13,7 +13,7 @@ from config.bankConfig import BANK_CODE_VALUE, HUB_CODE_VALUE, RFI_BANK_CODE_VAL
 from config.serverConfig import SCHEME_VALUE, HOST_URL_VALUE, HOST_PORT_VALUE
 
 
-def requestMessage(requestData):
+def buildMessage(requestData):
     # Construct file path
     template_filename = 'pacs.008.001.10_AccountEnquiry.json'
     file_path = os.path.join(
@@ -45,23 +45,27 @@ def requestMessage(requestData):
         **paymentData.dbtrData,
         **paymentData.splmtryData
     }
- 
+
     # Replace placeholders in template data
     filled_data = handler.replace_placeholders(template_data, value_dict)
     filled_data["BusMsg"]["Document"]["FIToFICstmrCdtTrf"]["CdtTrfTxInf"][0]["IntrBkSttlmAmt"]["value"] = float(
         value_dict.get('INTR_BK_STTLM_AMT_VALUE'))
     filled_data["BusMsg"]["AppHdr"]["PssblDplct"] = False
 
+    return filled_data
+
+
+def requestMessage(message):
     # Prepare headers
     headers = {
         "Content-Type": "application/json",
-        "Content-Length": str(len(json.dumps(filled_data))),
+        "Content-Length": str(len(json.dumps(message))),
         "message": "/FIToFICustomerCreditTransferV08"
     }
 
     # Send POST request
     host_url = f"{SCHEME_VALUE}{generalData.sampleData.get('HOST_URL')}:{generalData.sampleData.get('DBTR_PORT')}"
-    response = requests.post(host_url, json=filled_data, headers=headers)
+    response = requests.post(host_url, json=message, headers=headers)
 
     return response.text
 

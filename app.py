@@ -1,9 +1,10 @@
-from blueprints.RequestForPayment import requestForPaymentBlueprint
+# from blueprints.RequestForPayment import requestForPaymentBlueprint
 from flask import Flask, request, render_template, jsonify
 from config import serverConfig
 from handler import general as handler
+from blueprints.account_enquiry import account_enquiry_bp
 from handler.message import (
-    accountEnquiryHandler,
+    # accountEnquiryHandler,
     creditTransferHandler,
     creditTransferReversalHandler,
     creditTransferProxyHandler,
@@ -23,7 +24,7 @@ import json
 import requests
 
 app = Flask(__name__, template_folder="templates")
-app.register_blueprint(requestForPaymentBlueprint)
+app.register_blueprint(account_enquiry_bp)
 app.config['FORMAT_PATH'] = os.path.join(app.root_path, 'format/OFI')
 
 
@@ -41,25 +42,20 @@ def index():
 def sanity():
     return render_template('sanity.html', cards=dataDictionary.cards)
 
-# Account Enquiry
-@app.route('/AccountEnquiryOFI', methods=['POST'])
-def aeHandlerOFI():
-    if request.method == 'POST':
-        try:
-            data = request.get_json()
-            # print("Received JSON data:", data)
-            response_data = {
-                "status": "success",
-                "message": "Request processed successfully",
-            }
-            # return jsonify(response_data), 200
-        except Exception as e:
-            pass
-            # return jsonify({"error": "Invalid JSON data"}), 400
-            # return jsonify({"error": f"{e}"}), 400
+# HTML Template
+@app.route('/simulator', methods=['GET'])
+def simulator():
+    return render_template('simulator.html', cards=dataDictionary.cards)
 
-        # return accountEnquiryHandler.requestMessage(request.form)
-        return accountEnquiryHandler.requestMessage(data)
+# HTML Template
+@app.route('/setting', methods=['GET'])
+def setting():
+    return render_template('setting.html', data=dataDictionary.sampleData)
+
+
+
+
+
 
 # @app.route('/AccountEnquiryRFI', methods=['POST'])
 # def aeHandlerRFI():

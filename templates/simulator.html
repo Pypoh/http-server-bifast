@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}
+Simulator
+{% endblock %}
+
+{% block external_styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='simulator-styles.css') }}" />
+{% endblock %}
+
+{% block content %}
+<div class="checkbox-header">
+  <input type="checkbox" class="transaction-checkbox" />
+  <h2>Select All Transaction</h2>
+
+</div>
+
+<!-- Card List -->
+<div class="card-list">
+  {% for card in cards %}
+  <div class="card">
+    <h2>{{ card.title }}</h2>
+    <p>{{ card.content }}</p>
+    <button class="transaction-button" onclick="requestHandler('{{ card.content }}')">Fire</button>
+  </div>
+  {% endfor %}
+</div>
+
+<div class="console-container">
+  <div class="console-window" id="console-1">
+    <div class="console-header">Console 1</div>
+    <div class="console-content" id="console-content-1"></div>
+  </div>
+  <div class="console-window" id="console-2">
+    <div class="console-header">Console 2</div>
+    <div class="console-content" id="console-content-2"></div>
+  </div>
+</div>
+{% endblock %}
+
+{% block externals_script %}
+<script src="{{ url_for('static', filename='simulator-script.js') }}"></script>
+{% endblock %}
+
+</html>
