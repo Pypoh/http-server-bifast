@@ -6,9 +6,9 @@ Credit Transfer Proxy - need proxy
 
 PSR CT - can psr from history
 
-Request for Payment by Account
+Request for Payment by Account ---
 Request for Payment Rejection by Account
-Request for Payment by Proxy
+Request for Payment by Proxy ---
 Request for Payment Rejection by Proxy
 Credit Transfer RFP
 E-Mandate Registration by Crediting

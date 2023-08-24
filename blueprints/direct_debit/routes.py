@@ -1,6 +1,6 @@
 from flask import render_template
 from . import account_enquiry_bp
-from . import handler
+from . import accountEnquiryHandler
 from flask import Flask, request, render_template, jsonify
 
 # @app.route('/AccountEnquiryOFI', methods=['POST'])
@@ -30,7 +30,7 @@ def buildMessage():
         except Exception as e:
             return jsonify({"error": "Invalid JSON data"}), 400
 
-        return handler.buildMessage(data)
+        return accountEnquiryHandler.buildMessage(data)
 
 @account_enquiry_bp.route('/request', methods=['POST'])
 def requestMessage():
@@ -40,4 +40,4 @@ def requestMessage():
         except Exception as e:
             return jsonify({"error": "Invalid JSON data"}), 400
 
-        return handler.requestMessage(data)
+        return accountEnquiryHandler.requestMessage(data)
