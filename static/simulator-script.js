@@ -9,46 +9,15 @@ function updateConsoleContent(consoleId, content) {
   consoleContent.innerText = content;
 }
 
-// function handleCardClick(title) {
-//   // alert("You clicked on: " + title);
-//   updateConsoleContent(
-//     "console-content-1",
-//     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras enim metus, volutpat id nisl at, mollis luctus magna. Vestibulum eget risus eget arcu accumsan consectetur eget iaculis ligula. Maecenas turpis ante, pulvinar non commodo sit amet, venenatis quis odio. Suspendisse at maximus turpis. Duis condimentum nisl sit amet ultricies tincidunt. Sed finibus quam a lectus sagittis, sed dapibus mi lacinia. Ut ac consequat ipsum, nec pretium ex. Morbi consequat ligula nunc, eget euismod purus lacinia commodo. Aenean at quam non velit lacinia sagittis at eu magna. Mauris efficitur nisl euismod magna viverra imperdiet."
-//   );
-//   updateConsoleContent(
-//     "console-content-2",
-//     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras enim metus, volutpat id nisl at, mollis luctus magna. Vestibulum eget risus eget arcu accumsan consectetur eget iaculis ligula. Maecenas turpis ante, pulvinar non commodo sit amet, venenatis quis odio. Suspendisse at maximus turpis. Duis condimentum nisl sit amet ultricies tincidunt. Sed finibus quam a lectus sagittis, sed dapibus mi lacinia. Ut ac consequat ipsum, nec pretium ex. Morbi consequat ligula nunc, eget euismod purus lacinia commodo. Aenean at quam non velit lacinia sagittis at eu magna. Mauris efficitur nisl euismod magna viverra imperdiet."
-//   );
-// }
+function clearConsole() {
+  const consoleContent1 = document.getElementById('console-content-1');
+  const consoleContent2 = document.getElementById('console-content-2');
+  consoleContent1.innerText = "";
+  consoleContent2.innerText = "";
+}
 
 function generateTextAnimation(consoleId, text) {
   updateConsoleContent(consoleId, text);
-}
-
-// // Start the generated-text animations
-// generateTextAnimation(
-//   "console-content-1",
-//   "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras enim metus, volutpat id nisl at, mollis luctus magna. Vestibulum eget risus eget arcu accumsan consectetur eget iaculis ligula. Maecenas turpis ante, pulvinar non commodo sit amet, venenatis quis odio. Suspendisse at maximus turpis. Duis condimentum nisl sit amet ultricies tincidunt. Sed finibus quam a lectus sagittis, sed dapibus mi lacinia. Ut ac consequat ipsum, nec pretium ex. Morbi consequat ligula nunc, eget euismod purus lacinia commodo. Aenean at quam non velit lacinia sagittis at eu magna. Mauris efficitur nisl euismod magna viverra imperdiet. Mauris viverra id mi sit amet cursus. Pellentesque faucibus ornare libero a consequat. Nulla pellentesque justo at eros pharetra, sit amet interdum est dignissim. Etiam sem sapien, molestie non rutrum ut, ullamcorper id lorem. Quisque fringilla ultricies nulla ornare auctor. Proin lacinia eleifend erat vel mattis. Phasellus placerat ut libero nec posuere. Quisque eu quam eget risus sodales sodales. Cras consectetur odio ac sapien mattis sollicitudin sed ut nibh. Ut lacinia augue in felis placerat, eget aliquam tortor feugiat. Integer euismod mauris a metus mattis, vitae aliquam massa convallis. Suspendisse scelerisque ex in elit efficitur congue. Aenean quis dolor tempus, sodales metus in, placerat mauris. Aenean commodo euismod elit, a vestibulum dui eleifend nec. Vivamus non interdum ipsum. Vestibulum eget fermentum neque. Integer viverra luctus lacus eget semper. Praesent in metus quis erat auctor rutrum. Nulla ac arcu massa. Sed placerat consequat dui quis tincidunt. Suspendisse potenti. Aenean vel rhoncus diam, in tempor ex. Pellentesque porta dolor sem, et tempus dolor feugiat quis. Suspendisse laoreet pretium suscipit. Nam consequat orci eget eros fermentum, eget tempor eros cursus. Fusce consequat, orci eu faucibus convallis, velit turpis finibus diam, in dapibus sapien est ut purus. Fusce iaculis posuere faucibus. "
-// );
-// generateTextAnimation(
-//   "console-content-2",
-//   "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras enim metus, volutpat id nisl at, mollis luctus magna. Vestibulum eget risus eget arcu accumsan consectetur eget iaculis ligula. Maecenas turpis ante, pulvinar non commodo sit amet, venenatis quis odio. Suspendisse at maximus turpis. Duis condimentum nisl sit amet ultricies tincidunt. Sed finibus quam a lectus sagittis, sed dapibus mi lacinia. Ut ac consequat ipsum, nec pretium ex. Morbi consequat ligula nunc, eget euismod purus lacinia commodo. Aenean at quam non velit lacinia sagittis at eu magna. Mauris efficitur nisl euismod magna viverra imperdiet. Mauris viverra id mi sit amet cursus. Pellentesque faucibus ornare libero a consequat. Nulla pellentesque justo at eros pharetra, sit amet interdum est dignissim. Etiam sem sapien, molestie non rutrum ut, ullamcorper id lorem. Quisque fringilla ultricies nulla ornare auctor. Proin lacinia eleifend erat vel mattis. Phasellus placerat ut libero nec posuere. Quisque eu quam eget risus sodales sodales. Cras consectetur odio ac sapien mattis sollicitudin sed ut nibh. Ut lacinia augue in felis placerat, eget aliquam tortor feugiat. Integer euismod mauris a metus mattis, vitae aliquam massa convallis. Suspendisse scelerisque ex in elit efficitur congue. Aenean quis dolor tempus, sodales metus in, placerat mauris. Aenean commodo euismod elit, a vestibulum dui eleifend nec. Vivamus non interdum ipsum. Vestibulum eget fermentum neque. Integer viverra luctus lacus eget semper. Praesent in metus quis erat auctor rutrum. Nulla ac arcu massa. Sed placerat consequat dui quis tincidunt. Suspendisse potenti. Aenean vel rhoncus diam, in tempor ex. Pellentesque porta dolor sem, et tempus dolor feugiat quis. Suspendisse laoreet pretium suscipit. Nam consequat orci eget eros fermentum, eget tempor eros cursus. Fusce consequat, orci eu faucibus convallis, velit turpis finibus diam, in dapibus sapien est ut purus. Fusce iaculis posuere faucibus. "
-// );
-
-function getCheckedCheckboxes() {
-  const cardList = document.querySelectorAll(".card");
-  const checkedCardTitles = [];
-
-  cardList.forEach((card) => {
-    const checkbox = card.querySelector(".card-checkbox");
-    if (checkbox.checked) {
-      const title = card.querySelector("p").innerText;
-      checkedCardTitles.push(title);
-    }
-  });
-
-  // console.log("Checked Card Titles:", checkedCardTitles);
-  return checkedCardTitles;
 }
 
 function getCardsData() {
@@ -63,56 +32,17 @@ function getCardsData() {
   // console.log("Checked Card Titles:", checkedCardTitles);
   return checkedCardTitles;
 }
-function checkAllCards(transactionCheckbox) {
-  const cardCheckboxes = document.querySelectorAll(".card-checkbox");
 
-  cardCheckboxes.forEach((checkbox) => {
-    checkbox.checked = transactionCheckbox.checked;
-  });
-}
-
-// function sendRequest(url) {
-//   let participantData; // Declare participantData outside the fetch to make it accessible in both fetches
-
-//   fetch("/getParticipantData")
-//     .then((response) => response.json()) // Chain a .then() to get the JSON data from response
-//     .then((data) => {
-//       console.log("Participant Data:", data); // Log the fetched data
-//       participantData = data; // Save the data in the variable
-
-//       // POST Request
-//       fetch(`${url}`, {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify(participantData),
-//       })
-//         .then((response) => response.json())
-//         .then((data) => {
-//           console.log("Response Data:", data); // Log the response data from the second fetch
-//           return data; // You can return the response data if needed
-//         })
-//         .catch((error) => {
-//           console.error("Error:", error);
-//           throw error;
-//         });
-//     })
-//     .catch((error) => console.error("Error:", error));
-
-//   // console.log("Database:", participantData); // Log the fetched data
-// }
-
-async function requestHandler(payment_url) {
+async function requestJSONHandler(payment_url) {
   const startTime = Date.now() / 1000;
   try {
     // Get Participant Data
     const participantResponse = await fetch("/getParticipantData");
     const participantData = await participantResponse.json();
-    console.log("Participant Data:", participantData);
+    // console.log("Participant Data:", participantData);
 
     // Build Message
-    const buildResponse = await fetch(payment_url + "/build", {
+    const buildResponse = await fetch(payment_url + "/json/build", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -124,7 +54,58 @@ async function requestHandler(payment_url) {
     generateTextAnimation("console-content-1", jsonBuildString);
 
     // Send Request
-    const sendResponse = await fetch(payment_url + "/request", {
+    const sendResponse = await fetch(payment_url + "/json/request", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(jsonBuildResponse),
+    });
+    const jsonSendResponse = await sendResponse.json();
+    const jsonSendString = JSON.stringify(jsonSendResponse, null, 2);
+    generateTextAnimation("console-content-2", jsonSendString);
+
+    // const duration = (Date.now() / 1000 - startTime).toFixed(2);
+    // const jsonResponse = await response.json();
+    // // console.log(jsonResponse);
+    // const msgNmId = jsonResponse.BusMsg.AppHdr.MsgDefIdr;
+    // const messageType = {
+    //   "pacs.002.001.10": () => this.pacs0200110(jsonResponse),
+    //   "pain.012.001.06": () => this.pain01200106(jsonResponse),
+    // };
+    // const result = messageType[msgNmId]();
+    // const jsonString = JSON.stringify(jsonResponse, null, 2);
+    // generateTextAnimation('console-content-2', jsonString)
+    // console.log(`${new Date().toISOString()} (${duration} seconds) ${payment_url} ${result.endToEndId} ${result.txSts} ${result.stsRsnInf}`);
+    return result;
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
+  }
+}
+
+async function requestXMLHandler(payment_url) {
+  const startTime = Date.now() / 1000;
+  try {
+    // Get Participant Data
+    const participantResponse = await fetch("/getParticipantData");
+    const participantData = await participantResponse.json();
+    // console.log("Participant Data:", participantData);
+
+    // Build Message
+    const buildResponse = await fetch(payment_url + "/xml/build", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(participantData),
+    });
+    const jsonBuildResponse = await buildResponse.json();
+    const jsonBuildString = JSON.stringify(jsonBuildResponse, null, 2);
+    generateTextAnimation("console-content-1", jsonBuildString);
+
+    // Send Request
+    const sendResponse = await fetch(payment_url + "/xml/request", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

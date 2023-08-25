@@ -12,7 +12,7 @@ Simulator
 <div class="checkbox-header">
   <input type="checkbox" class="transaction-checkbox" />
   <h2>Select All Transaction</h2>
-
+  <button class="transaction-button" onclick="clearConsole()">Clear</button>
 </div>
 
 <!-- Card List -->
@@ -21,7 +21,10 @@ Simulator
   <div class="card">
     <h2>{{ card.title }}</h2>
     <p>{{ card.content }}</p>
-    <button class="transaction-button" onclick="requestHandler('{{ card.content }}')">Fire</button>
+    {% if card.input == 'Y' %}
+    <input type="text" class="endtoendid-input" name="endtoendid" placeholder="EndToEndId">
+    {% endif %}<button class="transaction-button" onclick="requestJSONHandler('{{ card.content }}')">JSON</button>
+    <button class="transaction-button" onclick="requestXMLHandler('{{ card.content }}')">XML</button>
   </div>
   {% endfor %}
 </div>

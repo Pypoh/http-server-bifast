@@ -115,7 +115,7 @@ requestForPaymentByAccount = {
     "PMTTPINF_CTGYPURP_VALUE": "85301",
     "PMTINF_PMTMTD_VALUE": "TRF",
     "INSTDAMT_VALUE": 853.01,
-    "INSTDAMT_CCY": "IDR",
+    "INSTDAMT_CCY_VALUE": "IDR",
     "INTR_BK_STTLM_DT_VALUE": handler.getDt(),
     "CHRGBR_VALUE": "DEBT",
     "RMTINF_USTRD_VALUE": "Testing Purpose",
@@ -125,7 +125,7 @@ requestForPaymentByAccount = {
     "XPRY_DT_VALUE": ""
 }
 
-requestForPaymentByAccount = {
+requestForPaymentByProxy = {
     "FR_BIC_VALUE": dbtrData.get('CDTR_AGT_VALUE'),
     "PAYMENT_TYPE": "851",
     "MSG_DEF_IDR_VALUE": "pain.013.001.08",

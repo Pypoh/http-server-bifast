@@ -9,6 +9,8 @@ import handler.general as handler
 from config.bankConfig import BANK_CODE_VALUE, HUB_CODE_VALUE, RFI_BANK_CODE_VALUE
 from config.serverConfig import SCHEME_VALUE, HOST_URL_VALUE, HOST_PORT_VALUE
 
+def buildMessage():
+    pass
 
 def requestMessage():
     return ""

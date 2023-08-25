@@ -3,6 +3,8 @@ from flask import Flask, request, render_template, jsonify
 from config import serverConfig
 from handler import general as handler
 from blueprints.account_enquiry import account_enquiry_bp
+from blueprints.credit_transfer import credit_transfer_bp
+from blueprints.request_for_payment import request_for_payment_bp
 from handler.message import (
     # accountEnquiryHandler,
     creditTransferHandler,
@@ -25,6 +27,8 @@ import requests
 
 app = Flask(__name__, template_folder="templates")
 app.register_blueprint(account_enquiry_bp)
+app.register_blueprint(credit_transfer_bp)
+app.register_blueprint(request_for_payment_bp)
 app.config['FORMAT_PATH'] = os.path.join(app.root_path, 'format/OFI')
 
 

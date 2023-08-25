@@ -138,3 +138,7 @@ body {
   padding: 10px;
   margin-left: auto; /* Push the button to the right by consuming all available space */
 }
+
+.endtoendid-input {
+  margin-bottom: 10px;
+}

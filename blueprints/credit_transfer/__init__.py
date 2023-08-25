@@ -1,5 +1,5 @@
 from flask import Blueprint
 
-account_enquiry_bp = Blueprint('account_enquiry', __name__, url_prefix='/AccountEnquiry')
+credit_transfer_bp = Blueprint('credit_transfer', __name__, url_prefix='/CreditTransfer')
 
 from . import routes  # Import the routes for this blueprint

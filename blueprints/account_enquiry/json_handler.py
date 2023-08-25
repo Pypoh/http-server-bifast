@@ -16,8 +16,8 @@ from config.serverConfig import SCHEME_VALUE, HOST_URL_VALUE, HOST_PORT_VALUE
 def buildMessage(requestData):
     # Construct file path
     template_filename = 'pacs.008.001.10_AccountEnquiry.json'
-    file_path = os.path.join(
-        current_app.config["FORMAT_PATH"], template_filename)
+    file_path = os.path.join(current_app.root_path,
+                             'blueprints', 'account_enquiry','templates', template_filename)
 
     # Generate unique IDs
     payment_type = paymentData.accountEnquiry.get('PAYMENT_TYPE')
