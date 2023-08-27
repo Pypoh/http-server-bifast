@@ -110,7 +110,7 @@ def replace_placeholders_xml(template, value_dict):
 
     for key, value in value_dict.items():
         value = bool_to_lower(value)  # Convert boolean to lowercase string
-        placeholder = "{" + key + "}"
+        placeholder = "{ " + key + " }"
         for element in root.iter():
             if element.text is not None and placeholder in element.text:
                 element.text = element.text.replace(placeholder, str(value))

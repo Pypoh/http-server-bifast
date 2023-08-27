@@ -4,6 +4,10 @@ import json
 import os
 import sys
 from datetime import datetime, timedelta
+import socket
+import xml.etree.ElementTree as ET
+import struct
+import xml.dom.minidom
 
 import handler.general as handler
 import repository.data as generalData
@@ -11,20 +15,18 @@ import repository.payment as paymentData
 from config.bankConfig import BANK_CODE_VALUE, HUB_CODE_VALUE, RFI_BANK_CODE_VALUE
 from config.serverConfig import SCHEME_VALUE, HOST_URL_VALUE, HOST_PORT_VALUE
 
-def buildMessage():
-    pass
 
-def requestMessage(isProxy=False):
+def buildMessage(data):
     # Construct file path
-    template_filename = 'pain.013.001.08_RequestForPay.json'
-    file_path = os.path.join(
-        current_app.config["FORMAT_PATH"], template_filename)
+    template_filename = 'pain.013.001.08_RequestForPay.xml'
+    file_path = os.path.join(current_app.root_path,
+                             'blueprints', 'request_for_payment', 'templates', template_filename)
 
     # Generate unique IDs
-    payment_type = paymentData.creditTransfer.get('PAYMENT_TYPE')
-    dbtr_agt = generalData.sampleData.get('DBTRAGT')
-    generated_biz_msg_idr = handler.generateBizMsgIdr(dbtr_agt, payment_type)
-    generated_msg_id = handler.generateMsgId(dbtr_agt, payment_type)
+    payment_type = paymentData.requestForPaymentByAccount.get('PAYMENT_TYPE')
+    cdtr_agt = generalData.sampleData.get('CDTRAGT')
+    generated_biz_msg_idr = handler.generateBizMsgIdr(cdtr_agt, payment_type)
+    generated_msg_id = handler.generateMsgId(cdtr_agt, payment_type)
 
     unique_id = {
         "BIZ_MSG_IDR_VALUE": generated_biz_msg_idr,
@@ -35,35 +37,36 @@ def requestMessage(isProxy=False):
 
     # Load template data
     with open(file_path, 'r') as file:
-        template_data = json.load(file)
+        xml_template = file.read()
 
     # Create value dictionary for placeholders
     value_dict = {
         **unique_id,
+        **paymentData.requestForPaymentByAccount,
         **paymentData.base,
         **paymentData.cdtrData,
         **paymentData.dbtrData,
         **paymentData.splmtryData
     }
 
-    if (isProxy):
-        value_dict = {
-            **value_dict,
-            **paymentData.requestForPaymentByProxy,
-        }
+    # if (isProxy):
+    #     value_dict = {
+    #         **value_dict,
+    #         **paymentData.requestForPaymentByProxy,
+    #     }
 
-        # Set proxy information
-        dbtr_acct_prxy = filled_data['BusMsg']['Document']['CdtrPmtActvtnReq']['PmtInf'][0]['DbtrAcct'].setdefault(
-            'Prxy', {}).setdefault('Tp', {})
-        dbtr_acct_prxy['Prtry'] = generalData.sampleData.get(
-            'DBTRACCT_PRXY_TYPE')
-        filled_data['BusMsg']['Document']['CdtrPmtActvtnReq']['PmtInf'][0]['DbtrAcct']['Prxy']['Id'] = generalData.sampleData.get(
-            'DBTRACCT_PRXY_ID')
-    else:
-        value_dict = {
-            **value_dict,
-            **paymentData.requestForPaymentByAccount,
-        }
+    #     # Set proxy information
+    #     dbtr_acct_prxy = filled_data['BusMsg']['Document']['CdtrPmtActvtnReq']['PmtInf'][0]['DbtrAcct'].setdefault(
+    #         'Prxy', {}).setdefault('Tp', {})
+    #     dbtr_acct_prxy['Prtry'] = generalData.sampleData.get(
+    #         'DBTRACCT_PRXY_TYPE')
+    #     filled_data['BusMsg']['Document']['CdtrPmtActvtnReq']['PmtInf'][0]['DbtrAcct']['Prxy']['Id'] = generalData.sampleData.get(
+    #         'DBTRACCT_PRXY_ID')
+    # else:
+    #     value_dict = {
+    #         **value_dict,
+    #         **paymentData.requestForPaymentByAccount,
+    #     }
 
     # Set the Date
     timestamp_now = datetime.now()
@@ -73,22 +76,32 @@ def requestMessage(isProxy=False):
     value_dict['REQD_EXCTN_DT_VALUE'] = timestamp_formatted
     value_dict['XPRY_DT_VALUE'] = timestamp_future_formatted
 
-    # Replace placeholders in template data
-    filled_data = handler.replace_placeholders(template_data, value_dict)
-    filled_data["BusMsg"]["Document"]["CdtrPmtActvtnReq"]["PmtInf"][0]["CdtTrfTx"][0]["Amt"]["InstdAmt"]["value"] = float(
-        value_dict.get('INSTDAMT_VALUE'))
-    filled_data["BusMsg"]["AppHdr"]["PssblDplct"] = False
+    filled_data = handler.replace_placeholders_xml(xml_template, value_dict)
 
+    # # Replace placeholders in template data
+    # filled_data = handler.replace_placeholders(template_data, value_dict)
+    # filled_data["BusMsg"]["Document"]["CdtrPmtActvtnReq"]["PmtInf"][0]["CdtTrfTx"][0]["Amt"]["InstdAmt"]["value"] = float(
+    #     value_dict.get('INSTDAMT_VALUE'))
+    # filled_data["BusMsg"]["AppHdr"]["PssblDplct"] = False
+
+    # Pretty print
+    xml_dom = xml.dom.minidom.parseString(filled_data)
+    pretty_xml_content = xml_dom.toprettyxml(indent="  ")
+
+    return pretty_xml_content
+
+
+def requestMessage(message):
     # Prepare headers
     headers = {
         "Content-Type": "application/json",
-        "Content-Length": str(len(json.dumps(filled_data))),
+        "Content-Length": str(len(json.dumps(message))),
         "message": "/CreditorPaymentActivationRequestV08"
     }
 
     # Send POST request
-    host_url = f"{SCHEME_VALUE}{generalData.sampleData.get('HOST_URL')}:{generalData.sampleData.get('DBTR_PORT')}"
-    response = requests.post(host_url, json=filled_data, headers=headers)
+    host_url = f"{SCHEME_VALUE}{generalData.sampleData.get('HOST_URL')}:{generalData.sampleData.get('CDTR_PORT')}"
+    response = requests.post(host_url, json=message, headers=headers)
 
     return response.text
 

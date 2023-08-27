@@ -1,31 +1,8 @@
 from flask import render_template
 from . import account_enquiry_bp
-from . import json_handler, xml_handler
+from blueprints.account_enquiry.handlers.json import json_handler
+from blueprints.account_enquiry.handlers.xml import xml_handler
 from flask import Flask, request, render_template, jsonify
-
-# @account_enquiry_bp.route('/<scheme>/build', methods=['POST'])
-# def buildMessage(scheme):
-#     try:
-#         data = request.get_json()
-#         if scheme == 'json':
-#             return json_handler.buildMessage(data)
-#         elif scheme == 'xml':
-#             return xml_handler.buildMessage(data)
-#     except Exception as e:
-#         return jsonify({"error": f"{e}"}), 400
-
-
-# @account_enquiry_bp.route('/<scheme>/request', methods=['POST'])
-# def requestMessage(scheme):
-#     try:
-#         data = request.get_json()
-#         if scheme == 'json':
-#             return json_handler.requestMessage(data)
-#         elif scheme == 'xml':
-#             return xml_handler.requestMessage(data)
-#     except Exception as e:
-#         return jsonify({"error": f"{e}"}), 400
-
 
 from functools import wraps
 

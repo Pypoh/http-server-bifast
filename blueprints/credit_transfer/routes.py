@@ -1,7 +1,7 @@
 from flask import render_template
 from . import credit_transfer_bp
-from . import credit_transfer_json_handlers, credit_transfer_proxy_json_handlers, credit_transfer_reversal_json_handlers, credit_transfer_rfp_json_handlers
-from . import credit_transfer_xml_handlers, credit_transfer_proxy_xml_handlers, credit_transfer_reversal_xml_handlers, credit_transfer_rfp_xml_handlers
+from blueprints.credit_transfer.handlers.json import credit_transfer_json_handlers, credit_transfer_proxy_json_handlers, credit_transfer_reversal_json_handlers, credit_transfer_rfp_json_handlers
+from blueprints.credit_transfer.handlers.xml import credit_transfer_xml_handlers, credit_transfer_proxy_xml_handlers, credit_transfer_reversal_xml_handlers, credit_transfer_rfp_xml_handlers
 from flask import Flask, request, render_template, jsonify
 
 build_handlers = {
@@ -41,6 +41,7 @@ request_handlers = {
     }
 }
 
+
 def process_message(type, scheme, action, data):
     try:
         if action == 'build':
@@ -53,10 +54,12 @@ def process_message(type, scheme, action, data):
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
+
 @credit_transfer_bp.route('/<type>/<scheme>/build', methods=['POST'])
 def buildMessage(type, scheme):
     data = request.get_json()
     return process_message(type, scheme, 'build', data)
+
 
 @credit_transfer_bp.route('/<type>/<scheme>/request', methods=['POST'])
 def requestMessage(type, scheme):

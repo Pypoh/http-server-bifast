@@ -8,6 +8,7 @@ import sys
 import socket
 import xml.etree.ElementTree as ET
 import struct
+import xml.dom.minidom
 
 import repository.data as generalData
 import repository.payment as paymentData
@@ -58,7 +59,11 @@ def buildMessage(requestData):
     # if tags_to_remove is not None:
     #     handler.remove_tags(filled_data, tags_to_remove)
 
-    return filled_data
+    # Pretty print
+    xml_dom = xml.dom.minidom.parseString(filled_data)
+    pretty_xml_content = xml_dom.toprettyxml(indent="  ")
+
+    return pretty_xml_content
 
 
 def requestMessage(message):

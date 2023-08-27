@@ -10,8 +10,8 @@ function updateConsoleContent(consoleId, content) {
 }
 
 function clearConsole() {
-  const consoleContent1 = document.getElementById('console-content-1');
-  const consoleContent2 = document.getElementById('console-content-2');
+  const consoleContent1 = document.getElementById("console-content-1");
+  const consoleContent2 = document.getElementById("console-content-2");
   consoleContent1.innerText = "";
   consoleContent2.innerText = "";
 }
@@ -33,7 +33,26 @@ function getCardsData() {
   return checkedCardTitles;
 }
 
-async function requestJSONHandler(payment_url) {
+function getInputValue(selector) {
+  var input = document.querySelector(selector);
+  return input ? input.value : "";
+}
+
+function checkInputData(payment_id) {
+  var endtoendidValue = getInputValue(`#endtoendid_${payment_id}`);
+  var mandateIdValue = getInputValue(".mandateid-input");
+
+  var data = {
+    SPLMNTR_RLTD_END_TO_END_ID: endtoendidValue,
+    mandateIdValue: mandateIdValue,
+  };
+
+  return data;
+}
+
+async function requestJSONHandler(payment_url, payment_id) {
+  var inputData = checkInputData(payment_id);
+
   const startTime = Date.now() / 1000;
   try {
     // Get Participant Data
@@ -41,13 +60,15 @@ async function requestJSONHandler(payment_url) {
     const participantData = await participantResponse.json();
     // console.log("Participant Data:", participantData);
 
+    var data = Object.assign({}, inputData, participantData);
+
     // Build Message
     const buildResponse = await fetch(payment_url + "/json/build", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(participantData),
+      body: JSON.stringify(data),
     });
     const jsonBuildResponse = await buildResponse.json();
     const jsonBuildString = JSON.stringify(jsonBuildResponse, null, 2);
@@ -84,13 +105,16 @@ async function requestJSONHandler(payment_url) {
   }
 }
 
-async function requestXMLHandler(payment_url) {
+async function requestXMLHandler(payment_url, payment_id) {
+  var inputData = checkInputData(payment_id);
+
   const startTime = Date.now() / 1000;
   try {
     // Get Participant Data
     const participantResponse = await fetch("/getParticipantData");
     const participantData = await participantResponse.json();
-    // console.log("Participant Data:", participantData);
+
+    var data = Object.assign({}, inputData, participantData);
 
     // Build Message
     const buildResponse = await fetch(payment_url + "/xml/build", {
@@ -98,23 +122,23 @@ async function requestXMLHandler(payment_url) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(participantData),
+      body: JSON.stringify(data),
     });
-    const jsonBuildResponse = await buildResponse.json();
-    const jsonBuildString = JSON.stringify(jsonBuildResponse, null, 2);
-    generateTextAnimation("console-content-1", jsonBuildString);
 
-    // Send Request
-    const sendResponse = await fetch(payment_url + "/xml/request", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(jsonBuildResponse),
-    });
-    const jsonSendResponse = await sendResponse.json();
-    const jsonSendString = JSON.stringify(jsonSendResponse, null, 2);
-    generateTextAnimation("console-content-2", jsonSendString);
+    const xmlResponseText = await buildResponse.text();
+    generateTextAnimation("console-content-1", xmlResponseText);
+
+    // // Send Request
+    // const sendResponse = await fetch(payment_url + "/xml/request", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(jsonBuildResponse),
+    // });
+    // const jsonSendResponse = await sendResponse.json();
+    // const jsonSendString = JSON.stringify(jsonSendResponse, null, 2);
+    // generateTextAnimation("console-content-2", jsonSendString);
 
     // const duration = (Date.now() / 1000 - startTime).toFixed(2);
     // const jsonResponse = await response.json();

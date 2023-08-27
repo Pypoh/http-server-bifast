@@ -28,7 +28,7 @@ def buildMessage(data):
         "BIZ_MSG_IDR_VALUE": generated_biz_msg_idr,
         "MSG_ID_VALUE": generated_msg_id,
         "END_TO_END_ID_VALUE": generated_biz_msg_idr,
-        "TX_ID_VALUE": generated_msg_id,
+        # "TX_ID_VALUE": generated_msg_id,
     }
 
     # Load template data
