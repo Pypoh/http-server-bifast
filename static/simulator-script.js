@@ -44,14 +44,59 @@ function checkInputData(payment_id) {
 
   var data = {
     SPLMNTR_RLTD_END_TO_END_ID: endtoendidValue,
-    mandateIdValue: mandateIdValue,
+    MNDT_REQ_ID: mandateIdValue,
   };
 
   return data;
 }
 
+function isEmpty(value) {
+  return value === null || value === undefined || value === "";
+}
+
+async function requestPaymentReport(payment_url, payment_data) {
+  // Build Message
+  const buildResponse = await fetch(payment_url + "/json/build", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  const jsonBuildResponse = await buildResponse.json();
+  const jsonBuildString = JSON.stringify(jsonBuildResponse, null, 2);
+  generateTextAnimation("console-content-1", jsonBuildString);
+}
+
 async function requestJSONHandler(payment_url, payment_id) {
   var inputData = checkInputData(payment_id);
+  var payment_data = "";
+  for (var key in data) {
+    switch (key) {
+      case "SPLMNTR_RLTD_END_TO_END_ID":
+        if (!isEmpty(data[key])) {
+          payment_data = {
+            ORGNAGT: "DBTRAGT",
+            ORGNL_END_TO_END_ID_VALUE: data,
+          };
+        }
+
+      case "MNDT_REQ_ID":
+        if (!isEmpty(data[key])) {
+        }
+        break;
+    }
+  }
+
+  const payment_status_response = await fetch(payment_url + "/json/build", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payment_data),
+  });
+
+  console.log(payment_status_response);
 
   const startTime = Date.now() / 1000;
   try {
@@ -86,18 +131,6 @@ async function requestJSONHandler(payment_url, payment_id) {
     const jsonSendString = JSON.stringify(jsonSendResponse, null, 2);
     generateTextAnimation("console-content-2", jsonSendString);
 
-    // const duration = (Date.now() / 1000 - startTime).toFixed(2);
-    // const jsonResponse = await response.json();
-    // // console.log(jsonResponse);
-    // const msgNmId = jsonResponse.BusMsg.AppHdr.MsgDefIdr;
-    // const messageType = {
-    //   "pacs.002.001.10": () => this.pacs0200110(jsonResponse),
-    //   "pain.012.001.06": () => this.pain01200106(jsonResponse),
-    // };
-    // const result = messageType[msgNmId]();
-    // const jsonString = JSON.stringify(jsonResponse, null, 2);
-    // generateTextAnimation('console-content-2', jsonString)
-    // console.log(`${new Date().toISOString()} (${duration} seconds) ${payment_url} ${result.endToEndId} ${result.txSts} ${result.stsRsnInf}`);
     return result;
   } catch (error) {
     console.error("Error:", error);
@@ -128,17 +161,16 @@ async function requestXMLHandler(payment_url, payment_id) {
     const xmlResponseText = await buildResponse.text();
     generateTextAnimation("console-content-1", xmlResponseText);
 
-    // // Send Request
-    // const sendResponse = await fetch(payment_url + "/xml/request", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(jsonBuildResponse),
-    // });
-    // const jsonSendResponse = await sendResponse.json();
-    // const jsonSendString = JSON.stringify(jsonSendResponse, null, 2);
-    // generateTextAnimation("console-content-2", jsonSendString);
+    // Send Request
+    const sendResponse = await fetch(payment_url + "/xml/request", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(xmlResponseText),
+    });
+    const xmlSendResponse = await sendResponse.text();
+    generateTextAnimation("console-content-2", xmlSendResponse);
 
     // const duration = (Date.now() / 1000 - startTime).toFixed(2);
     // const jsonResponse = await response.json();

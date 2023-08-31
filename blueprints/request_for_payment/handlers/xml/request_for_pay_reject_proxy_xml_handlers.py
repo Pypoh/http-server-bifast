@@ -1,131 +1,110 @@
 from flask import Flask, Response, current_app, jsonify
-from datetime import datetime
 import requests
+import handler.general as handler
+from datetime import datetime
 import json
 import os
 import sys
-import handler.general as handler
+import socket
+import xml.etree.ElementTree as ET
+import struct
+import xml.dom.minidom
+
+import repository.data as generalData
+import repository.payment as paymentData
 
 from config.bankConfig import BANK_CODE_VALUE, HUB_CODE_VALUE, RFI_BANK_CODE_VALUE
 from config.serverConfig import SCHEME_VALUE, HOST_URL_VALUE, HOST_PORT_VALUE
 
-def buildMessage():
-    pass
+def buildMessage(data):
+    # Construct file path
+    template_filename = 'pain.014.001.08_RequestForPayReject.xml'
+    file_path = os.path.join(current_app.root_path,
+                             'blueprints', 'request_for_payment', 'templates', template_filename)
 
-def requestMessage(requestData):
-    filePath = os.path.join(
-        current_app.config["FORMAT_PATH"], 'pain.014.001.08_RequestForPayReject.json')
+    # Generate unique IDs
+    payment_type = paymentData.requestForPaymentRejectByProxy.get('PAYMENT_TYPE')
+    dbtr_agt = generalData.sampleData.get('DBTRAGT')
+    generated_biz_msg_idr = handler.generateBizMsgIdr(dbtr_agt, payment_type)
+    generated_msg_id = handler.generateMsgId(dbtr_agt, payment_type)
 
-    generatedBizMsgIdr = handler.generateBizMsgIdr(requestData.get('Fr'), "854")
-    generatedMsgId = handler.generateMsgId(requestData.get('Fr'), "854")
-
-    with open(filePath, 'r') as file:
-        template_data = json.load(file)
-        value_dict = {
-            "FR_BIC_VALUE": requestData.get('Fr'),
-            "TO_BIC_VALUE": requestData.get('To'),
-            "BIZ_MSG_IDR_VALUE": generatedBizMsgIdr,
-            "MSG_DEF_IDR_VALUE": requestData.get('MsgDefIdr'),
-            "BIZ_SVC_VALUE": requestData.get('BizSvc'),
-            "CRE_DT_VALUE": handler.getCreDt(),
-            "CPYDPLCT_VALUE": requestData.get('CpyDplct'),
-            "PSSBLDPLCT_VALUE": requestData.get('PssblDplct'),
-            "MSG_ID_VALUE": generatedMsgId,
-            "CRE_DT_TM_VALUE": handler.getCreDtTm(),
-            "CDTR_AGT_VALUE": requestData.get('CdtrAgt'),
-            "ORGNL_MSG_ID_VALUE": requestData.get('OrgnlMsgId'),
-            "ORGNL_MSG_NM_VALUE": requestData.get('OrgnlMsgNmId'),
-            "ORGNL_PMTINF_ID_VALUE": requestData.get('OrgnlPmtInfId'),
-            "ORGNL_END_TO_END_ID_VALUE": requestData.get('OrgnlEndToEndId'),
-            "TXSTS_VALUE": requestData.get('TxSts'),
-            "STS_RSN_INF_VALUE": requestData.get('StsRsnInf'),
-            "END_TO_END_ID_VALUE": generatedBizMsgIdr
-        }
-
-    filled_data = handler.replace_placeholders(template_data, value_dict)
-
-    filled_data["BusMsg"]["AppHdr"]["PssblDplct"] = False
-    headers = {
-        "Content-Type": "application/json",
-        "Content-Length": str(filled_data),
-        "message": "/CreditorPaymentActivationRequestStatusReportV08"
+    unique_id = {
+        "BIZ_MSG_IDR_VALUE": generated_biz_msg_idr,
+        "MSG_ID_VALUE": generated_msg_id,
+        "END_TO_END_ID_VALUE": generated_biz_msg_idr,
+    }
+    
+    base_dynamic_data = {
+        "CRE_DT_VALUE": handler.getCreDt(),
+        "CRE_DT_TM_VALUE": handler.getCreDtTm(),
+        "FR_BIC_VALUE": dbtr_agt
     }
 
-    response = requests.post(
-        f"{SCHEME_VALUE}{requestData.get('Host_url')}:{requestData.get('Host_port')}", json=filled_data, headers=headers)
-    return response.text
+    # Load the XML file as an ElementTree
+    with open(file_path, 'r') as file:
+        xml_template = file.read()
 
-
-def requestMessageByProxy(requestData):
-    filePath = os.path.join(
-        current_app.config["FORMAT_PATH"], 'pain.014.001.08_RequestForPayReject.json')
-
-    generatedBizMsgIdr = handler.generateBizMsgIdr(requestData.get('Fr'), "852")
-    generatedMsgId = handler.generateMsgId(requestData.get('Fr'), "852")
-
-    with open(filePath, 'r') as file:
-        template_data = json.load(file)
-        value_dict = {
-            "FR_BIC_VALUE": requestData.get('Fr'),
-            "TO_BIC_VALUE": requestData.get('To'),
-            "BIZ_MSG_IDR_VALUE": generatedBizMsgIdr,
-            "MSG_DEF_IDR_VALUE": requestData.get('MsgDefIdr'),
-            "BIZ_SVC_VALUE": requestData.get('BizSvc'),
-            "CRE_DT_VALUE": handler.getCreDt(),
-            "CPYDPLCT_VALUE": requestData.get('CpyDplct'),
-            "PSSBLDPLCT_VALUE": requestData.get('PssblDplct'),
-            "MSG_ID_VALUE": generatedMsgId,
-            "CRE_DT_TM_VALUE": handler.getCreDtTm(),
-            "CDTR_AGT_VALUE": requestData.get('CdtrAgt'),
-            "ORGNL_MSG_ID_VALUE": requestData.get('OrgnlMsgId'),
-            "ORGNL_MSG_NM_VALUE": requestData.get('OrgnlMsgNmId'),
-            "ORGNL_PMTINF_ID_VALUE": requestData.get('OrgnlPmtInfId'),
-            "ORGNL_END_TO_END_ID_VALUE": requestData.get('OrgnlEndToEndId'),
-            "TXSTS_VALUE": requestData.get('TxSts'),
-            "STS_RSN_INF_VALUE": requestData.get('StsRsnInf'),
-            "END_TO_END_ID_VALUE": generatedBizMsgIdr
-        }
-
-    filled_data = handler.replace_placeholders(template_data, value_dict)
-
-    filled_data["BusMsg"]["AppHdr"]["PssblDplct"] = False
-    headers = {
-        "Content-Type": "application/json",
-        "Content-Length": str(filled_data),
-        "message": "/CreditorPaymentActivationRequestStatusReportV08"
+    # Create value dictionary for placeholders
+    value_dict = {
+        **unique_id,
+        **base_dynamic_data,
+        **paymentData.requestForPaymentRejectByProxy,
+        **paymentData.base,
+        **paymentData.cdtrData,
+        **paymentData.dbtrData,
     }
 
-    response = requests.post(
-        f"{SCHEME_VALUE}{requestData.get('Host_url')}:{requestData.get('Host_port')}", json=filled_data, headers=headers)
-    return response.text
+    # Replace placeholders in template data
+    filled_data = handler.replace_placeholders_xml(xml_template, value_dict)
 
+    # tags_to_remove = customForm.getlist('tags_to_remove')
 
-def generateResponse(message):
-    filePath = os.path.join(
-        current_app.config["FORMAT_PATH"], 'pacs.002.001.10_AccountEnquiry.json')
-    with open(filePath, 'r') as file:
-        template_data = json.load(file)
-        value_dict = {
-            "FR_BIC_VALUE": BANK_CODE_VALUE,
-            "TO_BIC_VALUE": HUB_CODE_VALUE,
-            "BIZ_MSG_IDR_VALUE": handler.generateBizMsgIdr(
-                handler.getTagValue(message, "BizMsgIdr")),
-            "CRE_DT_VALUE": handler.getCreDt(),
-            "MSG_ID_VALUE": handler.generateMsgId(bizMsgIdr),
-            "CRE_DT_TM_VALUE": handler.getCreDtTm(),
-            "ORGNL_MSG_ID_VALUE": handler.getTagValue(message, "MsgId"),
-            "ORGNL_MSG_NM_ID_VALUE": handler.getTagValue(message, "MsgDefIdr"),
-            "ORGNL_END_TO_END_ID_VALUE": handler.getTagValue(message, "EndToEndId"),
-            "ORGNL_TX_ID_VALUE": handler.getTagValue(message, "TxId"),
-            "TX_STS_VALUE": "ACTC",
-            "RSN_PRTRY_VALUE": "U000",
-            "ORGNL_CDTR_NM_VALUE": handler.getTagValueNested(
-                message, "BusMsg/Document/FIToFICstmrCdtTrf/CdtTrfTxInf/Cdtr/Nm"),
-            "ORGNL_CDTR_ACCT_ID_VALUE": handler.getTagValueNested(
-                message, "BusMsg/Document/FIToFICstmrCdtTrf/CdtTrfTxInf/CdtrAcct/Id/Othr/Id"),
-            # "ORGNL_CDTR_ACCT_TP_VALUE": handler.getTagValue(message, "CdtrAcct/Id/Othr/Id")
-        }
-    filled_data = handler.replace_placeholders(template_data, value_dict)
-    json_data = json.dumps(filled_data, indent=0)
-    response = Response(json_data, content_type='application/json')
-    return response
+    # if tags_to_remove is not None:
+    #     handler.remove_tags(filled_data, tags_to_remove)
+
+    # Pretty print
+    xml_dom = xml.dom.minidom.parseString(filled_data)
+    pretty_xml_content = xml_dom.toprettyxml(indent="  ")
+
+    return pretty_xml_content
+
+def requestMessage(message):
+    message_length = len(message)
+    header = struct.pack('!I', message_length)
+    print(message)
+    message_with_header = header + message.encode('utf-8')
+
+    # Create a TCP socket
+    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    # Connect to the server
+    client_socket.connect(('10.170.137.115', 18908))
+
+    # Send the XML message to the server
+    client_socket.send(message_with_header)
+
+    # Loop to wait for the server's response
+    while True:
+        header = client_socket.recv(4)
+        message_length = struct.unpack('!I', header)[0]
+
+        # Step 2: Read the message bytes
+        message_data = client_socket.recv(message_length)
+
+        # Step 3: Decode and process the message
+        decoded_message = message_data.decode('utf-8')
+        # print("Received message:", decoded_message)
+        break
+
+        # Check if the loop should continue
+        if decoded_message == "exit":
+            break
+
+    # Close the socket connection
+    client_socket.close()
+
+     # Pretty print
+    xml_dom = xml.dom.minidom.parseString(decoded_message)
+    pretty_xml_content = xml_dom.toprettyxml(indent="  ")
+
+    return pretty_xml_content

@@ -40,6 +40,7 @@
 					}
 				},
 				"PmtInf": [{
+					"PmtInfId": "{{ PMTINF_PMTINFID_VALUE }}",
 					"PmtMtd": "{{ PMTINF_PMTMTD_VALUE }}",
 					"PmtTpInf": {
 						"CtgyPurp": {

@@ -1,43 +1,60 @@
 from flask import render_template
-from . import account_enquiry_bp
-from . import accountEnquiryHandler
+from . import mandate_bp
+from blueprints.mandate.handlers.json import (
+    mandate_regist_json_handlers, mandate_approve_json_handlers, mandate_amend_json_handlers)
+from blueprints.mandate.handlers.xml import mandate_regist_xml_handlers
 from flask import Flask, request, render_template, jsonify
 
-# @app.route('/AccountEnquiryOFI', methods=['POST'])
-# def aeHandlerOFI():
-#     if request.method == 'POST':
-#         try:
-#             data = request.get_json()
-#             # print("Received JSON data:", data)
-#             response_data = {
-#                 "status": "success",
-#                 "message": "Request processed successfully",
-#             }
-#             # return jsonify(response_data), 200
-#         except Exception as e:
-#             pass
-#             # return jsonify({"error": "Invalid JSON data"}), 400
-#             # return jsonify({"error": f"{e}"}), 400
+build_handlers = {
+    'regist': {
+        'json': mandate_regist_json_handlers.buildMessage,
+        'xml': mandate_regist_xml_handlers.buildMessage
+    },
+    'approve': {
+        'json': mandate_regist_json_handlers.buildMessage,
+        'xml': mandate_regist_json_handlers.buildMessage
+    },
+    'amend': {
+        'json': mandate_regist_json_handlers.buildMessage,
+        'xml': mandate_regist_json_handlers.buildMessage
+    },
+}
+request_handlers = {
+    'regist': {
+        'json': mandate_regist_json_handlers.requestMessage,
+        'xml': mandate_regist_json_handlers.requestMessage
+    },
+    'approve': {
+        'json': mandate_regist_json_handlers.requestMessage,
+        'xml': mandate_regist_json_handlers.requestMessage
+    },
+    'amend': {
+        'json': mandate_regist_json_handlers.requestMessage,
+        'xml': mandate_regist_json_handlers.requestMessage
+    },
+}
 
-#         # return accountEnquiryHandler.requestMessage(request.form)
-#         return accountEnquiryHandler.requestMessage(data)
 
-@account_enquiry_bp.route('/build', methods=['POST'])
-def buildMessage():
-    if request.method == 'POST':
-        try:
-            data = request.get_json()
-        except Exception as e:
-            return jsonify({"error": "Invalid JSON data"}), 400
+def process_message(type, scheme, action, data, initiator):
+    try:
+        if action == 'build':
+            handler = build_handlers.get(type, {}).get(scheme)
+        elif action == 'request':
+            handler = request_handlers.get(type, {}).get(scheme)
+        if handler:
+            return handler(data, initiator)
+        return jsonify({"error": "Invalid type or scheme"}), 400
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
 
-        return accountEnquiryHandler.buildMessage(data)
 
-@account_enquiry_bp.route('/request', methods=['POST'])
-def requestMessage():
-    if request.method == 'POST':
-        try:
-            data = request.get_json()
-        except Exception as e:
-            return jsonify({"error": "Invalid JSON data"}), 400
+@mandate_bp.route('/<type>/<initiator>/<scheme>/build', methods=['POST'])
+def buildMessage(type, scheme, initiator):
+    data = request.get_json()
+    return process_message(type, scheme, 'build', data, initiator)
 
-        return accountEnquiryHandler.requestMessage(data)
+
+@mandate_bp.route('/<type>/<initiator>/<scheme>/request', methods=['POST'])
+def requestMessage(type, scheme, initiator):
+    data = request.get_json()
+    return process_message(type, scheme, 'request', data, initiator)

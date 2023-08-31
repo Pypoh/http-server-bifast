@@ -29,6 +29,16 @@ def buildMessage(data):
         "TX_ID_VALUE": generated_msg_id,
         "SPLMNTR_RLTD_END_TO_END_ID": data.get('SPLMNTR_RLTD_END_TO_END_ID')
     }
+    
+    base_dynamic_data = {
+        "CRE_DT_VALUE": handler.getCreDt(),
+        "CRE_DT_TM_VALUE": handler.getCreDtTm(),
+        "FR_BIC_VALUE": dbtr_agt
+    }
+    
+    payment_dynamic_data = {
+        "INTR_BK_STTLM_DT_VALUE": handler.getDt(),
+    }
 
     # Load template data
     with open(file_path, 'r') as file:
@@ -37,6 +47,8 @@ def buildMessage(data):
     # Create value dictionary for placeholders
     value_dict = {
         **unique_id,
+        **base_dynamic_data,
+        **payment_dynamic_data,
         **paymentData.base,
         **paymentData.creditTransferRFP,
         **paymentData.cdtrData,

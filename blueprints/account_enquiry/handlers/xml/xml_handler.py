@@ -20,6 +20,7 @@ from config.serverConfig import SCHEME_VALUE, HOST_URL_VALUE, HOST_PORT_VALUE
 def buildMessage(requestData):
     # Construct file path
     template_filename = 'pacs.008.001.10_AccountEnquiry.xml'
+    # template_filename = 'pacs.008.001.10_BulkAccountEnquiry.xml'
     file_path = os.path.join(current_app.root_path,
                              'blueprints', 'account_enquiry','templates', template_filename)
 
@@ -35,6 +36,16 @@ def buildMessage(requestData):
         "END_TO_END_ID_VALUE": generated_biz_msg_idr,
         "TX_ID_VALUE": generated_msg_id,
     }
+    
+    base_dynamic_data = {
+        "CRE_DT_VALUE": handler.getCreDt(),
+        "CRE_DT_TM_VALUE": handler.getCreDtTm(),
+        "FR_BIC_VALUE": dbtr_agt
+    }
+    
+    payment_dynamic_data = {
+        "INTR_BK_STTLM_DT_VALUE": handler.getCreDt(),
+    }
 
     # Load the XML file as an ElementTree
     with open(file_path, 'r') as file:
@@ -43,6 +54,8 @@ def buildMessage(requestData):
     # Create value dictionary for placeholders
     value_dict = {
         **unique_id,
+        **base_dynamic_data,
+        **payment_dynamic_data,
         **paymentData.base,
         **paymentData.accountEnquiry,
         **paymentData.cdtrData,
@@ -76,7 +89,7 @@ def requestMessage(message):
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     # Connect to the server
-    client_socket.connect(('10.170.137.115', 18907))
+    client_socket.connect(('10.170.137.115', 18908))
 
     # Send the XML message to the server
     client_socket.send(message_with_header)
@@ -91,7 +104,7 @@ def requestMessage(message):
 
         # Step 3: Decode and process the message
         decoded_message = message_data.decode('utf-8')
-        print("Received message:", decoded_message)
+        # print("Received message:", decoded_message)
         break
 
         # Check if the loop should continue
@@ -101,4 +114,8 @@ def requestMessage(message):
     # Close the socket connection
     client_socket.close()
 
-    return decoded_message
+     # Pretty print
+    xml_dom = xml.dom.minidom.parseString(decoded_message)
+    pretty_xml_content = xml_dom.toprettyxml(indent="  ")
+
+    return pretty_xml_content

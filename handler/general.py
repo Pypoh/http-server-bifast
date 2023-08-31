@@ -5,6 +5,29 @@ import random
 import json
 import pytz
 import xml.etree.ElementTree as ET
+# import repository.payment as paymentData
+
+
+def getCreDt():
+    wibTimeZone = pytz.timezone('Asia/Jakarta')
+    currentTime = datetime.now(wibTimeZone)
+    creDtValue = currentTime.strftime('%Y-%m-%dT%H:%M:%SZ')
+    return creDtValue
+
+
+def getCreDtTm():
+    wibTimeZone = pytz.timezone('Asia/Jakarta')
+    currentTime = datetime.now(wibTimeZone)
+    creDtTmValue = currentTime.strftime('%Y-%m-%dT%H:%M:%S')
+    return creDtTmValue
+
+
+def getDt():
+    wibTimeZone = pytz.timezone('Asia/Jakarta')
+    currentTime = datetime.now(wibTimeZone)
+    DtValue = currentTime.strftime('%Y-%m-%d')
+    return DtValue
+
 
 def getTagValue(json_data, target_tag):
     if isinstance(json_data, dict):
@@ -58,10 +81,18 @@ def printNestedTag(data, parent_key="", indent=""):
 
 
 def getTransactionCode(bizMsgIdr):
-    # bizMsgIdr = "20001111BBLUIDJA821O0110080002"
     transactionCode = bizMsgIdr[16:19]
     print(transactionCode, file=sys.stderr)
     return transactionCode
+
+
+# def getMessageNameIdFromTrxCode(bizMsgIdr):
+#     trxCode = getTransactionCode(bizMsgIdr)
+#     payment_dictionaries = paymentData.payment_dictionaries
+#     for dictionary_name in payment_dictionaries:
+#         dictionary = getattr(paymentData, dictionary_name)
+#         if dictionary.get("PAYMENT_TYPE") == trxCode:
+#             return dictionary.get('MSG_DEF_IDR_VALUE')
 
 
 def generateBizMsgIdr(bic, bizMsgIdrOrTTC=None):
@@ -102,8 +133,10 @@ def replace_placeholders(template, value_dict):
         json_string = json_string.replace(placeholder, str(value))
     return json.loads(json_string)
 
+
 def bool_to_lower(value):
     return str(value).lower() if isinstance(value, bool) else value
+
 
 def replace_placeholders_xml(template, value_dict):
     root = ET.fromstring(template)
@@ -121,27 +154,6 @@ def replace_placeholders_xml(template, value_dict):
                     element.attrib[attr_name] = attr_value
 
     return ET.tostring(root, encoding='utf-8').decode()
-
-
-def getCreDt():
-    wibTimeZone = pytz.timezone('Asia/Jakarta')
-    currentTime = datetime.now(wibTimeZone)
-    creDtValue = currentTime.strftime('%Y-%m-%dT%H:%M:%SZ')
-    return creDtValue
-
-
-def getCreDtTm():
-    wibTimeZone = pytz.timezone('Asia/Jakarta')
-    currentTime = datetime.now(wibTimeZone)
-    creDtTmValue = currentTime.strftime('%Y-%m-%dT%H:%M:%S')
-    return creDtTmValue
-
-
-def getDt():
-    wibTimeZone = pytz.timezone('Asia/Jakarta')
-    currentTime = datetime.now(wibTimeZone)
-    DtValue = currentTime.strftime('%Y-%m-%d')
-    return DtValue
 
 
 def extract_values(json_data):
@@ -176,13 +188,14 @@ def extract_values(json_data):
         parsed_data = json.loads(json_data)
         extracted_data = _extract(parsed_data)
         # Remove the prefix "Document_MndtAccptncRpt_UndrlygAccptncDtls_0_" from the keys
-        result_dict1 = {key.replace("Document_MndtAccptncRpt_UndrlygAccptncDtls0_", "")
-                                   : value for key, value in extracted_data.items()}
-        result_dict = {key.replace("OrgnlMndt_", ""): value for key, value in result_dict1.items()}
+        result_dict1 = {key.replace("Document_MndtAccptncRpt_UndrlygAccptncDtls0_", ""): value for key, value in extracted_data.items()}
+        result_dict = {key.replace(
+            "OrgnlMndt_", ""): value for key, value in result_dict1.items()}
         return result_dict
     except json.JSONDecodeError as e:
         print("JSON decoding error:", e)
         return None
+
 
 def remove_tags(data, tags_to_remove):
     for tag_path in tags_to_remove:

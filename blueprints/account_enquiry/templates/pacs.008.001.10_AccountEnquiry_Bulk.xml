@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ns:BusMsg xmlns:ns="urn:iso"
+    xmlns:ns2="urn:iso:std:iso:20022:tech:xsd:head.001.001.01"
+    xmlns:ns1="urn:iso:std:iso:20022:tech:xsd:pacs.008.001.08">
+    <ns:AppHdr>
+        <ns2:Fr>
+            <ns2:FIId>
+                <ns2:FinInstnId>
+                    <ns2:Othr>
+                        <ns2:Id>{ FR_BIC_VALUE }</ns2:Id>
+                    </ns2:Othr>
+                </ns2:FinInstnId>
+            </ns2:FIId>
+        </ns2:Fr>
+        <ns2:To>
+            <ns2:FIId>
+                <ns2:FinInstnId>
+                    <ns2:Othr>
+                        <ns2:Id>{ TO_BIC_VALUE }</ns2:Id>
+                    </ns2:Othr>
+                </ns2:FinInstnId>
+            </ns2:FIId>
+        </ns2:To>
+        <ns2:BizMsgIdr>{ BIZ_MSG_IDR_VALUE }</ns2:BizMsgIdr>
+        <ns2:MsgDefIdr>{ MSG_DEF_IDR_VALUE }</ns2:MsgDefIdr>
+        <ns2:BizSvc>{ BIZ_SVC_VALUE }</ns2:BizSvc>
+        <ns2:CreDt>{ CRE_DT_VALUE }</ns2:CreDt>
+        <ns2:CpyDplct>{ CPYDPLCT_VALUE }</ns2:CpyDplct>
+        <ns2:PssblDplct>{ PSSBLDPLCT_VALUE }</ns2:PssblDplct>
+    </ns:AppHdr>
+    <ns:Document>
+        <ns:FIToFICstmrCdtTrf>
+            <ns1:GrpHdr>
+                <ns1:MsgId>{ MSG_ID_VALUE }</ns1:MsgId>
+                <ns1:CreDtTm>{ CRE_DT_TM_VALUE }</ns1:CreDtTm>
+                <ns1:NbOfTxs>{ NM_OF_TXS_VALUE }</ns1:NbOfTxs>
+                <ns1:SttlmInf>
+                    <ns1:SttlmMtd>{ STTLMTD_VALUE }</ns1:SttlmMtd>
+                </ns1:SttlmInf>
+            </ns1:GrpHdr>
+            <ns1:CdtTrfTxInf>
+                <ns1:PmtId>
+                    <ns1:EndToEndId>{ END_TO_END_ID_VALUE }</ns1:EndToEndId>
+                    <ns1:TxId>{ TX_ID_VALUE }</ns1:TxId>
+                </ns1:PmtId>
+                <ns1:PmtTpInf>
+                    <ns1:CtgyPurp>
+                        <ns1:Prtry>{ PMT_TP_INF_CTGYPURP_VALUE }</ns1:Prtry>
+                    </ns1:CtgyPurp>
+                </ns1:PmtTpInf>
+                <ns1:IntrBkSttlmAmt Ccy='{ INTR_BK_STTLM_CCY_VALUE }'>{ INTR_BK_STTLM_AMT_VALUE }</ns1:IntrBkSttlmAmt>
+                <ns1:ChrgBr>{ CHRGBR_VALUE }</ns1:ChrgBr>
+                <ns1:Dbtr>
+                    <ns1:Nm>{ DBTR_NM_VALUE }</ns1:Nm>
+                </ns1:Dbtr>
+                <ns1:DbtrAcct>
+                    <ns1:Id>
+                        <ns1:Othr>
+                            <ns1:Id>{ DBTR_ACCT_VALUE }</ns1:Id>
+                        </ns1:Othr>
+                    </ns1:Id>
+                    <ns1:Tp>
+                        <ns1:Prtry>{ DBTR_ACCT_TP_VALUE }</ns1:Prtry>
+                    </ns1:Tp>
+                </ns1:DbtrAcct>
+                <ns1:DbtrAgt>
+                    <ns1:FinInstnId>
+                        <ns1:Othr>
+                            <ns1:Id>{ DBTR_AGT_VALUE }</ns1:Id>
+                        </ns1:Othr>
+                    </ns1:FinInstnId>
+                </ns1:DbtrAgt>
+                <ns1:CdtrAgt>
+                    <ns1:FinInstnId>
+                        <ns1:Othr>
+                            <ns1:Id>{ CDTR_AGT_VALUE }</ns1:Id>
+                        </ns1:Othr>
+                    </ns1:FinInstnId>
+                </ns1:CdtrAgt>
+                <ns1:Cdtr>
+                    <ns1:Nm>{ CDTR_NM_VALUE }</ns1:Nm>
+                </ns1:Cdtr>
+                <ns1:CdtrAcct>
+                    <ns1:Id>
+                        <ns1:Othr>
+                            <ns1:Id>{ CDTR_ACCT_VALUE }</ns1:Id>
+                        </ns1:Othr>
+                    </ns1:Id>
+                </ns1:CdtrAcct>
+                <ns1:SplmtryData>
+                    <ns1:Envlp>
+                        <Dtl>
+                            <Dbtr>
+                                <Tp>01</Tp>
+                                <RsdntSts>01</RsdntSts>
+                                <TwnNm>0300</TwnNm>
+                            </Dbtr>
+                            <Cdtr>
+                                <Tp>01</Tp>
+                                <RsdntSts>01</RsdntSts>
+                                <TwnNm>0300</TwnNm>
+                            </Cdtr>
+                            <Blk>
+                                <BlkId>202308280000000401</BlkId>
+                            </Blk>
+                        </Dtl>
+                    </ns1:Envlp>
+                </ns1:SplmtryData>
+            </ns1:CdtTrfTxInf>
+        </ns:FIToFICstmrCdtTrf>
+    </ns:Document>
+</ns:BusMsg>

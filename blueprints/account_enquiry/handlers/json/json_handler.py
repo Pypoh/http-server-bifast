@@ -31,6 +31,16 @@ def buildMessage(requestData):
         "END_TO_END_ID_VALUE": generated_biz_msg_idr,
         "TX_ID_VALUE": generated_msg_id,
     }
+    
+    base_dynamic_data = {
+        "CRE_DT_VALUE": handler.getCreDt(),
+        "CRE_DT_TM_VALUE": handler.getCreDtTm(),
+        "FR_BIC_VALUE": dbtr_agt
+    }
+
+    payment_dynamic_data = {
+        "INTR_BK_STTLM_DT_VALUE": handler.getCreDt(),
+    }
 
     # Load template data
     with open(file_path, 'r') as file:
@@ -40,6 +50,8 @@ def buildMessage(requestData):
     value_dict = {
         **unique_id,
         **paymentData.base,
+        **base_dynamic_data,
+        **payment_dynamic_data,
         **paymentData.accountEnquiry,
         **paymentData.cdtrData,
         **paymentData.dbtrData,

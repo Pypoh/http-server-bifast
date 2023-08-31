@@ -1,13 +1,30 @@
 import handler.general as handler
 import repository.data as generalData
 
+payment_dictionaries = [
+    "accountEnquiry",
+    "creditTransfer",
+    "creditTransferReversal",
+    "creditTransferProxy",
+    "requestForPaymentByAccount",
+    "requestForPaymentByProxy",
+    "requestForPaymentRejectByAccount",
+    "creditTransferRFP",
+    "emandateRegistrationByCreditor",
+    "emandateRegistApprovalByCreditor",
+    "emandateAmendmentByCreditor",
+    "emandateEnquiry",
+    "paymentStatusRequest",
+    "directDebit"
+]
+
 base = {
     "TO_BIC_VALUE": "FASTIDJA",
     "BIZ_SVC_VALUE": "BI",
-    "CRE_DT_VALUE": handler.getCreDt(),
+    # "CRE_DT_VALUE": handler.getCreDt(),
     "CPYDPLCT_VALUE": "CODU",
     "PSSBLDPLCT_VALUE": False,
-    "CRE_DT_TM_VALUE": handler.getCreDtTm(),
+    # "CRE_DT_TM_VALUE": handler.getCreDtTm(),
     "NM_OF_TXS_VALUE": "1",
 }
 
@@ -52,7 +69,7 @@ splmtryData = {
 }
 
 accountEnquiry = {
-    "FR_BIC_VALUE": dbtrData.get('DBTR_AGT_VALUE'),
+    # "FR_BIC_VALUE": dbtrData.get('DBTR_AGT_VALUE'),
     "PAYMENT_TYPE": "510",
     "STTLMTD_VALUE": "CLRG",
     "MSG_DEF_IDR_VALUE": "pacs.008.001.08",
@@ -60,13 +77,13 @@ accountEnquiry = {
     "PMT_TP_INF_LCLINSTRM_VALUE": "01",
     "INTR_BK_STTLM_AMT_VALUE": 510.01,
     "INTR_BK_STTLM_CCY_VALUE": "IDR",
-    "INTR_BK_STTLM_DT_VALUE": handler.getDt(),
+    # "INTR_BK_STTLM_DT_VALUE": handler.getDt(),
     "CHRGBR_VALUE": "DEBT",
     "RMTINF_USTRD_VALUE": "Testing Purpose",
 }
 
 creditTransfer = {
-    "FR_BIC_VALUE": dbtrData.get('DBTR_AGT_VALUE'),
+    # "FR_BIC_VALUE": dbtrData.get('DBTR_AGT_VALUE'),
     "PAYMENT_TYPE": "010",
     "STTLMTD_VALUE": "CLRG",
     "MSG_DEF_IDR_VALUE": "pacs.008.001.08",
@@ -74,7 +91,7 @@ creditTransfer = {
     "PMT_TP_INF_LCLINSTRM_VALUE": "01",
     "INTR_BK_STTLM_AMT_VALUE": 910.01,
     "INTR_BK_STTLM_CCY_VALUE": "IDR",
-    "INTR_BK_STTLM_DT_VALUE": handler.getDt(),
+    # "INTR_BK_STTLM_DT_VALUE": handler.getDt(),
     "CHRGBR_VALUE": "DEBT",
     "RMTINF_USTRD_VALUE": "Testing Purpose",
 }
@@ -108,45 +125,57 @@ creditTransferProxy = {
 }
 
 requestForPaymentByAccount = {
-    "FR_BIC_VALUE": cdtrData.get('CDTR_AGT_VALUE'),
+    # "FR_BIC_VALUE": cdtrData.get('CDTR_AGT_VALUE'),
     "PAYMENT_TYPE": "853",
     "MSG_DEF_IDR_VALUE": "pain.013.001.08",
     "PMTTPINF_CTGYPURP_VALUE": "85301",
     "PMTINF_PMTMTD_VALUE": "TRF",
     "INSTDAMT_VALUE": 853.01,
     "INSTDAMT_CCY_VALUE": "IDR",
-    "INTR_BK_STTLM_DT_VALUE": handler.getDt(),
+    # "INTR_BK_STTLM_DT_VALUE": handler.getDt(),
     "CHRGBR_VALUE": "DEBT",
     "RMTINF_USTRD_VALUE": "Testing Purpose",
-    "INITG_PTY_NM_VALUE": generalData.sampleData.get('DBTR_NM'),
+    # "INITG_PTY_NM_VALUE": generalData.sampleData.get('DBTR_NM'),
     "PSTLADR_CTRY_VALUE": "ID",
-    "REQD_EXCTN_DT_VALUE": "",
-    "XPRY_DT_VALUE": ""
+    # "REQD_EXCTN_DT_VALUE": "",
+    # "XPRY_DT_VALUE": ""
 }
 
 requestForPaymentByProxy = {
-    "FR_BIC_VALUE": cdtrData.get('CDTR_AGT_VALUE'),
+    # "FR_BIC_VALUE": cdtrData.get('CDTR_AGT_VALUE'),
     "PAYMENT_TYPE": "851",
     "MSG_DEF_IDR_VALUE": "pain.013.001.08",
     "PMTTPINF_CTGYPURP_VALUE": "85101",
     "PMTINF_PMTMTD_VALUE": "TRF",
     "INSTDAMT_VALUE": 851.01,
     "INSTDAMT_CCY": "IDR",
-    "INTR_BK_STTLM_DT_VALUE": handler.getDt(),
+    # "INTR_BK_STTLM_DT_VALUE": handler.getDt(),
     "CHRGBR_VALUE": "DEBT",
     "RMTINF_USTRD_VALUE": "Testing Purpose",
-    "INITG_PTY_NM_VALUE": generalData.sampleData.get('DBTR_NM'),
+    # "INITG_PTY_NM_VALUE": generalData.sampleData.get('DBTR_NM'),
     "PSTLADR_CTRY_VALUE": "ID",
-    "REQD_EXCTN_DT_VALUE": "",
-    "XPRY_DT_VALUE": ""
+    # "REQD_EXCTN_DT_VALUE": "",
+    # "XPRY_DT_VALUE": ""
 }
 
 requestForPaymentRejectByAccount = {
-    "FR_BIC_VALUE": dbtrData.get('DBTR_AGT_VALUE'),
+    # "FR_BIC_VALUE": dbtrData.get('DBTR_AGT_VALUE'),
     "PAYMENT_TYPE": "854",
-    "MSG_DEF_IDR_VALUE": "pain.013.001.08",
+    "MSG_DEF_IDR_VALUE": "pain.014.001.08",
     "ORGNL_MSG_ID_VALUE": "",
-    "ORGNL_MSG_NM_VALUE": "pain.014.001.08",
+    "ORGNL_MSG_NM_VALUE": "pain.013.001.08",
+    "ORGNL_PMTINF_ID_VALUE": "",
+    "ORGNL_END_TO_END_ID_VALUE": "",
+    "TXSTS_VALUE": "RJCT",
+    "STS_RSN_INF_VALUE": "U110",
+}
+
+requestForPaymentRejectByProxy = {
+    # "FR_BIC_VALUE": dbtrData.get('DBTR_AGT_VALUE'),
+    "PAYMENT_TYPE": "852",
+    "MSG_DEF_IDR_VALUE": "pain.014.001.08",
+    "ORGNL_MSG_ID_VALUE": "",
+    "ORGNL_MSG_NM_VALUE": "pain.013.001.08",
     "ORGNL_PMTINF_ID_VALUE": "",
     "ORGNL_END_TO_END_ID_VALUE": "",
     "TXSTS_VALUE": "RJCT",
@@ -154,7 +183,7 @@ requestForPaymentRejectByAccount = {
 }
 
 creditTransferRFP = {
-    "FR_BIC_VALUE": dbtrData.get('DBTR_AGT_VALUE'),
+    # "FR_BIC_VALUE": dbtrData.get('DBTR_AGT_VALUE'),
     "PAYMENT_TYPE": "310",
     "STTLMTD_VALUE": "CLRG",
     "MSG_DEF_IDR_VALUE": "pacs.008.001.08",
@@ -162,14 +191,38 @@ creditTransferRFP = {
     "PMT_TP_INF_LCLINSTRM_VALUE": "01",
     "INTR_BK_STTLM_AMT_VALUE": 310.01,
     "INTR_BK_STTLM_CCY_VALUE": "IDR",
-    "INTR_BK_STTLM_DT_VALUE": handler.getDt(),
+    # "INTR_BK_STTLM_DT_VALUE": handler.getDt(),
     "CHRGBR_VALUE": "DEBT",
     "RMTINF_USTRD_VALUE": "Testing Purpose",
 }
 
 emandateRegistrationByCreditor = {
-    "FR_BIC_VALUE": cdtrData.get('CDTR_AGT_VALUE'),
+    # "FR_BIC_VALUE": cdtrData.get('CDTR_AGT_VALUE'),
     "PAYMENT_TYPE": "802",
+    "MSG_DEF_IDR_VALUE": "pain.009.001.06",
+    "MNDT_LCLINSTRM_VALUE": "FixedAmt",
+    "MNDT_CTGYPURP_VALUE": "01",
+    "OCRNCS_SEQTP_VALUE": "RCUR",
+    "OCRNCS_FRQCY_VALUE": "MNTH",
+    "OCRNCS_CNTPERPRD_VALUE": "12",
+    "DRTN_FRDT_VALUE": "",
+    "DRTN_TODT_VALUE": "",
+    "FRST_COLLTNDT_VALUE": "",
+    "FNL_COLLTNDT_VALUE": "",
+    "TRCKGIND_VALUE": True,
+    "FRST_COLLTNAMT_CCY_VALUE": "IDR",
+    "FRST_COLLTNAMT_VALUE": 13001.01,
+    "COLLTNAMT_CCY_VALUE": "IDR",
+    "COLLTNAMT_VALUE": 13001.01,
+    "MAX_AMT_CCY_VALUE": "IDR",
+    "MAX_AMT_VALUE": 13001.01,
+    "MNDT_RSN_VALUE": "Credit Pay Insurance",
+    "RFRD_DOC_CDTR_REF_VALUE": "Test"
+}
+
+emandateRegistrationByDebitor = {
+    # "FR_BIC_VALUE": cdtrData.get('CDTR_AGT_VALUE'),
+    "PAYMENT_TYPE": "821",
     "MSG_DEF_IDR_VALUE": "pain.009.001.06",
     "MNDT_LCLINSTRM_VALUE": "FixedAmt",
     "MNDT_CTGYPURP_VALUE": "01",

@@ -1,7 +1,9 @@
 from flask import render_template
 from . import request_for_payment_bp
-from blueprints.request_for_payment.handlers.json import request_for_pay_account_json_handlers, request_for_pay_reject_json_handlers, request_for_pay_proxy_json_handlers
-from blueprints.request_for_payment.handlers.xml import request_for_pay_account_xml_handlers, request_for_pay_reject_account_xml_handlers, request_for_pay_proxy_xml_handlers
+from blueprints.request_for_payment.handlers.json import (
+    request_for_pay_account_json_handlers, request_for_pay_reject_account_json_handlers, request_for_pay_proxy_json_handlers, request_for_pay_reject_proxy_json_handlers)
+from blueprints.request_for_payment.handlers.xml import (
+    request_for_pay_account_xml_handlers, request_for_pay_reject_account_xml_handlers, request_for_pay_proxy_xml_handlers, request_for_pay_reject_proxy_xml_handlers)
 from flask import Flask, request, render_template, jsonify
 
 build_handlers = {
@@ -14,31 +16,31 @@ build_handlers = {
         'xml': request_for_pay_proxy_xml_handlers.buildMessage
     },
     'reject_account': {
-        'json': request_for_pay_reject_json_handlers.buildMessage,
-        # 'xml': request_for_pay_reject_xml_handlers.buildMessage
+        'json': request_for_pay_reject_account_json_handlers.buildMessage,
+        'xml': request_for_pay_reject_account_xml_handlers.buildMessage
     },
-    # 'reject_proxy': {
-    #     'json': credit_transfer_proxy_json_handlers.buildMessage,
-    #     'xml': credit_transfer_proxy_xml_handlers.buildMessage
-    # },
+    'reject_proxy': {
+        'json': request_for_pay_reject_proxy_json_handlers.buildMessage,
+        'xml': request_for_pay_reject_proxy_xml_handlers.buildMessage
+    },
 }
 request_handlers = {
-    'account': {
+        'account': {
         'json': request_for_pay_account_json_handlers.requestMessage,
-        # 'xml': request_for_pay_xml_handlers.requestMessage
+        'xml': request_for_pay_account_xml_handlers.requestMessage
     },
-    # 'proxy': {
-    #     'json': credit_transfer_proxy_json_handlers.requestMessage,
-    #     'xml': credit_transfer_proxy_xml_handlers.requestMessage
-    # },
+    'proxy': {
+        'json': request_for_pay_proxy_json_handlers.requestMessage,
+        'xml': request_for_pay_proxy_xml_handlers.requestMessage
+    },
     'reject_account': {
-        'json': request_for_pay_reject_json_handlers.requestMessage,
-        # 'xml': request_for_pay_reject_xml_handlers.requestMessage
+        'json': request_for_pay_reject_account_json_handlers.requestMessage,
+        'xml': request_for_pay_reject_account_xml_handlers.requestMessage
     },
-    # 'reject_proxy': {
-    #     'json': credit_transfer_proxy_json_handlers.requestMessage,
-    #     'xml': credit_transfer_proxy_xml_handlers.requestMessage
-    # },
+    'reject_proxy': {
+        'json': request_for_pay_reject_proxy_json_handlers.requestMessage,
+        'xml': request_for_pay_reject_proxy_xml_handlers.requestMessage
+    },
 }
 
 
