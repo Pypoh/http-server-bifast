@@ -34,6 +34,17 @@ def buildMessage(data):
         "CRE_DT_TM_VALUE": handler.getCreDtTm(),
         "FR_BIC_VALUE": dbtr_agt
     }
+    
+    ORGNL_END_TO_END_ID_VALUE = data["BusMsg"]["Document"]["FIToFIPmtStsRpt"]["TxInfAndSts"][0]["OrgnlEndToEndId"]
+    
+    original_data = {
+        "ORGNL_MSG_ID_VALUE": generated_msg_id,
+        "ORGNL_MSG_NM_VALUE": handler.getMessageNameIdFromTrxCode(ORGNL_END_TO_END_ID_VALUE),
+        "ORGNL_PMTINF_ID_VALUE": ORGNL_END_TO_END_ID_VALUE,
+        "ORGNL_END_TO_END_ID_VALUE": ORGNL_END_TO_END_ID_VALUE,
+        "TXSTS_VALUE": "RJCT",
+        "STS_RSN_INF_VALUE": "U110"
+    }
 
     # Load template data
     with open(file_path, 'r') as file:
@@ -43,6 +54,7 @@ def buildMessage(data):
     value_dict = {
         **unique_id,
         **base_dynamic_data,
+        **original_data,
         **paymentData.requestForPaymentRejectByAccount,
         **paymentData.base,
         **paymentData.cdtrData,

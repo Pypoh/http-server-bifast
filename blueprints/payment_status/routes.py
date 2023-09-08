@@ -1,7 +1,9 @@
 from flask import render_template
-from . import account_enquiry_bp
-from . import accountEnquiryHandler
+from . import payment_status_bp
+from . import payment_status_report_json_handlers
 from flask import Flask, request, render_template, jsonify
+
+from functools import wraps
 
 def dynamic_route(url_rule, json_func, xml_func):
     def decorator(func):
@@ -18,13 +20,13 @@ def dynamic_route(url_rule, json_func, xml_func):
         return wrapper
     return decorator
 
-@account_enquiry_bp.route('/<scheme>/build', methods=['POST'])
-@dynamic_route('<scheme>/build', json_handler.buildMessage, xml_handler.buildMessage)
+@payment_status_bp.route('/<scheme>/build', methods=['POST'])
+@dynamic_route('<scheme>/build', payment_status_report_json_handlers.buildMessage, payment_status_report_json_handlers.buildMessage)
 def build_message(scheme):
     pass
 
-@account_enquiry_bp.route('/<scheme>/request', methods=['POST'])
-@dynamic_route('<scheme>/request', json_handler.requestMessage, xml_handler.requestMessage)
+@payment_status_bp.route('/<scheme>/request', methods=['POST'])
+@dynamic_route('<scheme>/request', payment_status_report_json_handlers.requestMessage, payment_status_report_json_handlers.requestMessage)
 def request_message(scheme):
     pass
 

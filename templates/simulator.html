@@ -22,9 +22,12 @@ Simulator
     <h2>{{ card.title }}</h2>
     <p>{{ card.content }}</p>
     {% if card.input == 'Y' %}
-    <input type="text" class="endtoendid-input" name="endtoendid" id="endtoendid_{{ card.id }}" placeholder="EndToEndId">
+    <input type="text" class="endtoendid-input" name="endtoendid" id="endtoendid_{{ card.id }}" placeholder="EndToEndId/MndtId">
     {% endif %}
-    <button class="transaction-button" onclick="requestJSONHandler('{{ card.content }}', '{{ card.id }}')">JSON</button>
+    {% if card.related == 'Y' %}
+    <input type="text" class="related-input" name="related" id="related_{{ card.id }}" placeholder="Related">
+    {% endif %}
+    <button class="transaction-button" onclick="requestJSONHandler('{{ card.content }}', '{{ card.id }}', '{{ card.inquiry }}')">JSON</button>
     <button class="transaction-button" onclick="requestXMLHandler('{{ card.content }}', '{{ card.id }}')">XML</button>
   </div>
   {% endfor %}

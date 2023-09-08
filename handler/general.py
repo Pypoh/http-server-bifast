@@ -5,7 +5,7 @@ import random
 import json
 import pytz
 import xml.etree.ElementTree as ET
-# import repository.payment as paymentData
+import repository.payment as paymentData
 
 
 def getCreDt():
@@ -82,17 +82,17 @@ def printNestedTag(data, parent_key="", indent=""):
 
 def getTransactionCode(bizMsgIdr):
     transactionCode = bizMsgIdr[16:19]
-    print(transactionCode, file=sys.stderr)
+    # print(transactionCode, file=sys.stderr)
     return transactionCode
 
 
-# def getMessageNameIdFromTrxCode(bizMsgIdr):
-#     trxCode = getTransactionCode(bizMsgIdr)
-#     payment_dictionaries = paymentData.payment_dictionaries
-#     for dictionary_name in payment_dictionaries:
-#         dictionary = getattr(paymentData, dictionary_name)
-#         if dictionary.get("PAYMENT_TYPE") == trxCode:
-#             return dictionary.get('MSG_DEF_IDR_VALUE')
+def getMessageNameIdFromTrxCode(bizMsgIdr):
+    trxCode = getTransactionCode(bizMsgIdr)
+    payment_dictionaries = paymentData.payment_dictionaries
+    for dictionary_name in payment_dictionaries:
+        dictionary = getattr(paymentData, dictionary_name)
+        if dictionary.get("PAYMENT_TYPE") == trxCode:
+            return dictionary.get('MSG_DEF_IDR_VALUE')
 
 
 def generateBizMsgIdr(bic, bizMsgIdrOrTTC=None):

@@ -63,9 +63,14 @@
                   "FrDt": "{{ DRTN_FRDT_VALUE }}",
                   "ToDt": "{{ DRTN_TODT_VALUE }}"
                 },
+                {% comment %} "FrstColltnDt": "{{ FRST_COLLTNDT_VALUE }}", {% endcomment %}
                 "FnlColltnDt": "{{ FNL_COLLTNDT_VALUE }}"
               },
               "TrckgInd": "{{ TRCKGIND_VALUE }}",
+              {% comment %} "FrstColltnAmt": {
+                "Ccy": "{{ FRST_COLLTNAMT_CCY_VALUE }}",
+                "value": "{{ FRST_COLLTNAMT_VALUE }}"
+              }, {% endcomment %}
               "ColltnAmt": {
                 "Ccy": "{{ COLLTNAMT_CCY_VALUE }}",
                 "value": "{{ COLLTNAMT_VALUE }}"
@@ -167,9 +172,14 @@
                     "FrDt": "{{ ORGNLMNDT_DRTN_FRDT_VALUE }}",
                     "ToDt": "{{ ORGNLMNDT_DRTN_TODT_VALUE }}"
                   },
+                  {% comment %} "FrstColltnDt": "{{ ORGNLMNDT_FRST_COLLTNDT_VALUE }}", {% endcomment %}
                   "FnlColltnDt": "{{ ORGNLMNDT_FNL_COLLTNDT_VALUE }}"
                 },
                 "TrckgInd": "{{ ORGNLMNDT_TRCKGIND_VALUE }}",
+                {% comment %} "FrstColltnAmt": {
+                  "Ccy": "{{ ORGNLMNDT_FRST_COLLTNAMT_CCY_VALUE }}",
+                  "value": "{{ ORGNLMNDT_FRST_COLLTNAMT_VALUE }}"
+                }, {% endcomment %}
                 "ColltnAmt": {
                   "Ccy": "{{ ORGNLMNDT_COLLTNAMT_CCY_VALUE }}",
                   "value": "{{ ORGNLMNDT_COLLTNAMT_VALUE }}"

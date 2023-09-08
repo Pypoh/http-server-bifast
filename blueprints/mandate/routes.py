@@ -1,7 +1,7 @@
 from flask import render_template
 from . import mandate_bp
 from blueprints.mandate.handlers.json import (
-    mandate_regist_json_handlers, mandate_approve_json_handlers, mandate_amend_json_handlers)
+    mandate_regist_json_handlers, mandate_approve_json_handlers, mandate_amend_json_handlers, mandate_enquiry_json_handler)
 from blueprints.mandate.handlers.xml import mandate_regist_xml_handlers
 from flask import Flask, request, render_template, jsonify
 
@@ -11,12 +11,16 @@ build_handlers = {
         'xml': mandate_regist_xml_handlers.buildMessage
     },
     'approve': {
-        'json': mandate_regist_json_handlers.buildMessage,
-        'xml': mandate_regist_json_handlers.buildMessage
+        'json': mandate_approve_json_handlers.buildMessage,
+        'xml': mandate_approve_json_handlers.buildMessage
     },
     'amend': {
-        'json': mandate_regist_json_handlers.buildMessage,
-        'xml': mandate_regist_json_handlers.buildMessage
+        'json': mandate_amend_json_handlers.buildMessage,
+        'xml': mandate_amend_json_handlers.buildMessage
+    },
+    'enquiry': {
+        'json': mandate_enquiry_json_handler.buildMessage,
+        'xml': mandate_enquiry_json_handler.buildMessage
     },
 }
 request_handlers = {
@@ -25,12 +29,16 @@ request_handlers = {
         'xml': mandate_regist_json_handlers.requestMessage
     },
     'approve': {
-        'json': mandate_regist_json_handlers.requestMessage,
-        'xml': mandate_regist_json_handlers.requestMessage
+        'json': mandate_approve_json_handlers.requestMessage,
+        'xml': mandate_approve_json_handlers.requestMessage
     },
     'amend': {
-        'json': mandate_regist_json_handlers.requestMessage,
-        'xml': mandate_regist_json_handlers.requestMessage
+        'json': mandate_amend_json_handlers.requestMessage,
+        'xml': mandate_amend_json_handlers.requestMessage
+    },
+    'enquiry': {
+        'json': mandate_enquiry_json_handler.requestMessage,
+        'xml': mandate_enquiry_json_handler.requestMessage
     },
 }
 

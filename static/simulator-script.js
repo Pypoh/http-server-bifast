@@ -40,12 +40,15 @@ function getInputValue(selector) {
 
 function checkInputData(payment_id) {
   var endtoendidValue = getInputValue(`#endtoendid_${payment_id}`);
-  var mandateIdValue = getInputValue(".mandateid-input");
+  var relatedValue = getInputValue(`#related_${payment_id}`);
 
-  var data = {
-    SPLMNTR_RLTD_END_TO_END_ID: endtoendidValue,
-    MNDT_REQ_ID: mandateIdValue,
-  };
+  var data = null;
+  if (!isEmpty(endtoendidValue)) {
+    var data = {
+      SPLMNTR_RLTD_END_TO_END_ID: endtoendidValue,
+      RELATED_VALUE: relatedValue
+    };
+  }
 
   return data;
 }
@@ -54,8 +57,13 @@ function isEmpty(value) {
   return value === null || value === undefined || value === "";
 }
 
-async function requestPaymentReport(payment_url, payment_data) {
-  // Build Message
+async function requestPaymentReport(
+  payment_url,
+  payment_data,
+  participant_data
+) {
+  var data = Object.assign({}, payment_data, participant_data);
+  console.log(data);
   const buildResponse = await fetch(payment_url + "/json/build", {
     method: "POST",
     headers: {
@@ -66,38 +74,23 @@ async function requestPaymentReport(payment_url, payment_data) {
   const jsonBuildResponse = await buildResponse.json();
   const jsonBuildString = JSON.stringify(jsonBuildResponse, null, 2);
   generateTextAnimation("console-content-1", jsonBuildString);
-}
 
-async function requestJSONHandler(payment_url, payment_id) {
-  var inputData = checkInputData(payment_id);
-  var payment_data = "";
-  for (var key in data) {
-    switch (key) {
-      case "SPLMNTR_RLTD_END_TO_END_ID":
-        if (!isEmpty(data[key])) {
-          payment_data = {
-            ORGNAGT: "DBTRAGT",
-            ORGNL_END_TO_END_ID_VALUE: data,
-          };
-        }
-
-      case "MNDT_REQ_ID":
-        if (!isEmpty(data[key])) {
-        }
-        break;
-    }
-  }
-
-  const payment_status_response = await fetch(payment_url + "/json/build", {
+  //   // Send Request
+  const sendResponse = await fetch(payment_url + "/json/request", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(payment_data),
+    body: JSON.stringify(jsonBuildResponse),
   });
+  const jsonSendResponse = await sendResponse.json();
+  const jsonSendString = JSON.stringify(jsonSendResponse, null, 2);
+  generateTextAnimation("console-content-2", jsonSendString);
 
-  console.log(payment_status_response);
+  return jsonSendResponse;
+}
 
+async function requestJSONHandler(payment_url, payment_id, inquiry_url) {
   const startTime = Date.now() / 1000;
   try {
     // Get Participant Data
@@ -105,7 +98,26 @@ async function requestJSONHandler(payment_url, payment_id) {
     const participantData = await participantResponse.json();
     // console.log("Participant Data:", participantData);
 
-    var data = Object.assign({}, inputData, participantData);
+    var inputData = checkInputData(payment_id);
+    var payment_data = {};
+    if (!isEmpty(inputData)) {
+      payment_data = await requestPaymentReport(
+        inquiry_url,
+        inputData,
+        participantData
+      );
+      var inputData = {
+        INPUT_DATA: inputData["SPLMNTR_RLTD_END_TO_END_ID"],
+        RELATED_DATA: inputData["RELATED_VALUE"]
+      };
+    }
+
+    if (payment_url == inquiry_url) {
+      return;
+    }
+
+    clearConsole();
+    var data = Object.assign({}, payment_data, participantData, inputData);
 
     // Build Message
     const buildResponse = await fetch(payment_url + "/json/build", {
@@ -131,7 +143,7 @@ async function requestJSONHandler(payment_url, payment_id) {
     const jsonSendString = JSON.stringify(jsonSendResponse, null, 2);
     generateTextAnimation("console-content-2", jsonSendString);
 
-    return result;
+    // return result;
   } catch (error) {
     console.error("Error:", error);
     throw error;

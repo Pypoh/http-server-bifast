@@ -11,8 +11,13 @@ payment_dictionaries = [
     "requestForPaymentRejectByAccount",
     "creditTransferRFP",
     "emandateRegistrationByCreditor",
+    "emandateRegistrationByDebitor",
     "emandateRegistApprovalByCreditor",
+    "emandateRegistApprovalByDebitor",
     "emandateAmendmentByCreditor",
+    "emandateAmendmentByDebitor",
+    "emandateAmendApprovalByCreditor",
+    "emandateAmendApprovalByDebitor",
     "emandateEnquiry",
     "paymentStatusRequest",
     "directDebit"
@@ -105,7 +110,7 @@ creditTransferReversal = {
     "PMT_TP_INF_LCLINSTRM_VALUE": "01",
     "INTR_BK_STTLM_AMT_VALUE": 911.01,
     "INTR_BK_STTLM_CCY_VALUE": "IDR",
-    "INTR_BK_STTLM_DT_VALUE": handler.getDt(),
+    # "INTR_BK_STTLM_DT_VALUE": handler.getDt(),
     "CHRGBR_VALUE": "DEBT",
     "RMTINF_USTRD_VALUE": "Testing Purpose",
 }
@@ -119,7 +124,7 @@ creditTransferProxy = {
     "PMT_TP_INF_LCLINSTRM_VALUE": "01",
     "INTR_BK_STTLM_AMT_VALUE": 110.01,
     "INTR_BK_STTLM_CCY_VALUE": "IDR",
-    "INTR_BK_STTLM_DT_VALUE": handler.getDt(),
+    # "INTR_BK_STTLM_DT_VALUE": handler.getDt(),
     "CHRGBR_VALUE": "DEBT",
     "RMTINF_USTRD_VALUE": "Testing Purpose",
 }
@@ -162,12 +167,9 @@ requestForPaymentRejectByAccount = {
     # "FR_BIC_VALUE": dbtrData.get('DBTR_AGT_VALUE'),
     "PAYMENT_TYPE": "854",
     "MSG_DEF_IDR_VALUE": "pain.014.001.08",
-    "ORGNL_MSG_ID_VALUE": "",
-    "ORGNL_MSG_NM_VALUE": "pain.013.001.08",
-    "ORGNL_PMTINF_ID_VALUE": "",
-    "ORGNL_END_TO_END_ID_VALUE": "",
-    "TXSTS_VALUE": "RJCT",
-    "STS_RSN_INF_VALUE": "U110",
+    # "ORGNL_MSG_NM_VALUE": "pain.013.001.08",
+    # "TXSTS_VALUE": "RJCT",
+    # "STS_RSN_INF_VALUE": "U110",
 }
 
 requestForPaymentRejectByProxy = {
@@ -229,10 +231,6 @@ emandateRegistrationByDebitor = {
     "OCRNCS_SEQTP_VALUE": "RCUR",
     "OCRNCS_FRQCY_VALUE": "MNTH",
     "OCRNCS_CNTPERPRD_VALUE": "12",
-    "DRTN_FRDT_VALUE": "",
-    "DRTN_TODT_VALUE": "",
-    "FRST_COLLTNDT_VALUE": "",
-    "FNL_COLLTNDT_VALUE": "",
     "TRCKGIND_VALUE": True,
     "FRST_COLLTNAMT_CCY_VALUE": "IDR",
     "FRST_COLLTNAMT_VALUE": 13001.01,
@@ -245,28 +243,62 @@ emandateRegistrationByDebitor = {
 }
 
 emandateRegistApprovalByCreditor = {
-    "FR_BIC_VALUE": dbtrData.get('DBTR_AGT_VALUE'),
     "PAYMENT_TYPE": "803",
     "MSG_DEF_IDR_VALUE": "pain.012.001.06",
     "TRCKGIND_VALUE": True,
 }
 
+emandateRegistApprovalByDebitor = {
+    "PAYMENT_TYPE": "822",
+    "MSG_DEF_IDR_VALUE": "pain.012.001.06",
+    "TRCKGIND_VALUE": True,
+}
+
+emandateAmendApprovalByCreditor = {
+    "PAYMENT_TYPE": "771",
+    "MSG_DEF_IDR_VALUE": "pain.012.001.06",
+    "TRCKGIND_VALUE": True,
+}
+
+emandateAmendApprovalByDebitor = {
+    "PAYMENT_TYPE": "772",
+    "MSG_DEF_IDR_VALUE": "pain.012.001.06",
+    "TRCKGIND_VALUE": True,
+}
+
 emandateAmendmentByCreditor = {
-    "FR_BIC_VALUE": cdtrData.get('CDTR_AGT_VALUE'),
     "PAYMENT_TYPE": "761",
     "MSG_DEF_IDR_VALUE": "pain.010.001.06",
     "AMDMNTRSN_RSN_VALUE": "MD18",
     "AMDMNTRSN_ADDTLINF_VALUE": "Additional Information",
-    # "MNDT_MNDTID_VALUE": "",
     "MNDT_LCLINSTRM_VALUE": "FixedAmt",
     "MNDT_CTGYPURP_VALUE": "01",
     "OCRNCS_SEQTP_VALUE": "RCUR",
     "OCRNCS_FRQCY_VALUE": "YEAR",
     "OCRNCS_CNTPERPRD_VALUE": 1,
-    "DRTN_FRDT_VALUE": "",
-    "DRTN_TODT_VALUE": "",
-    "FRST_COLLTNDT_VALUE": "",
-    "FNL_COLLTNDT_VALUE": "",
+    "TRCKGIND_VALUE": True,
+    "FRST_COLLTNAMT_CCY_VALUE": "IDR",
+    "FRST_COLLTNAMT_VALUE": 13001.01,
+    "COLLTNAMT_CCY_VALUE": "IDR",
+    "COLLTNAMT_VALUE": 13001.01,
+    "MAX_AMT_CCY_VALUE": "IDR",
+    "MAX_AMT_VALUE": 13001.01,
+    "MNDT_RSN_VALUE": "Credit Pay Insurance",
+    "RFRD_DOC_CDTR_REF_VALUE": "Test",
+    "SPLMTRYDATA_ORGNLMNDT_STS": "ACTV",
+    "SPLMTRYDATA_MNDT_STS": "ACTV"
+}
+
+emandateAmendmentByDebitor = {
+    "PAYMENT_TYPE": "762",
+    "MSG_DEF_IDR_VALUE": "pain.010.001.06",
+    "AMDMNTRSN_RSN_VALUE": "MD18",
+    "AMDMNTRSN_ADDTLINF_VALUE": "Additional Information",
+    "MNDT_LCLINSTRM_VALUE": "FixedAmt",
+    "MNDT_CTGYPURP_VALUE": "01",
+    "OCRNCS_SEQTP_VALUE": "RCUR",
+    "OCRNCS_FRQCY_VALUE": "YEAR",
+    "OCRNCS_CNTPERPRD_VALUE": 1,
     "TRCKGIND_VALUE": True,
     "FRST_COLLTNAMT_CCY_VALUE": "IDR",
     "FRST_COLLTNAMT_VALUE": 13001.01,
@@ -297,7 +329,6 @@ directDebit = {
     "MSG_DEF_IDR_VALUE": "pacs.003.001.08",
     "INTR_BK_STTLM_AMT_VALUE": 13001.01,
     "INTR_BK_STTLM_CCY_VALUE": "IDR",
-    "INTR_BK_STTLM_DT_VALUE": "",
     "CHRGBR_VALUE": "SLEV",
     "RMTINF_USTRD_VALUE": "Testing Purpose",
 }

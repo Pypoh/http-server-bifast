@@ -7,21 +7,8 @@ from blueprints.account_enquiry import account_enquiry_bp
 from blueprints.credit_transfer import credit_transfer_bp
 from blueprints.request_for_payment import request_for_payment_bp
 from blueprints.mandate import mandate_bp
-from handler.message import (
-    # accountEnquiryHandler,
-    creditTransferHandler,
-    creditTransferReversalHandler,
-    creditTransferProxyHandler,
-    paymentStatusReportHandler,
-    proxyHandler,
-    requestForPaymentHandler,
-    requestForPaymentRejectHandler,
-    creditTransferRFPHandler,
-    mandateRegistHandler,
-    mandateApprovalHandler,
-    mandateAmendHandler,
-    directDebitHandler
-)
+from blueprints.payment_status import payment_status_bp
+from blueprints.direct_debit import direct_debit_bp
 from repository import data as dataDictionary
 import os
 import json
@@ -32,6 +19,8 @@ app.register_blueprint(account_enquiry_bp)
 app.register_blueprint(credit_transfer_bp)
 app.register_blueprint(request_for_payment_bp)
 app.register_blueprint(mandate_bp)
+app.register_blueprint(payment_status_bp)
+app.register_blueprint(direct_debit_bp)
 app.config['FORMAT_PATH'] = os.path.join(app.root_path, 'format/OFI')
 
 

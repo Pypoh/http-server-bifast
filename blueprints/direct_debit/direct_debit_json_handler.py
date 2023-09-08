@@ -12,12 +12,11 @@ import repository.payment as paymentData
 from config.bankConfig import BANK_CODE_VALUE, HUB_CODE_VALUE, RFI_BANK_CODE_VALUE
 from config.serverConfig import SCHEME_VALUE, HOST_URL_VALUE, HOST_PORT_VALUE
 
-
-def requestMessage(mandateForm):
+def buildMessage(data):
     # Construct file path
     template_filename = 'pacs.003.001.08_DirectDebit.json'
-    file_path = os.path.join(
-        current_app.config["FORMAT_PATH"], template_filename)
+    file_path = os.path.join(current_app.root_path,
+                             'blueprints', 'direct_debit','templates', template_filename)
 
     # Generate unique IDs
     payment_type = paymentData.directDebit.get(
@@ -32,6 +31,16 @@ def requestMessage(mandateForm):
         "END_TO_END_ID_VALUE": generated_biz_msg_idr
     }
 
+    base_dynamic_data = {
+        "CRE_DT_VALUE": handler.getCreDt(),
+        "CRE_DT_TM_VALUE": handler.getCreDtTm(),
+        "FR_BIC_VALUE": cdtr_agt
+    }
+    
+    original_data = {
+        "MNDT_MNDTID_VALUE": data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["MndtId"]
+    }
+
     # Load template data
     with open(file_path, 'r') as file:
         template_data = json.load(file)
@@ -39,12 +48,13 @@ def requestMessage(mandateForm):
     # Create value dictionary for placeholders
     value_dict = {
         **unique_id,
+        **base_dynamic_data,
+        **original_data,
         **paymentData.base,
         **paymentData.directDebit,
         **paymentData.cdtrData,
         **paymentData.dbtrData,
         **paymentData.splmtryData,
-        **mandateForm,
     }
 
     # Set the Date
@@ -60,17 +70,20 @@ def requestMessage(mandateForm):
 
     # Print filled data (for debugging)
     # print(filled_data, file=sys.stderr)
+    
+    return filled_data
 
+def requestMessage(message):
     # Prepare headers
     headers = {
         "Content-Type": "application/json",
-        "Content-Length": str(len(json.dumps(filled_data))),
+        "Content-Length": str(len(json.dumps(message))),
         "message": "/FIToFICustomerDirectDebitV08"
     }
 
     # Send POST request
     host_url = f"{SCHEME_VALUE}{generalData.sampleData.get('HOST_URL')}:{generalData.sampleData.get('CDTR_PORT')}"
-    response = requests.post(host_url, json=filled_data, headers=headers)
+    response = requests.post(host_url, json=message, headers=headers)
 
     return response.text
 

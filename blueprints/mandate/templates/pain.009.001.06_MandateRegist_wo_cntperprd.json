@@ -27,30 +27,49 @@
       "PssblDplct": "{{ PSSBLDPLCT_VALUE }}"
     },
     "Document": {
-      "FIToFICstmrDrctDbt": {
+      "MndtInitnReq": {
         "GrpHdr": {
           "MsgId": "{{ MSG_ID_VALUE }}",
-          "CreDtTm": "{{ CRE_DT_TM_VALUE }}",
-          "NbOfTxs": "{{ NM_OF_TXS_VALUE }}",
-          "IntrBkSttlmDt": "{{ INTR_BK_STTLM_DT_VALUE }}",
-          "SttlmInf": {
-            "SttlmMtd": "{{ STTLMTD_VALUE }}"
-          }
+          "CreDtTm": "{{ CRE_DT_TM_VALUE }}"
         },
-        "DrctDbtTxInf": [
+        "Mndt": [
           {
-            "PmtId": {
-              "EndToEndId": "{{ END_TO_END_ID_VALUE }}"
-            },
-            "IntrBkSttlmAmt": {
-              "value": "{{ INTR_BK_STTLM_AMT_VALUE }}",
-              "Ccy": "{{ INTR_BK_STTLM_CCY_VALUE }}"
-            },
-            "ChrgBr": "{{ CHRGBR_VALUE }}",
-            "DrctDbtTx": {
-              "MndtRltdInf": {
-                "MndtId": "{{ MNDT_MNDTID_VALUE }}"
+            "MndtReqId": "{{ MNDT_REQ_ID_VALUE }}",
+            "Tp": {
+              "LclInstrm": {
+                "Prtry": "{{ MNDT_LCLINSTRM_VALUE }}"
+              },
+              "CtgyPurp": {
+                "Prtry": "{{ MNDT_CTGYPURP_VALUE }}"
               }
+            },
+            "Ocrncs": {
+              "SeqTp": "{{ OCRNCS_SEQTP_VALUE }}",
+              "Frqcy": {
+                "Tp": "{{ OCRNCS_FRQCY_VALUE }}"
+              },
+              "Drtn": {
+                "FrDt": "{{ DRTN_FRDT_VALUE }}",
+                "ToDt": "{{ DRTN_TODT_VALUE }}"
+              },
+              "FrstColltnDt": "{{ FRST_COLLTNDT_VALUE }}",
+              "FnlColltnDt": "{{ FNL_COLLTNDT_VALUE }}"
+            },
+            "TrckgInd": "{{ TRCKGIND_VALUE }}",
+            "FrstColltnAmt": {
+              "Ccy": "{{ FRST_COLLTNAMT_CCY_VALUE }}",
+              "value": "{{ FRST_COLLTNAMT_VALUE }}"
+            },
+            "ColltnAmt": {
+              "Ccy": "{{ COLLTNAMT_CCY_VALUE }}",
+              "value": "{{ COLLTNAMT_VALUE }}"
+            },
+            "MaxAmt": {
+              "Ccy": "{{ MAX_AMT_CCY_VALUE }}",
+              "value": "{{ MAX_AMT_VALUE }}"
+            },
+            "Rsn": {
+              "Prtry": "{{ MNDT_RSN_VALUE }}"
             },
             "Cdtr": {
               "Nm": "{{ CDTR_NM_VALUE }}",
@@ -112,25 +131,9 @@
                 }
               }
             },
-            "RmtInf": {
-              "Ustrd": ["{{ RMTINF_USTRD_VALUE }}"]
-            },
-            "SplmtryData": [
+            "RfrdDoc": [
               {
-                "Envlp": {
-                  "Dtl": {
-                    "Dbtr": {
-                      "Tp": "{{ SPLMNTR_DBTR_TP_VALUE }}",
-                      "RsdntSts": "{{ SPLMNTR_DBTR_RSDNTSTS_VALUE }}",
-                      "TwnNm": "{{ SPLMNTR_DBTR_TWNNM_VALUE }}"
-                    },
-                    "Cdtr": {
-                      "Tp": "{{ SPLMNTR_CDTR_TP_VALUE }}",
-                      "RsdntSts": "{{ SPLMNTR_CDTR_RSDNTSTS_VALUE }}",
-                      "TwnNm": "{{ SPLMNTR_CDTR_TWNNM_VALUE }}"
-                    }
-                  }
-                }
+                "CdtrRef": "{{ RFRD_DOC_CDTR_REF_VALUE }}"
               }
             ]
           }
