@@ -72,7 +72,7 @@ def requestMessage(message):
     headers = {
         "Content-Type": "application/json",
         "Content-Length": str(len(json.dumps(message))),
-        "message": "/FIToFICustomerCreditTransferV08"
+        # "message": "/FIToFICustomerCreditTransferV08"
     }
 
     # Send POST request

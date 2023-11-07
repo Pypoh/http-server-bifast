@@ -112,6 +112,17 @@ def generateBizMsgIdr(bic, bizMsgIdrOrTTC=None):
     return result
 
 
+def generateBulkId(bic=None, bizMsgIdrOrTTC=None):
+    formatted_string = "{dateTime}{sequence}"
+
+    result = formatted_string.format(
+        dateTime=datetime.now().strftime('%Y%m%d'),
+        sequence=random.randint(1000000000, 9999999999)
+    )
+
+    return result
+
+
 def generateMsgId(bic, bizMsgIdrOrTTC=None):
     formatted_string = "{dateTime}{bankCode}{ttc}{status}"
 
@@ -188,7 +199,8 @@ def extract_values(json_data):
         parsed_data = json.loads(json_data)
         extracted_data = _extract(parsed_data)
         # Remove the prefix "Document_MndtAccptncRpt_UndrlygAccptncDtls_0_" from the keys
-        result_dict1 = {key.replace("Document_MndtAccptncRpt_UndrlygAccptncDtls0_", ""): value for key, value in extracted_data.items()}
+        result_dict1 = {key.replace("Document_MndtAccptncRpt_UndrlygAccptncDtls0_", "")
+                                    : value for key, value in extracted_data.items()}
         result_dict = {key.replace(
             "OrgnlMndt_", ""): value for key, value in result_dict1.items()}
         return result_dict

@@ -80,10 +80,11 @@ def buildMessage(requestData):
 
 
 def requestMessage(message):
+    print(message)
     message_length = len(message)
     header = struct.pack('!I', message_length)
-    print(message)
-    message_with_header = header + message.encode('utf-8')
+    # message_with_header = header + message.encode('utf-8')
+    message_with_header = header + message
 
     # Create a TCP socket
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

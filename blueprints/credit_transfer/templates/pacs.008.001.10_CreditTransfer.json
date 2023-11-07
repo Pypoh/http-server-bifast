@@ -51,7 +51,7 @@
               }
             },
             "IntrBkSttlmAmt": {
-              "value": "{{ INTR_BK_STTLM_AMT_VALUE }}",
+              "Value": "{{ INTR_BK_STTLM_AMT_VALUE }}",
               "Ccy": "{{ INTR_BK_STTLM_CCY_VALUE }}"
             },
             "IntrBkSttlmDt": "{{ INTR_BK_STTLM_DT_VALUE }}",

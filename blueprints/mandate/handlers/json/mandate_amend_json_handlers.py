@@ -15,6 +15,7 @@ from config.serverConfig import SCHEME_VALUE, HOST_URL_VALUE, HOST_PORT_VALUE
 def buildMessage(data, initiator):
     # Construct file path
     template_filename = 'pain.010.001.06_MandateAmend.json'
+    # template_filename = 'pain.010.001.06_MandateAmend_wo_rsn.json'
     file_path = os.path.join(current_app.root_path,
                              'blueprints', 'mandate', 'templates', template_filename)
 
@@ -46,46 +47,52 @@ def buildMessage(data, initiator):
     with open(file_path, 'r') as file:
         template_data = json.load(file)
 
-    DRTN_FRDT_VALUE = data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["Ocrncs"]["Drtn"]["FrDt"]
-    DRTN_TODT_VALUE = data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["Ocrncs"]["Drtn"]["ToDt"]
-    FRST_COLLTNDT_VALUE = data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["Ocrncs"]["FrstColltnDt"]
-    FNL_COLLTNDT_VALUE = data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["Ocrncs"]["FnlColltnDt"]
-    MNDT_MNDTID_VALUE = data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["MndtId"]
-    
+    DRTN_FRDT_VALUE = data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("Ocrncs", {}).get("Drtn", {}).get("FrDt")
+    DRTN_TODT_VALUE = data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("Ocrncs", {}).get("Drtn", {}).get("ToDt")
+    FRST_COLLTNDT_VALUE = data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("Ocrncs", {}).get("FrstColltnDt")
+    FNL_COLLTNDT_VALUE = data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("Ocrncs", {}).get("FnlColltnDt")
+    MNDT_MNDTID_VALUE = data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("MndtId")
+
     original_data = {
         "MNDT_MNDTID_VALUE": MNDT_MNDTID_VALUE,
         "ORGNLMNDT_MNDTID_VALUE": MNDT_MNDTID_VALUE,
-        "ORGNLMNDT_REQ_ID_VALUE": data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["MndtReqId"],
-        "ORGNLMNDT_LCLINSTRM_VALUE": data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["Tp"]["LclInstrm"]["Prtry"],
-        "ORGNLMNDT_CTGYPURP_VALUE": data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["Tp"]["CtgyPurp"]["Prtry"],
-        "ORGNLMNDT_OCRNCS_SEQTP_VALUE": data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["Ocrncs"]["SeqTp"],
-        "ORGNLMNDT_OCRNCS_FRQCY_VALUE": data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["Ocrncs"]["Frqcy"]["Prd"]["Tp"],
-        "ORGNLMNDT_OCRNCS_CNTPERPRD_VALUE": data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["Ocrncs"]["Frqcy"]["Prd"]["CntPerPrd"],
+        "ORGNLMNDT_REQ_ID_VALUE": data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("MndtReqId"),
+        "ORGNLMNDT_LCLINSTRM_VALUE": data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("Tp", {}).get("LclInstrm", {}).get("Prtry"),
+        "ORGNLMNDT_CTGYPURP_VALUE": data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("Tp", {}).get("CtgyPurp", {}).get("Prtry"),
+        "ORGNLMNDT_OCRNCS_SEQTP_VALUE": data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("Ocrncs", {}).get("SeqTp"),
+        "ORGNLMNDT_OCRNCS_FRQCY_VALUE": data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("Ocrncs", {}).get("Frqcy", {}).get("Prd", {}).get("Tp"),
+        "ORGNLMNDT_OCRNCS_CNTPERPRD_VALUE": data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("Ocrncs", {}).get("Frqcy", {}).get("Prd", {}).get("CntPerPrd"),
         "ORGNLMNDT_DRTN_FRDT_VALUE": DRTN_FRDT_VALUE,
         "ORGNLMNDT_DRTN_TODT_VALUE": DRTN_TODT_VALUE,
         "ORGNLMNDT_FRST_COLLTNDT_VALUE": FRST_COLLTNDT_VALUE,
         "ORGNLMNDT_FNL_COLLTNDT_VALUE": FNL_COLLTNDT_VALUE,
-        "ORGNLMNDT_TRCKGIND_VALUE": data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["TrckgInd"],
-        "ORGNLMNDT_FRST_COLLTNAMT_CCY_VALUE": data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["FrstColltnAmt"]["Ccy"],
-        "ORGNLMNDT_FRST_COLLTNAMT_VALUE": data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["FrstColltnAmt"]["value"],
-        "ORGNLMNDT_COLLTNAMT_CCY_VALUE": data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["ColltnAmt"]["Ccy"],
-        "ORGNLMNDT_COLLTNAMT_VALUE": data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["ColltnAmt"]["value"],
-        "ORGNLMNDT_MAX_AMT_CCY_VALUE": data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["MaxAmt"]["Ccy"],
-        "ORGNLMNDT_MAX_AMT_VALUE": data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["MaxAmt"]["value"],
-        "ORGNLMNDT_MNDT_RSN_VALUE": data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["Rsn"]["Prtry"],
-        "ORGNLMNDT_CDTR_NM_VALUE": data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["Cdtr"]["Nm"],
-        "ORGNLMNDT_CDTR_ORG_ID_VALUE": data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["Cdtr"]["Id"]["OrgId"]["Othr"][0]["Id"],
-        "ORGNLMNDT_CDTR_ACCT_VALUE": data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["CdtrAcct"]["Id"]["Othr"]["Id"],
-        "ORGNLMNDT_CDTR_ACCT_TP_VALUE": data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["CdtrAcct"]["Tp"]["Prtry"],
-        "ORGNLMNDT_CDTR_ACCT_NM_VALUE": data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["CdtrAcct"]["Nm"],
-        "ORGNLMNDT_CDTR_AGT_VALUE": data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["CdtrAgt"]["FinInstnId"]["Othr"]["Id"],
-        "ORGNLMNDT_DBTR_NM_VALUE": data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["Dbtr"]["Nm"],
-        "ORGNLMNDT_DBTR_PRVT_ID_VALUE": data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["Dbtr"]["Id"]["PrvtId"]["Othr"][0]["Id"],
-        "ORGNLMNDT_DBTR_ACCT_VALUE": data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["DbtrAcct"]["Id"]["Othr"]["Id"],
-        "ORGNLMNDT_DBTR_ACCT_TP_VALUE": data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["DbtrAcct"]["Tp"]["Prtry"],
-        "ORGNLMNDT_DBTR_ACCT_NM_VALUE": data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["DbtrAcct"]["Nm"],
-        "ORGNLMNDT_DBTR_AGT_VALUE": data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["DbtrAgt"]["FinInstnId"]["Othr"]["Id"],
-        "ORGNLMNDT_RFRD_DOC_CDTR_REF_VALUE": data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["RfrdDoc"][0]["CdtrRef"],
+        "ORGNLMNDT_REQ_ID_VALUE": data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("MndtReqId"),
+        "ORGNLMNDT_LCLINSTRM_VALUE": data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("Tp", {}).get("LclInstrm", {}).get("Prtry"),
+        "ORGNLMNDT_CTGYPURP_VALUE": data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("Tp", {}).get("CtgyPurp", {}).get("Prtry"),
+        "ORGNLMNDT_OCRNCS_SEQTP_VALUE": data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("Ocrncs", {}).get("SeqTp"),
+        "ORGNLMNDT_OCRNCS_FRQCY_VALUE": data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("Ocrncs", {}).get("Frqcy", {}).get("Prd", {}).get("Tp"),
+        "ORGNLMNDT_OCRNCS_CNTPERPRD_VALUE": data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("Ocrncs", {}).get("Frqcy", {}).get("Prd", {}).get("CntPerPrd"),
+        "ORGNLMNDT_TRCKGIND_VALUE": data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("TrckgInd"),
+        "ORGNLMNDT_FRST_COLLTNAMT_CCY_VALUE": data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("FrstColltnAmt", {}).get("Ccy"),
+        "ORGNLMNDT_FRST_COLLTNAMT_VALUE": data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("FrstColltnAmt", {}).get("value"),
+        "ORGNLMNDT_COLLTNAMT_CCY_VALUE": data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("ColltnAmt", {}).get("Ccy"),
+        "ORGNLMNDT_COLLTNAMT_VALUE": data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("ColltnAmt", {}).get("value"),
+        "ORGNLMNDT_MAX_AMT_CCY_VALUE": data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("MaxAmt", {}).get("Ccy"),
+        "ORGNLMNDT_MAX_AMT_VALUE": data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("MaxAmt", {}).get("value"),
+        "ORGNLMNDT_MNDT_RSN_VALUE": data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("Rsn", {}).get("Prtry"),
+        "ORGNLMNDT_CDTR_NM_VALUE": data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("Cdtr", {}).get("Nm"),
+        "ORGNLMNDT_CDTR_ORG_ID_VALUE": data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("Cdtr", {}).get("Id", {}).get("OrgId", {}).get("Othr", [{}])[0].get("Id"),
+        "ORGNLMNDT_CDTR_ACCT_VALUE": data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("CdtrAcct", {}).get("Id", {}).get("Othr", {}).get("Id"),
+        "ORGNLMNDT_CDTR_ACCT_TP_VALUE": data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("CdtrAcct", {}).get("Tp", {}).get("Prtry"),
+        "ORGNLMNDT_CDTR_ACCT_NM_VALUE": data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("CdtrAcct", {}).get("Nm"),
+        "ORGNLMNDT_CDTR_AGT_VALUE": data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("CdtrAgt", {}).get("FinInstnId", {}).get("Othr", {}).get("Id"),
+        "ORGNLMNDT_DBTR_NM_VALUE": data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("Dbtr", {}).get("Nm"),
+        "ORGNLMNDT_DBTR_PRVT_ID_VALUE": data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("Dbtr", {}).get("Id", {}).get("PrvtId", {}).get("Othr", [{}])[0].get("Id"),
+        "ORGNLMNDT_DBTR_ACCT_VALUE": data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("DbtrAcct", {}).get("Id", {}).get("Othr", {}).get("Id"),
+        "ORGNLMNDT_DBTR_ACCT_TP_VALUE": data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("DbtrAcct", {}).get("Tp", {}).get("Prtry"),
+        "ORGNLMNDT_DBTR_ACCT_NM_VALUE": data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("DbtrAcct", {}).get("Nm"),
+        "ORGNLMNDT_DBTR_AGT_VALUE": data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("DbtrAgt", {}).get("FinInstnId", {}).get("Othr", {}).get("Id"),
+        "ORGNLMNDT_RFRD_DOC_CDTR_REF_VALUE": data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("RfrdDoc", [{}])[0].get("CdtrRef"),
     }
 
     # Create value dictionary for placeholders
@@ -100,9 +107,11 @@ def buildMessage(data, initiator):
     }
 
     # # Set the Date
-    # timestamp_now = datetime.now() - timedelta(days=7)
+    # timestamp_now = datetime.now() - timedelta(days=5)
     # timestamp_formatted = timestamp_now.strftime('%Y-%m-%d')
-    # timestamp_future = datetime.now() - timedelta(days=3)
+    # timestamp_first = datetime.now() - timedelta(days=2)
+    # timestamp_first_formatted = timestamp_first.strftime('%Y-%m-%d')
+    # timestamp_future = timestamp_now + relativedelta(years=1)
     # timestamp_future_formatted = timestamp_future.strftime('%Y-%m-%d')
     # value_dict['DRTN_FRDT_VALUE'] = timestamp_formatted
     # value_dict['DRTN_TODT_VALUE'] = timestamp_future_formatted
@@ -154,6 +163,15 @@ def buildMessage(data, initiator):
 
     # Print filled data (for debugging)
     # print(filled_data, file=sys.stderr)
+    
+    
+    tags_to_remove = data.get('TAGS_TO_REMOVE_AMEND')
+    # print(f'Tag Found: {tags_to_remove}')
+    
+    if tags_to_remove is not None:
+        handler.remove_tags(filled_data, tags_to_remove)
+        
+    
     return filled_data
 
 

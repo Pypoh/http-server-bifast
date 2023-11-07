@@ -12,6 +12,7 @@ def dynamic_route(url_rule, json_func, xml_func):
         def wrapper(scheme):
             try:
                 data = request.get_json()
+                # data = request.data
                 if scheme == 'json':
                     return json_func(data)
                 elif scheme == 'xml':

@@ -18,6 +18,7 @@ from config.serverConfig import SCHEME_VALUE, HOST_URL_VALUE, HOST_PORT_VALUE
 
 def buildMessage(data, initiator):
     # Construct file path
+    # template_filename = 'pain.009.001.06_MandateRegist_wo_colamt.json'
     template_filename = 'pain.009.001.06_MandateRegist.json'
     # template_filename = 'pain.009.001.06_MandateRegist_wo_cntperprd.json'
     file_path = os.path.join(current_app.root_path,
@@ -72,12 +73,15 @@ def buildMessage(data, initiator):
     timestamp_now = datetime.now()
     # timestamp_now = datetime.now() - timedelta(days=7)
     timestamp_formatted = timestamp_now.strftime('%Y-%m-%d')
-    # timestamp_future = datetime.now() - timedelta(days=3)
+    timestamp_first = datetime.now()
+    # timestamp_first = datetime.now() + timedelta(days=1)
+    timestamp_first_formatted = timestamp_first.strftime('%Y-%m-%d')
+    # timestamp_future = datetime.now() - timedelta(days=2)
     timestamp_future = timestamp_now + relativedelta(years=1)
     timestamp_future_formatted = timestamp_future.strftime('%Y-%m-%d')
     value_dict['DRTN_FRDT_VALUE'] = timestamp_formatted
     value_dict['DRTN_TODT_VALUE'] = timestamp_future_formatted
-    value_dict['FRST_COLLTNDT_VALUE'] = timestamp_formatted
+    value_dict['FRST_COLLTNDT_VALUE'] = timestamp_first_formatted
     value_dict['FNL_COLLTNDT_VALUE'] = timestamp_future_formatted
 
     # Replace placeholders in template data
@@ -93,11 +97,12 @@ def buildMessage(data, initiator):
     filled_data["BusMsg"]["Document"]["MndtInitnReq"]["Mndt"][0]["Ocrncs"]["Frqcy"]["Prd"]["CntPerPrd"] = float(
         value_dict.get('OCRNCS_CNTPERPRD_VALUE'))
 
-    # tags_to_remove = customForm.getlist('tags_to_remove')
-    # # print(f'Tag Found: {tags_to_remove}')
+    # print(data)
+    tags_to_remove = data.get('TAGS_TO_REMOVE_REGIST')
+    # print(f'Tag Found: {tags_to_remove}')
 
-    # if tags_to_remove is not None:
-    #     handler.remove_tags(filled_data, tags_to_remove)
+    if tags_to_remove is not None:
+        handler.remove_tags(filled_data, tags_to_remove)
 
     # Print filled data (for debugging)
     # print(filled_data, file=sys.stderr)

@@ -30,8 +30,7 @@ def buildMessage(data, initiator):
         date_object = datetime.strptime(yyyyMMdd, '%Y%m%d')
         ORGNL_MNDT_REQ_ID_VALUE = mandate_data
     except ValueError:
-        ORGNL_MNDT_REQ_ID_VALUE = data["BusMsg"]["Document"]["MndtAccptncRpt"][
-            "UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["MndtReqId"]
+        ORGNL_MNDT_REQ_ID_VALUE = data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("MndtReqId")
 
     trx_code = ORGNL_MNDT_REQ_ID_VALUE[16:20]
     if (trx_code[0] == "8"):
@@ -77,16 +76,16 @@ def buildMessage(data, initiator):
     ORGNL_MSG_NM_VALUE = handler.getMessageNameIdFromTrxCode(ORGNL_MNDT_REQ_ID_VALUE)
 
     original_data = {
-        "ORGNL_MSG_ID_VALUE": data["BusMsg"]["Document"]["MndtAccptncRpt"]["GrpHdr"]["MsgId"],
+        "ORGNL_MSG_ID_VALUE": data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("GrpHdr", {}).get("MsgId"),
         "ORGNL_MSG_NM_VALUE": ORGNL_MSG_NM_VALUE,
-        "ACCPTNCRSLT_VALUE": data["BusMsg"]["Document"]["MndtAccptncRpt"],
-        "ORGNL_MNDT_ID_VALUE": data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["MndtId"],
+        "ACCPTNCRSLT_VALUE": data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt"),
+        "ORGNL_MNDT_ID_VALUE": data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("MndtId"),
         "ORGNL_MNDT_REQ_ID_VALUE": ORGNL_MNDT_REQ_ID_VALUE,
-        "ORGNL_SEQTP_VALUE": data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["Ocrncs"]["SeqTp"],
-        "ORGNL_FR_DT_VALUE": data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["Ocrncs"]["Drtn"]["FrDt"],
-        "ORGNL_TO_DT_VALUE": data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["Ocrncs"]["Drtn"]["ToDt"],
-        "ORGNL_FRST_COLLTN_DT_VALUE": data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["Ocrncs"]["FrstColltnDt"],
-        "ORGNL_FNL_COLLTN_DT_VALUE": data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0]["OrgnlMndt"]["OrgnlMndt"]["Ocrncs"]["FrstColltnDt"],
+        "ORGNL_SEQTP_VALUE": data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("Ocrncs", {}).get("SeqTp"),
+        "ORGNL_FR_DT_VALUE": data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("Ocrncs", {}).get("Drtn", {}).get("FrDt"),
+        "ORGNL_TO_DT_VALUE": data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("Ocrncs", {}).get("Drtn", {}).get("ToDt"),
+        "ORGNL_FRST_COLLTN_DT_VALUE": data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("Ocrncs", {}).get("FrstColltnDt"),
+        "ORGNL_FNL_COLLTN_DT_VALUE": data.get("BusMsg", {}).get("Document", {}).get("MndtAccptncRpt", {}).get("UndrlygAccptncDtls", [{}])[0].get("OrgnlMndt", {}).get("OrgnlMndt", {}).get("Ocrncs", {}).get("FrstColltnDt"),
         "ORGNL_MNDT_STS_VALUE": "ACTV",
     }
 
@@ -136,65 +135,3 @@ def requestMessage(message, initiator):
     response = requests.post(host_url, json=message, headers=headers)
 
     return response.text
-
-# def requestMessageByCreditor(requestData):
-#     filePath = os.path.join(
-#         current_app.config["FORMAT_PATH"], 'pain.012.001.06_MandateApproval.json')
-
-#     generatedBizMsgIdr = handler.generateBizMsgIdr(
-#         requestData.get('Fr'), requestData.get('Payment_type'))
-#     generatedMsgId = handler.generateMsgId(
-#         requestData.get('Fr'), requestData.get('Payment_type'))
-
-#     timestamp_now = datetime.now()
-#     timestamp_formatted = timestamp_now.strftime('%Y-%m-%d')
-#     timestamp_future = timestamp_now + relativedelta(years=1)
-#     timestamp_future_formatted = timestamp_future.strftime('%Y-%m-%d')
-
-#     with open(filePath, 'r') as file:
-#         template_data = json.load(file)
-#         value_dict = {
-#             "FR_BIC_VALUE": requestData.get('Fr'),
-#             "TO_BIC_VALUE": requestData.get('To'),
-#             "BIZ_MSG_IDR_VALUE": generatedBizMsgIdr,
-#             "MSG_DEF_IDR_VALUE": requestData.get('MsgDefIdr'),
-#             "BIZ_SVC_VALUE": requestData.get('BizSvc'),
-#             "CRE_DT_VALUE": handler.getCreDt(),
-#             "CPYDPLCT_VALUE": requestData.get('CpyDplct'),
-#             "PSSBLDPLCT_VALUE": requestData.get('PssblDplct'),
-#             "MSG_ID_VALUE": generatedMsgId,
-#             "CRE_DT_TM_VALUE": handler.getCreDtTm(),
-#             "ORGNL_MSG_ID_VALUE": requestData.get('OrgnlMsgInf_msgid'),
-#             "ORGNL_MSG_NM_VALUE": requestData.get('OrgnlMsgInf_msgnmid'),
-#             "ACCPTNCRSLT_VALUE": requestData.get('AccptncRslt'),
-#             "ORGNL_MNDT_ID_VALUE": requestData.get('OrgnlMndt_mndtid'),
-#             "ORGNL_MNDT_REQ_ID_VALUE": requestData.get('OrgnlMndt_mndtreqid'),
-#             "ORGNL_SEQTP_VALUE": requestData.get('SeqTp'),
-#             "ORGNL_FR_DT_VALUE": requestData.get('FrDt'),
-#             "ORGNL_TO_DT_VALUE": requestData.get('ToDt'),
-#             "ORGNL_FRST_COLLTN_DT_VALUE": requestData.get('FrstColltnDt'),
-#             "ORGNL_FNL_COLLTN_DT_VALUE": requestData.get('FnlColltnDt'),
-#             "TRCKGIND_VALUE": requestData.get('TrckgInd'),
-#             "CDTR_NM_VALUE": requestData.get('Cdtr_nm'),
-#             "CDTR_ORG_ID_VALUE": requestData.get('Cdtr_orgid'),
-#             "CDTR_AGT_VALUE": requestData.get('CdtrAgt'),
-#             "DBTR_NM_VALUE": requestData.get('Dbtr_nm'),
-#             "DBTR_AGT_VALUE": requestData.get('DbtrAgt'),
-#             "ORGNL_MNDT_STS_VALUE": requestData.get('OrgnlMndt_sts')
-#         }
-
-#     filled_data = handler.replace_placeholders(template_data, value_dict)
-
-#     filled_data["BusMsg"]["AppHdr"]["PssblDplct"] = False
-#     filled_data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0][0]["OrgnlMndt"]["OrgnlMndt"]["TrckgInd"] = True
-#     filled_data["BusMsg"]["Document"]["MndtAccptncRpt"]["UndrlygAccptncDtls"][0][0]["AccptncRslt"]["Accptd"] = True
-#     headers = {
-#         "Content-Type": "application/json",
-#         "Content-Length": str(filled_data),
-#         "message": "/MandateAcceptanceReportV06"
-#     }
-
-#     response = requests.post(
-#         f"{SCHEME_VALUE}{requestData.get('Host_url')}:{requestData.get('Host_port')}", json=filled_data, headers=headers)
-
-#     return response.text

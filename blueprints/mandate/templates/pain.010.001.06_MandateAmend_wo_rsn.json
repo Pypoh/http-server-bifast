@@ -1,0 +1,269 @@
+{
+  "BusMsg": {
+    "AppHdr": {
+      "Fr": {
+        "FIId": {
+          "FinInstnId": {
+            "Othr": {
+              "Id": "{{ FR_BIC_VALUE }}"
+            }
+          }
+        }
+      },
+      "To": {
+        "FIId": {
+          "FinInstnId": {
+            "Othr": {
+              "Id": "{{ TO_BIC_VALUE }}"
+            }
+          }
+        }
+      },
+      "BizMsgIdr": "{{ BIZ_MSG_IDR_VALUE }}",
+      "MsgDefIdr": "{{ MSG_DEF_IDR_VALUE }}",
+      "BizSvc": "{{ BIZ_SVC_VALUE }}",
+      "CreDt": "{{ CRE_DT_VALUE }}",
+      "CpyDplct": "{{ CPYDPLCT_VALUE }}",
+      "PssblDplct": "{{ PSSBLDPLCT_VALUE }}"
+    },
+    "Document": {
+      "MndtAmdmntReq": {
+        "GrpHdr": {
+          "MsgId": "{{ MSG_ID_VALUE }}",
+          "CreDtTm": "{{ CRE_DT_TM_VALUE }}"
+        },
+        "UndrlygAmdmntDtls": [
+          {
+            "AmdmntRsn": {
+              "Rsn": {
+                "Prtry": "{{ AMDMNTRSN_RSN_VALUE }}"
+              },
+              "AddtlInf": ["{{ AMDMNTRSN_ADDTLINF_VALUE }}"]
+            },
+            "Mndt": {
+              "MndtId": "{{ MNDT_MNDTID_VALUE }}",
+              "MndtReqId": "{{ MNDT_REQ_ID_VALUE }}",
+              "Tp": {
+                "LclInstrm": {
+                  "Prtry": "{{ MNDT_LCLINSTRM_VALUE }}"
+                },
+                "CtgyPurp": {
+                  "Prtry": "{{ MNDT_CTGYPURP_VALUE }}"
+                }
+              },
+              "Ocrncs": {
+                "SeqTp": "{{ OCRNCS_SEQTP_VALUE }}",
+                "Frqcy": {
+                  "Prd": {
+                    "Tp": "{{ OCRNCS_FRQCY_VALUE }}",
+                    "CntPerPrd": "{{ OCRNCS_CNTPERPRD_VALUE }}"
+                  }
+                },
+                "Drtn": {
+                  "FrDt": "{{ DRTN_FRDT_VALUE }}",
+                  "ToDt": "{{ DRTN_TODT_VALUE }}"
+                },
+                "FnlColltnDt": "{{ FNL_COLLTNDT_VALUE }}"
+              },
+              "TrckgInd": "{{ TRCKGIND_VALUE }}",
+              "ColltnAmt": {
+                "Ccy": "{{ COLLTNAMT_CCY_VALUE }}",
+                "value": "{{ COLLTNAMT_VALUE }}"
+              },
+              "MaxAmt": {
+                "Ccy": "{{ MAX_AMT_CCY_VALUE }}",
+                "value": "{{ MAX_AMT_VALUE }}"
+              },
+              "Cdtr": {
+                "Nm": "{{ CDTR_NM_VALUE }}",
+                "Id": {
+                  "OrgId": {
+                    "Othr": [
+                      {
+                        "Id": "{{ CDTR_ORG_ID_VALUE }}"
+                      }
+                    ]
+                  }
+                }
+              },
+              "CdtrAcct": {
+                "Id": {
+                  "Othr": {
+                    "Id": "{{ CDTR_ACCT_VALUE }}"
+                  }
+                },
+                "Tp": {
+                  "Prtry": "{{ CDTR_ACCT_TP_VALUE }}"
+                },
+                "Nm": "{{ CDTR_ACCT_NM_VALUE }}"
+              },
+              "CdtrAgt": {
+                "FinInstnId": {
+                  "Othr": {
+                    "Id": "{{ CDTR_AGT_VALUE }}"
+                  }
+                }
+              },
+              "Dbtr": {
+                "Nm": "{{ DBTR_NM_VALUE }}",
+                "Id": {
+                  "PrvtId": {
+                    "Othr": [
+                      {
+                        "Id": "{{ DBTR_PRVT_ID_VALUE }}"
+                      }
+                    ]
+                  }
+                }
+              },
+              "DbtrAcct": {
+                "Id": {
+                  "Othr": {
+                    "Id": "{{ DBTR_ACCT_VALUE }}"
+                  }
+                },
+                "Tp": {
+                  "Prtry": "{{ DBTR_ACCT_TP_VALUE }}"
+                },
+                "Nm": "{{ DBTR_ACCT_NM_VALUE }}"
+              },
+              "DbtrAgt": {
+                "FinInstnId": {
+                  "Othr": {
+                    "Id": "{{ DBTR_AGT_VALUE }}"
+                  }
+                }
+              },
+              "RfrdDoc": [
+                {
+                  "CdtrRef": "{{ RFRD_DOC_CDTR_REF_VALUE }}"
+                }
+              ]
+            },
+            "OrgnlMndt": {
+              "OrgnlMndt": {
+                "MndtId": "{{ ORGNLMNDT_MNDTID_VALUE }}",
+                "MndtReqId": "{{ ORGNLMNDT_REQ_ID_VALUE }}",
+                "Tp": {
+                  "LclInstrm": {
+                    "Prtry": "{{ ORGNLMNDT_LCLINSTRM_VALUE }}"
+                  },
+                  "CtgyPurp": {
+                    "Prtry": "{{ ORGNLMNDT_CTGYPURP_VALUE }}"
+                  }
+                },
+                "Ocrncs": {
+                  "SeqTp": "{{ ORGNLMNDT_OCRNCS_SEQTP_VALUE }}",
+                  "Frqcy": {
+                    "Prd": {
+                      "Tp": "{{ ORGNLMNDT_OCRNCS_FRQCY_VALUE }}",
+                      "CntPerPrd": "{{ ORGNLMNDT_OCRNCS_CNTPERPRD_VALUE }}"
+                    }
+                  },
+                  "Drtn": {
+                    "FrDt": "{{ ORGNLMNDT_DRTN_FRDT_VALUE }}",
+                    "ToDt": "{{ ORGNLMNDT_DRTN_TODT_VALUE }}"
+                  },
+                  "FnlColltnDt": "{{ ORGNLMNDT_FNL_COLLTNDT_VALUE }}"
+                },
+                "TrckgInd": "{{ ORGNLMNDT_TRCKGIND_VALUE }}",
+                "ColltnAmt": {
+                  "Ccy": "{{ ORGNLMNDT_COLLTNAMT_CCY_VALUE }}",
+                  "value": "{{ ORGNLMNDT_COLLTNAMT_VALUE }}"
+                },
+                "MaxAmt": {
+                  "Ccy": "{{ ORGNLMNDT_MAX_AMT_CCY_VALUE }}",
+                  "value": "{{ ORGNLMNDT_MAX_AMT_VALUE }}"
+                },
+                "Rsn": {
+                  "Prtry": "{{ ORGNLMNDT_MNDT_RSN_VALUE }}"
+                },
+                "Cdtr": {
+                  "Nm": "{{ ORGNLMNDT_CDTR_NM_VALUE }}",
+                  "Id": {
+                    "OrgId": {
+                      "Othr": [
+                        {
+                          "Id": "{{ ORGNLMNDT_CDTR_ORG_ID_VALUE }}"
+                        }
+                      ]
+                    }
+                  }
+                },
+                "CdtrAcct": {
+                  "Id": {
+                    "Othr": {
+                      "Id": "{{ ORGNLMNDT_CDTR_ACCT_VALUE }}"
+                    }
+                  },
+                  "Tp": {
+                    "Prtry": "{{ ORGNLMNDT_CDTR_ACCT_TP_VALUE }}"
+                  },
+                  "Nm": "{{ ORGNLMNDT_CDTR_ACCT_NM_VALUE }}"
+                },
+                "CdtrAgt": {
+                  "FinInstnId": {
+                    "Othr": {
+                      "Id": "{{ ORGNLMNDT_CDTR_AGT_VALUE }}"
+                    }
+                  }
+                },
+                "Dbtr": {
+                  "Nm": "{{ ORGNLMNDT_DBTR_NM_VALUE }}",
+                  "Id": {
+                    "PrvtId": {
+                      "Othr": [
+                        {
+                          "Id": "{{ ORGNLMNDT_DBTR_PRVT_ID_VALUE }}"
+                        }
+                      ]
+                    }
+                  }
+                },
+                "DbtrAcct": {
+                  "Id": {
+                    "Othr": {
+                      "Id": "{{ ORGNLMNDT_DBTR_ACCT_VALUE }}"
+                    }
+                  },
+                  "Tp": {
+                    "Prtry": "{{ ORGNLMNDT_DBTR_ACCT_TP_VALUE }}"
+                  },
+                  "Nm": "{{ ORGNLMNDT_DBTR_ACCT_NM_VALUE }}"
+                },
+                "DbtrAgt": {
+                  "FinInstnId": {
+                    "Othr": {
+                      "Id": "{{ ORGNLMNDT_DBTR_AGT_VALUE }}"
+                    }
+                  }
+                },
+                "RfrdDoc": [
+                  {
+                    "CdtrRef": "{{ ORGNLMNDT_RFRD_DOC_CDTR_REF_VALUE }}"
+                  }
+                ]
+              }
+            },
+            "SplmtryData": [
+              {
+                "Envlp": {
+                  "Dtl": {
+                    "UndrlygAmdmntDtls": {
+                      "OrgnlMndt": {
+                        "Sts": "{{ SPLMTRYDATA_ORGNLMNDT_STS }}"
+                      },
+                      "Mndt": {
+                        "Sts": "{{ SPLMTRYDATA_MNDT_STS }}"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

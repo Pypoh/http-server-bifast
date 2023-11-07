@@ -52,7 +52,6 @@ def process_message(type, scheme, action, data):
             return handler(data)
         return jsonify({"error": "Invalid type or scheme"}), 400
     except Exception as e:
-        print (e)
         return jsonify({"error": str(e)}), 400
 
 
@@ -65,5 +64,4 @@ def buildMessage(type, scheme):
 @credit_transfer_bp.route('/<type>/<scheme>/request', methods=['POST'])
 def requestMessage(type, scheme):
     data = request.get_json()
-    # data = request.data
     return process_message(type, scheme, 'request', data)
